@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "956275766314",
+    "firebase_url": "https://cong-cafe-app-default-rtdb.firebaseio.com",
+    "project_id": "cong-cafe-app",
+    "storage_bucket": "cong-cafe-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956275766314:android:ea80474885543c58a63f53",
+        "android_client_info": {
+          "package_name": "com.congcafeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGK6ajPyWIS3EC81rL3N8W0yyQ0_hhqmo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
