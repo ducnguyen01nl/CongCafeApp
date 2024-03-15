@@ -51,7 +51,7 @@ class IconApp extends React.PureComponent<IconProps> {
         return (
             <IconView
                 size={this.props.size || 23}
-                color={this.props.color || COLORS.text3}
+                color={this.props.color || COLORS.text2}
                 name={this.props.name}
                 onPress={this.props.onPress}
                 style={[styleProps, this.props.style]}

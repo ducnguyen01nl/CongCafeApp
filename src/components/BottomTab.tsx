@@ -7,6 +7,7 @@ import User from '../screen/User'
 import Order from '../screen/Order'
 import Favourite from '../screen/Favourite'
 import IconApp from './IconApp'
+import { AppLang } from '../assets/languages'
 
 type Props = {
     Home: undefined
@@ -42,13 +43,13 @@ const BottomTab = (props: Props) => {
             tabBarLabel: ({ focused }) => {
               let labelText;
               if (route.name === 'Home') {
-                labelText = 'Trang chủ'; // Tên tùy chỉnh cho tab Home
+                labelText = AppLang(`trang_chu`); // Tên tùy chỉnh cho tab Home
               } else if (route.name === 'Favourite') {
-                labelText = 'Yêu thích'; // Tên tùy chỉnh cho tab Favourite
+                labelText = AppLang(`yeu_thich`); // Tên tùy chỉnh cho tab Favourite
               } else if (route.name === 'Order') {
-                labelText = 'Đơn hàng'; // Tên tùy chỉnh cho tab Order
+                labelText = AppLang(`don_hang`); // Tên tùy chỉnh cho tab Order
               } else if (route.name === 'User') {
-                labelText = 'Người dùng'; // Tên tùy chỉnh cho tab User
+                labelText = AppLang(`nguoi_dung`); // Tên tùy chỉnh cho tab User
               }
               return (
                 <Text style={{ color: focused ? COLORS.primary : 'gray',fontSize:12, marginVertical:5 }}>{labelText}</Text>

@@ -124,7 +124,8 @@ interface T_TouchApp extends ViewStyle, TouchableWithoutFeedbackProps {
   bottomRadius?: number | undefined
   //
   positionA?: boolean | undefined
-  positionT?: boolean | undefined
+  positionTL?: boolean | undefined
+  positionTR?: boolean | undefined
   positionB?: boolean | undefined
   positionFull?: boolean | undefined
   left0?: boolean | undefined
@@ -259,7 +260,8 @@ const TouchApp: React.FC<T_TouchApp> = (props) => {
       left: 0,
       right: 0,
     },
-    props.positionT && { position: 'absolute', top: 0, left: 0, right: 0 },
+    props.positionTL && { position: 'absolute', top: 0, left: 0, },
+    props.positionTR && { position: 'absolute', top: 0, right: 0 },
     props.positionB && {
       position: 'absolute',
       bottom: 0,

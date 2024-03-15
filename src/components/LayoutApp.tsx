@@ -1,7 +1,7 @@
 import React from 'react'
 import SafeAreaView, {ForceInsetProp} from 'react-native-safe-area-view'
 import { goBack } from '../root/RootNavigation'
-import {Platform, StyleProp, ViewStyle} from 'react-native'
+import {Platform, StatusBar, StyleProp, ViewStyle} from 'react-native'
 import { COLORS } from '../colors/colors'
 type _layout = {
   children?: any

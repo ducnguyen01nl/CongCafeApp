@@ -7,6 +7,7 @@ import TextApp from "./TextApp"
 import {launchCamera, launchImageLibrary, CameraOptions, ImagePickerResponse} from 'react-native-image-picker';
 import * as ImagePicker from 'react-native-image-picker';
 import { requestCameraPermission } from "../service/requestCamera"
+import { useSelector } from "react-redux"
 
 // import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker";
 
@@ -26,6 +27,7 @@ interface Props extends ModalBaseProps {
     background?: string
     children?: React.ReactNode,
     bot?:boolean,
+    onSelected:any
     // onImageLibraryPress: () => void,
     // onCameraPress: () => void,
 }
@@ -46,6 +48,7 @@ const ModalPickerImage = forwardRef<Handle,Props>(
         onRequestClose,
         onShow,
         children,
+        onSelected,
         mid,
         outClose = true,
         bot,
@@ -95,9 +98,11 @@ const ModalPickerImage = forwardRef<Handle,Props>(
                 } else if (response.error) {
                   console.log('Camera Error: ', response.error);
                 } else {
-                  console.log('Image/Video URI: ', response.assets?.[0]?.uri);
+                  // console.log('Image/Video URI: ', response.assets?.[0]?.uri);
                   // Handle the selected media
-                  setValue(response.assets?.[0]?.uri);
+                  // setValue(response.assets?.[0]?.uri);
+                  onSelected(response.assets?.[0]?.uri)
+                  setShow(false)
                 }
               });
             } catch (error) {
@@ -107,20 +112,23 @@ const ModalPickerImage = forwardRef<Handle,Props>(
             
           };
 
-          const onImageLibraryPress = () => {
+          const onImageLibraryPress = async() => {
             const options: ImagePicker.ImageLibraryOptions = {
                 mediaType: 'photo' as ImagePicker.MediaType,
                 includeBase64: false,
             };
-            launchImageLibrary(options, (response:any) => {
+            await launchImageLibrary(options, (response:any) => {
               if (response.didCancel) {
                 console.log('User cancelled camera');
               } else if (response.error) {
                 console.log('Camera Error: ', response.error);
               } else {
-                console.log('Image/Video URI1: ', response.assets?.[0]?.uri);
+                // console.log('Image/Video URI1: ', setImage(response.assets?.[0]?.uri));
                 // Handle the selected media
-                setValue(response.assets?.[0]?.uri);
+                // setValue(response.assets?.[0]?.uri);
+                // setImage(response.assets?.[0]?.uri)
+                onSelected(response.assets?.[0]?.uri)
+                setShow(false)
               }
             });
           };

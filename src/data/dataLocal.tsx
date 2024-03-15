@@ -1,4 +1,6 @@
 import { Timestamp } from "firebase/firestore";
+import { AppLang } from "../assets/languages";
+import { Dimensions } from "react-native";
 
 
 export const regPhone: RegExp = /([3|5|7|8|9])+([0-9]{8})\b/
@@ -18,7 +20,22 @@ export const formatDateTimestamp = (time:any) => {
     // return formattedDate
 }
 
+
+export const heightScreen = Dimensions.get('window').height;
+export const widthScreen = Dimensions.get('window').width;
+
 export const DATA_GENDER = [
-    { name: 'Nam', value: true }, 
-    { name: 'Nữ', value: false }
+    { name: AppLang(`nam`), value: true }, 
+    { name: AppLang(`nu`), value: false }
+]
+
+export const DATA_TYPE_ITEMS = [
+    {name:AppLang('dac_san_cua_cong'), value:0},
+    {name:AppLang('ca_phe_pho'), value:1},
+    {name:AppLang('ca_phe_ta'), value:2},
+    {name:AppLang('tra_co_thu'), value:3},
+    {name:AppLang('do_dia_phuong'), value:4},
+    {name:AppLang('trai_cay'), value:5},
+    {name:AppLang('sua_chua'), value:6},
+    {name:AppLang('do_an'), value:7},
 ]

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { userApi } from "../api/userApi"
+import { addressApi } from "../api/addressApi"
+import { drinksApi } from "../api/drinksApi"
 
 export const useLocalMater = (type,callBackApi) => {
     const [isLoading,setIsLoading] = useState(false)
@@ -31,3 +33,40 @@ export const useInfoUserCurrent = () =>{
     )
     return [isLoading,data,onRefresh]
 }
+
+export const useListAddress = () => {
+    const {user} = useSelector(state => state.user)
+    const [isLoading,data,onRefresh] = useLocalMater([],() =>
+        userApi.getListAddress(user),
+    )
+    return [isLoading,data,onRefresh]
+}
+
+export const useAddressVN = () => {
+    const [isLoading,data,onRefresh] = useLocalMater([],() =>
+        addressApi.getAddress(),
+    )
+    return [isLoading,data,onRefresh]
+}
+
+export const useListDrinks = () => {
+    const [isLoading,data,onRefresh] = useLocalMater([],() =>
+        drinksApi.getListDrinks(),
+    )
+    return [isLoading,data,onRefresh]
+}
+
+export const useCartUser = () => {
+    const [isLoading,data,onRefresh] = useLocalMater({},() =>
+        userApi.getCartUser(),
+    )
+    return[isLoading,data,onRefresh]
+}
+
+export const useGetItemDrink = (id) => {
+    const [isLoading,data,onRefresh] = useLocalMater({}, () =>
+    drinksApi.getItemDrink(id))
+
+    return [isLoading,data,onRefresh]
+}
+

@@ -20,6 +20,11 @@ import { userApi } from '../../api/userApi'
 import ToastService from '../../service/ToastService'
 import ToastMessage from '../../components/ToastMessage'
 import I18n from 'react-native-i18n'
+import { AppLang } from '../../assets/languages'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { convertFirebaseTimestamp } from '../../components/convertData'
+import { covertFirebaseTimeStampToString } from '../../utils/format'
+import moment from 'moment'
 const Login_email = () => {
   const toastRef:any = useRef(null)
   const formik = useFormik({
@@ -28,8 +33,8 @@ const Login_email = () => {
       password:'',
     },
     validationSchema: Yup.object({
-      email: Yup.string().trim().lowercase().email('Email không đúng định dạng').required('Email không dược để trống'),
-      password: Yup.string().trim().min(6, 'Mật khẩu phải nhiều hơn 6 kí tự').required('Mật khẩu không dược để trống'),
+      email: Yup.string().trim().lowercase().email(AppLang(`phai_la_email`)).required(AppLang(`email_khong_duoc_trong`)),
+      password: Yup.string().trim().min(6, AppLang(`mat_khau_phai_nhieu_hon_6`)).required(AppLang(`mat_khau_khong_duoc_trong`)),
     }),
     onSubmit: (values) => {
       console.log('value', values);
@@ -40,9 +45,6 @@ const Login_email = () => {
   const dispatch = useDispatch();
 
   const handleLogin = async() => {
-    console.log('====================================');
-    console.log(I18n.currentLocale());
-    console.log('====================================');
     formik.validateForm().then(async(errors) => {
       if (errors.email) {
         // toastRef.current?.show(errors.email);
@@ -66,16 +68,25 @@ const Login_email = () => {
           await auth().signInWithEmailAndPassword(formik.values.email,formik.values.password)
           .then(async(userCredential) => {
               const userInfo:any = await userApi.getUserInfoByUid(userCredential.user.uid)
-              dispatch(setUser(userInfo?.user_id))
+              userInfo.birthday = covertFirebaseTimeStampToString(userInfo?.birthday)
+              userInfo.createAt = covertFirebaseTimeStampToString(userInfo?.createAt)
+              userInfo.updateAt = covertFirebaseTimeStampToString(userInfo?.updateAt)
+              // console.log(userInfo);
+              
+              dispatch(setUser(userInfo))
+              AsyncStorage.setItem('userId',userInfo?.user_id)
               navigate('BottomTab')
             })
           .catch(error => {
             if(error.code === 'auth/invalid-credential'){
               console.log('Tài khoản mật khẩu không đúng');
-              ToastService.showToast('Tài khoản mật khẩu không đúng')
-              
+              return ToastService.showToast(AppLang(`tai_khoan_mk_sai`))
             }
-            // console.error(error);
+            if(error.code === 'auth/network-request-failed'){
+              console.log('không có kết nối mạng');
+              return ToastService.showToast(AppLang('khong_co_ket_noi_mang'))
+            }
+            console.error(error);
           });
           dispatch(setUserLoading(false));
           
@@ -90,7 +101,7 @@ const Login_email = () => {
 
   return (
     <LayoutApp>
-      <HeaderApp title={'Đăng nhập'}
+      <HeaderApp title={AppLang(`dang_nhap`)}
         left={{
           show: true,
           onPress: () => goBack()
@@ -99,8 +110,8 @@ const Login_email = () => {
       <View style={{ height: 10, backgroundColor: COLORS.text4 }}></View>
       <ScrollView style={{flex:1}} contentContainerStyle={{justifyContent:"center",alignItems:'center'}} showsVerticalScrollIndicator={false}>
         <Image source={imgApp.logoApp} style={styles.logo} resizeMode='contain' />
-        <TextApp size30 bold color1>Xin chào</TextApp>
-        <TextApp mV10 color2>Vui lòng đăng nhập bằng số điện thoại của bạn</TextApp>
+        <TextApp size30 bold color1>{AppLang(`xin_chao`)}</TextApp>
+        <TextApp mV10 color2>{AppLang(`vui_long_dang_nhap_sdt`)}</TextApp>
 
         <ViewApp style={{width:'80%'}} >
               <TextInputForm placeholder='Email'
@@ -108,13 +119,13 @@ const Login_email = () => {
                 value={formik.values.email}
                 onBlur={formik.handleBlur('email')}
               />
-              <TextInputForm placeholder='Mật khẩu' look
+              <TextInputForm placeholder={AppLang(`mat_khau`)} look
                 onChangeText={formik.handleChange('password')}
                 value={formik.values.password}
                 onBlur={formik.handleBlur('password')}
                   />
 
-          <ButtonApp bR={20} title={'Đăng nhập'}
+          <ButtonApp bR={20} title={AppLang(`dang_nhap`)}
             onPress={handleLogin}
           />
         </ViewApp>

@@ -3,14 +3,26 @@ import React from 'react'
 import ViewApp from './ViewApp'
 import { COLORS } from '../colors/colors'
 
-const {width} = Dimensions.get('window')
-const LoadingApp = () => {
+const { width } = Dimensions.get('window')
+
+type LoadingStyle = {
+    noBg?: boolean | undefined
+}
+
+const LoadingApp = ({ noBg }: LoadingStyle) => {
     return (
         <ViewApp mid style={styles.loading}>
-            <ViewApp style={styles.square}>
+            {
+                noBg ? <ViewApp >
 
-                <ActivityIndicator size={'large'} color={COLORS.primary} />
-            </ViewApp>
+                    <ActivityIndicator size={'large'} color={COLORS.primary} />
+                </ViewApp>
+                    : <ViewApp style={[styles.square, { backgroundColor: COLORS.white }]}>
+
+                        <ActivityIndicator size={'large'} color={COLORS.primary} />
+                    </ViewApp>
+            }
+
         </ViewApp>
     )
 }
@@ -27,15 +39,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'rgba(255, 255, 255, 0.5)'
-        
+
     },
-    square:{
-        backgroundColor: COLORS.white,
-        width:width*0.2,
-        height:width*0.2,
-        borderRadius:20,
-        alignItems:'center',
-        justifyContent:'center',
+    square: {
+        width: width * 0.2,
+        height: width * 0.2,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

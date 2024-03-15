@@ -41,7 +41,7 @@ interface Props extends TextInputMaskProps {
 }
 const TEXT_COLOR = '#1E2E3D'
 const TEXT_PLACE_HOLDER = '#A4A4A4'
-const InputCustom = React.forwardRef<Handle, Props>(({ isText, isUpdate, isModal, label, styleLabel, value, onPressRight, styleBox, icon, rightComponent, background = 'white', styleBlockContain, required, placeholder = '', propsInput, ...props }: any, ref) => {
+const InputCustom = React.forwardRef<Handle, Props>(({ isText, isUpdate, isModal, label, styleLabel, value, onPressRight, styleBox, icon, rightComponent, background = 'white', styleBlockContain, required, placeholder = '', propsInput,styleInput, ...props }: any, ref) => {
     const _InputCustom = useRef<any>()
     React.useImperativeHandle(ref, () => ({
         getValue: () => {
@@ -70,6 +70,7 @@ const InputCustom = React.forwardRef<Handle, Props>(({ isText, isUpdate, isModal
                 <InputBasic
                     ref={_InputCustom}
                     placeholder=''
+                    styleBoxInput={styleInput}
                     background={background}
                     {...propsInput}
                     {...props}

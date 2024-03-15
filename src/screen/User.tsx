@@ -1,7 +1,7 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { Children, useEffect, useRef, useState, useReducer } from 'react'
 import LayoutApp from '../components/LayoutApp'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ViewApp from '../components/ViewApp'
 import { COLORS } from '../colors/colors'
 import { imgApp } from '../assets/img'
@@ -19,40 +19,24 @@ import i18n from '../assets/languages/i18n'
 import RNRestart from 'react-native-restart'
 import InputSelect from '../components/input/InputSelect'
 import ModalApp from '../components/ModelApp'
+import { AppLang } from '../assets/languages'
+import { useFocusEffect } from '@react-navigation/native'
+import Count from '../components/Count'
 type Props = {}
 
 const User = (props: Props) => {
   const { user, userLoading } = useSelector((state: any) => state.user)
-  const [isLoading, data, onRefresh] = useInfoUserCurrent();
+  // const [isLoading, data, onRefresh] = useInfoUserCurrent();
   const refToast = useRef<any>();
   const _langue = useRef<any>();
   const auth = getAuth()
-  // console.log('dataCurrent', data);
-
-  // useEffect(() => {    
-  //   if (user) {
-  //     const fetchData = async () => {
-  //       try {
-  //         const userInfo = await userApi.getUserInfoById(user);
-  //         console.log(userInfo);
-  //         setUserInfo(userInfo)
-  //       } catch (error) {
-  //         console.error('Error fetching user info', error);
-  //       }
-  //     }
-  //     fetchData();
-  //     console.log('11',userInfo);
-
-  //   }
-
-  // }, [user])
 
   const handleLogOut = async () => {
 
     try {
       await signOut(auth);
       console.log('User signed out successfully');
-      ToastService.showToast('Đăng xuất thành công')
+      ToastService.showToast(AppLang(`dang_xuat_thanh_cong`))
       navigate('Login_email')
     } catch (error) {
       console.error('Error signing out:', error);
@@ -60,12 +44,10 @@ const User = (props: Props) => {
   }
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const changeLanguage = (language:any) => {
-    console.log('====================================');
-    console.log('change',language);
-    console.log('====================================');
     i18n.locale = language
     forceUpdate()
     _langue.current.close()
+    navigate('BottomTab')
     // setTimeout(() =>{
     //   // CodePush.restartApp()
     //   RNRestart.Restart()
@@ -79,21 +61,21 @@ const User = (props: Props) => {
       {/* {isLoading ? <LoadingApp />
       : */}
       <ViewApp bg={COLORS.primary} flex1>
-        <TouchApp style={styles.blockHeader} onPress={() => navigate('Screen_info_user',{data:data})}>
-          <ViewApp row alignItems='center'>
+        <TouchApp style={styles.blockHeader} onPress={() => navigate('Screen_info_user')} w100 row>
+          <ViewApp row alignItems='center' flex3>
 
             <ViewApp square={60} overF='hidden' mid styleBox={styles.imageUser}>
-              <Image source={data?.imgUrl ? {uri:data?.imgUrl} : imgApp.userDefault} style={{height:'100%', width:'100%'}} resizeMode='cover' />
+              <Image source={user.img ? {uri:user.img} : imgApp.userDefault} style={{height:'100%', width:'100%'}} resizeMode='cover' />
             </ViewApp>
 
-            <ViewApp>
-              <TextApp color4 size18 bold>{data.userName}</TextApp>
-              <TextApp color4 >{data.phone}</TextApp>
+            <ViewApp flex1>
+              <TextApp color4 size18 bold>{user.userName}</TextApp>
+              <TextApp color4 >{user.phone}</TextApp>
             </ViewApp>
 
           </ViewApp>
-          <ViewApp row>
-            <TextApp color4>Chỉnh sửa</TextApp>
+          <ViewApp row flex1>
+            <TextApp color4>{AppLang(`chinh_sua`)}</TextApp>
             <IconApp type='Entypo' name='chevron-right' color={COLORS.text4} />
           </ViewApp>
         </TouchApp>
@@ -107,7 +89,7 @@ const User = (props: Props) => {
             onPress={() =>{}}
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='clipboard-clock-outline'/>
-            <TextApp colorW>Đang xử lý</TextApp>
+            <TextApp colorW>{AppLang(`dang_xu_ly`)}</TextApp>
             <Count top={-10} right={'30%'} count={10}/>
           </TouchApp>
           <TouchApp
@@ -118,7 +100,7 @@ const User = (props: Props) => {
             onPress={() =>{}}
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='truck-fast-outline'/>
-            <TextApp colorW>Đang giao</TextApp>
+            <TextApp colorW>{AppLang('dang_giao')}</TextApp>
             <Count top={-10} right={'30%'} count={10}/>
           </TouchApp>
           <TouchApp
@@ -129,7 +111,7 @@ const User = (props: Props) => {
             onPress={() =>{}}
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='star-outline'/>
-            <TextApp colorW>Đánh giá</TextApp>
+            <TextApp colorW>{AppLang(`danh_gia`)}</TextApp>
             <Count top={-10} right={'30%'} count={10}/>
           </TouchApp>
 
@@ -141,24 +123,26 @@ const User = (props: Props) => {
           pad20
         >
           <ScrollView
+            showsVerticalScrollIndicator={false}
             style={{ marginBottom:50}}
           >
-            <ItemTitle title='Tài khoản'>
-              <ItemChildren title='Hồ sơ' icon='user' first onPress={()=>navigate('Screen_info_user',{data:data})}/>
-              <ItemChildren title='Danh sách địa chỉ' icon='map-marker'/>
-              <ItemChildren title='Đổi mật khẩu' icon='lock'/>
+            <ItemTitle title={AppLang(`tai_khoan`)}>
+              <ItemChildren title={AppLang(`thong_tin_tai_khoan`)} icon='user' first onPress={()=>navigate('Screen_info_user')}/>
+              <ItemChildren title={AppLang(`danh_sach_dia_chi`)} icon='map-marker' onPress={() =>navigate('Screen_address')}/>
+              <ItemChildren title={AppLang(`doi_mat_khau`)} icon='lock'/>
             </ItemTitle>
 
-            <ItemTitle title='Ứng dụng'>
+            <ItemTitle title={AppLang(`ung_dung`)}>
               <ItemChildren title={i18n.t('ngon_ngu')} icon='user' first onPress={() => _langue.current.open()}/>
+              <ItemChildren title={i18n.t('qr_code')} icon='qrcode' type='AntDesign' onPress={() => {navigate('Screen_qr_code')}}/>
             </ItemTitle>
             
-            <ItemTitle title='Trung tâm trợ giúp'>
-              <ItemChildren title='Câu hỏi thường gặp' icon='comments' first/>
-              <ItemChildren title='Phản hồi & hỗ trợ' icon='headset' type='FontAwesome5'/>
+            <ItemTitle title={AppLang(`trung_tam_tro_giup`)}>
+              <ItemChildren title={AppLang(`cau_hoi_thuong_gap`)} icon='comments' first/>
+              <ItemChildren title={AppLang(`phan_hoi_ho_tro`)} icon='headset' type='FontAwesome5'/>
             </ItemTitle>
 
-            <ButtonApp title='Đăng xuất' styleButton={{ borderRadius: 10 }}
+            <ButtonApp title={AppLang(`dang_xuat`)} styleButton={{ borderRadius: 10 }}
               onPress={handleLogOut}
             />
           </ScrollView>
@@ -199,23 +183,6 @@ const ItemChildren = ({ title, icon, type, first, onPress }: any) => {
         <IconApp type='Entypo' name='chevron-right' color={COLORS.text3} />
 
       </TouchableOpacity>
-    </ViewApp>
-  )
-}
-
-const Count = ({right, left, top, bottom,count}:any) =>{
-
-  return(
-    <ViewApp
-      positionA
-      top={top}
-      right={right}
-      left={left}
-      bottom={bottom}
-      backgroundColor={'#B22830'}
-      borderR100
-    >
-      <TextApp colorW size14>{count}</TextApp>
     </ViewApp>
   )
 }

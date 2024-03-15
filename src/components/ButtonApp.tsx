@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         marginVertical:10,
+        borderRadius:10
         
     },
     styleButtonDisabled:{
