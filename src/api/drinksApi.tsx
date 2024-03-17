@@ -33,7 +33,6 @@ export const drinksApi = {
     },
 
     getItemDrink: async (idItem: string) => {
-        console.log('dataa', idItem);
         try {
             const documentSnapshot = await firestore()
                 .collection('items')

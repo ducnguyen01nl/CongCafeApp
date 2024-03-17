@@ -18,7 +18,7 @@ const ChangeCountItem = ({count,setCount}: any) => {
                 <IconApp size={14} color={COLORS.white} name='minus' type='FontAwesome' />
             </TouchApp>
             <ViewApp h={30} marH10 mid borderR={5} bg={COLORS.Secondary}>
-                <TextApp size18 bold>{count}</TextApp>
+                <TextApp color1 size18 bold>{count}</TextApp>
             </ViewApp>
             <TouchApp square={24} mid borderR100 bg={COLORS.primary}
                 onPress={() => setCount(count + 1)}

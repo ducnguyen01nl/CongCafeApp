@@ -29,8 +29,8 @@ const Login_email = () => {
   const toastRef:any = useRef(null)
   const formik = useFormik({
     initialValues: {
-      email:'',
-      password:'',
+      email:'admin@gmail.com',
+      password:'12345678',
     },
     validationSchema: Yup.object({
       email: Yup.string().trim().lowercase().email(AppLang(`phai_la_email`)).required(AppLang(`email_khong_duoc_trong`)),

@@ -12,10 +12,49 @@ import TextApp from '../../components/TextApp';
 import { formatMoney, moneyDiscount } from '../../utils/format';
 import ButtonApp from '../../components/ButtonApp';
 import { AppLang } from '../../assets/languages';
+import { useCartUser } from '../../service/useLocalMater';
+import { userApi } from '../../api/userApi';
+import ToastService from '../../service/ToastService';
 
 const Screen_item_detail = ({ route }: any) => {
     const { item } = route?.params;
     const [count,setCount] = useState<number>(1)
+    const [isLoading, data, onRefresh] = useCartUser()
+    const countData = data?.order?.length;
+
+    const handleAddDrinkToCart = async() => {
+        let isItemExist = false;
+        const dataAdd = {
+            count:count,
+            idItem:item.id,
+            imgItem:item.img,
+            nameItem:item.name
+        }
+        console.log('database',data?.order);
+        
+        const updateOrder = data?.order?.map((item:any) =>{
+            if(item.idItem === dataAdd.idItem){
+                isItemExist = true
+                return{
+                    ...item,
+                    count: item.count + dataAdd.count
+                }
+            }
+            else return item
+        })
+        if(!isItemExist){
+            updateOrder.push(dataAdd)
+        }
+        try {
+            await userApi.addDrinksToCart(data?.id,{order:updateOrder})
+            onRefresh()
+        } catch (error) {
+            console.log(error);
+            
+        }
+         
+    }
+    
     return (
         <LayoutApp>
             <ViewApp w100 h={'45%'}>
@@ -31,7 +70,7 @@ const Screen_item_detail = ({ route }: any) => {
                     onPress={() => navigate('Screen_cart')}
                 >
                     <IconApp color={COLORS.white} name='shopping-basket' type='FontAwesome' size={18} />
-                    <Count top={0} right={-4} count={6} size={12} />
+                    <Count top={0} right={-4} count={countData} size={12} />
                 </TouchApp>
             </ViewApp>
 
@@ -70,7 +109,9 @@ const Screen_item_detail = ({ route }: any) => {
                         <IconApp size={18} color={COLORS.white} name='plus' type='FontAwesome' />
                     </TouchApp>
                 </ViewApp>
-                <ButtonApp with6 title={`${AppLang('them')} - ${formatMoney(moneyDiscount(item.price, item.discount)*count)}`} />
+                <ButtonApp with6 title={`${AppLang('them')} - ${formatMoney(moneyDiscount(item.price, item.discount)*count)}`} 
+                    onPress={handleAddDrinkToCart}
+                />
             </ViewApp>
 
         </LayoutApp>

@@ -9,11 +9,13 @@ import TextApp from '../components/TextApp'
 import { AppLang } from '../assets/languages'
 import TouchApp from '../components/TouchApp'
 import { navigate } from '../root/RootNavigation'
-import { formatMoney } from '../utils/format'
+import { formatMoney, moneyDiscount } from '../utils/format'
 import { DATA_TYPE_ITEMS } from '../data/dataLocal'
 import ListViewItems from './home/components/ListViewItems'
 import { drinksApi } from '../api/drinksApi'
 import { useSelector } from 'react-redux'
+import { useCartUser, useGetItemDrink } from '../service/useLocalMater'
+import moment from 'moment'
 
 type Props = {}
 
@@ -42,10 +44,7 @@ const data = [
 const Home = (props: Props) => {
 
   const {user} = useSelector((state:any) => state.user)
-  console.log('====================================');
-  console.log(user);
-  console.log('====================================');
-
+  const [isLoading,data,onRefresh] = useCartUser()
   return (
     <LayoutApp>
       <ViewApp h={'24%'} bg={COLORS.primary}>
@@ -88,12 +87,14 @@ const Home = (props: Props) => {
         </ViewApp>
 
         <ViewApp row centerH mar20>
-          <TouchApp row flex1 mid bgW padV10 borderR={10} borderC={COLORS.yl} borderW={3} marR={20}>
+          <TouchApp row flex1 mid bgW padV10 borderR={10} borderC={COLORS.yl} borderW={3} marR={20}
+            onPress={() =>navigate('Screen_cart')}
+          >
             <IconApp color={COLORS.yl} name='shopping-basket' type='FontAwesome' />
-            <TextApp bold size16 color={COLORS.yl}>{`10`}</TextApp>
+            <TextApp bold size16 color={COLORS.yl}>{data?.order?.length}</TextApp>
           </TouchApp>
           <TouchApp flex3 row mid bg={COLORS.yl} padV10 borderR={10} borderC={COLORS.yl} borderW={3}>
-            <TextApp bold size16 colorW>{`${AppLang('trang_thanh_toan')} - 100000`}</TextApp>
+            <TextApp bold size16 colorW>{`${AppLang('trang_thanh_toan')}`}</TextApp>
           </TouchApp>
         </ViewApp>
 

@@ -70,6 +70,7 @@ const vi = {
     gio_hang_cua_ban:   'Giỏ hàng của bạn',
     khong_co_ket_noi_mang:   'Không có kết nối mạng',
     qr_code:   'Mã QR code',
+    dat_hang:   'Đặt hàng',
   };
   
   export default vi;

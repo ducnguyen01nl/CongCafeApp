@@ -70,6 +70,7 @@ const en = {
     gio_hang_cua_ban:   `Your cart`,
     khong_co_ket_noi_mang: 'No network connection',
     qr_code: 'QR code',
+    dat_hang: 'Order',
   };
   
   export default en;

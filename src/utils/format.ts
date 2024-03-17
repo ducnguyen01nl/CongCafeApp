@@ -83,7 +83,7 @@ export const covertStringToDate = (date:any) => {
     }
   }
 }
-export const formatMoney = (number:any) => {
+export const formatMoney = (number:number) => {
   return `${Number(number).toLocaleString('en-US')} đ`
 }
 

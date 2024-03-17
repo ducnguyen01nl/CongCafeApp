@@ -11,6 +11,7 @@ interface T_Button extends TouchableOpacityProps {
     propsText?: any
     disabled?: boolean | undefined
     refBtn?: RefObject<any>
+    children?: any
 
     with10?: boolean | undefined
     with9?: boolean | undefined
@@ -157,6 +158,7 @@ const ButtonApp: React.FC<T_Button> = (props) => {
             style={[props.styleText,styles.text]}
 
         >{props.title}</TextApp>
+        {props.children}
     </TouchableOpacity>
   )
 }

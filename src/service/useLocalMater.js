@@ -15,7 +15,6 @@ export const useLocalMater = (type,callBackApi) => {
         setIsLoading(true)
         try {
             const res = await callBackApi();
-            console.log('====', res);
             if (res) setData(res);
         } catch (error) {
             console.error('Error fetching data:', error);

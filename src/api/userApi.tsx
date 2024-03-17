@@ -111,5 +111,18 @@ export const userApi = {
             console.log(error);
 
         }
+    },
+
+    addDrinksToCart: async(id:any,params:any) => {
+        firestore()
+        .collection('cart')
+        .doc(id)
+        .update(params)
+        .then(() =>{
+            ToastService.showToast(AppLang('them_do_uong_thanh_cong'))
+        })
+        .catch(() =>{
+            ToastService.showToast(AppLang('them_do_uong_that_bai'))
+        })
     }
 }
