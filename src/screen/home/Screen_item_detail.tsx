@@ -101,7 +101,7 @@ const Screen_item_detail = ({ route }: any) => {
                         <IconApp size={18} color={COLORS.white} name='minus' type='FontAwesome' />
                     </TouchApp>
                     <ViewApp h={30} flex1 marH10 mid borderR={5} bg={COLORS.Secondary}>
-                        <TextApp size18 bold>{count}</TextApp>
+                        <TextApp color1 size18 bold>{count}</TextApp>
                     </ViewApp>
                     <TouchApp square={30} mid borderR100 bg={COLORS.primary}
                         onPress={() =>setCount(count + 1)}

@@ -71,6 +71,8 @@ const en = {
     khong_co_ket_noi_mang: 'No network connection',
     qr_code: 'QR code',
     dat_hang: 'Order',
+    them_do_uong_thanh_cong:   `Add successful drinks`,
+    them_do_uong_that_bai:   `Add drinks failed`,
   };
   
   export default en;

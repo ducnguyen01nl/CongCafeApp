@@ -71,6 +71,8 @@ const vi = {
     khong_co_ket_noi_mang:   'Không có kết nối mạng',
     qr_code:   'Mã QR code',
     dat_hang:   'Đặt hàng',
+    them_do_uong_thanh_cong:   'Thêm đồ uống thành công',
+    them_do_uong_that_bai:   'Thêm đồ uống thất bại',
   };
   
   export default vi;
