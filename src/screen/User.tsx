@@ -36,7 +36,7 @@ const User = (props: Props) => {
     try {
       await signOut(auth);
       console.log('User signed out successfully');
-      ToastService.showToast(AppLang(`dang_xuat_thanh_cong`))
+      ToastService.showToast(AppLang(`dang_xuat_thanh_cong`),0)
       navigate('Login_email')
     } catch (error) {
       console.error('Error signing out:', error);
@@ -128,7 +128,7 @@ const User = (props: Props) => {
           >
             <ItemTitle title={AppLang(`tai_khoan`)}>
               <ItemChildren title={AppLang(`thong_tin_tai_khoan`)} icon='user' first onPress={()=>navigate('Screen_info_user')}/>
-              <ItemChildren title={AppLang(`danh_sach_dia_chi`)} icon='map-marker' onPress={() =>navigate('Screen_address')}/>
+              <ItemChildren title={AppLang(`danh_sach_dia_chi`)} icon='map-marker' onPress={() =>navigate('Screen_address',{select:false})}/>
               <ItemChildren title={AppLang(`doi_mat_khau`)} icon='lock'/>
             </ItemTitle>
 

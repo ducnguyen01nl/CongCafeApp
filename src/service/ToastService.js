@@ -4,8 +4,8 @@ import React from "react";
 class ToastService {
     static ref = React.createRef();
   
-    static showToast(message) {
-      this.ref.current?.show(message);
+    static showToast(message,type) {
+      this.ref.current?.show(message,type);
     }
   }
 

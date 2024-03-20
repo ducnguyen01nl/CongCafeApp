@@ -34,10 +34,19 @@ export const useInfoUserCurrent = () =>{
 }
 
 export const useListAddress = () => {
-    const {user} = useSelector(state => state.user)
     const [isLoading,data,onRefresh] = useLocalMater([],() =>
-        userApi.getListAddress(user),
+        addressApi.getListAddress(),
     )
+    return [isLoading,data,onRefresh]
+}
+export const useAddressActive = () => {
+    const [isLoading,data,onRefresh] = useLocalMater({},() =>
+    addressApi.getAddressActive())
+    return data
+}
+export const useAddressActive2 = () => {
+    const [isLoading,data,onRefresh] = useLocalMater({},() =>
+    addressApi.getAddressActive())
     return [isLoading,data,onRefresh]
 }
 

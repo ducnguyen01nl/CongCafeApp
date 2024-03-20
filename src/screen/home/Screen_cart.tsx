@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import LayoutApp from '../../components/LayoutApp'
 import HeaderApp from '../../components/HeaderApp'
 import { AppLang } from '../../assets/languages'
-import { goBack } from '../../root/RootNavigation'
+import { goBack, navigate } from '../../root/RootNavigation'
 import ViewApp from '../../components/ViewApp'
 import { COLORS } from '../../colors/colors'
 import { useCartUser, useGetItemDrink } from '../../service/useLocalMater'
@@ -17,6 +17,9 @@ import { ScrollView } from 'react-native'
 import ButtonApp from '../../components/ButtonApp'
 import { array, number } from 'yup'
 import LoadingApp from '../../components/LoadingApp'
+import ModalApp from '../../components/ModelApp'
+import { userRef } from '../../firebase/firebaseConfig'
+import { imgApp } from '../../assets/img'
 
 const Screen_cart = () => {
     const [isLoading, data, onRefresh] = useCartUser();
@@ -24,6 +27,7 @@ const Screen_cart = () => {
     const [totalPrice,setTotalPrice] = useState<number>(0);
     const [itemPrices, setItemPrices] = useState<number[]>([]); // Mảng lưu giá trị của từng mục
     const totalPriceCart = itemPrices.reduce((total,current) =>total + current,0)
+    const refModal = useRef<any>()
     // const [isReady, setIsReady] = useState<boolean>(false); // State để kiểm soát việc hiển thị trang
     // if(itemPrices.length == data?.order?.length){
     //     setIsReady(true)
@@ -57,7 +61,7 @@ const Screen_cart = () => {
                 {
                     itemPrices.length == data?.order?.length
                     ? <ButtonApp with8 title={`${AppLang('dat_hang')} - ${formatMoney(totalPriceCart)} `} 
-                    onPress={handleOrder}
+                    onPress={() => refModal.current.open()}
                 />
                 : <ButtonApp with8>
                     <LoadingApp noBg />
@@ -65,6 +69,27 @@ const Screen_cart = () => {
                 }
                 
             </ViewApp>
+
+            <ModalApp ref={refModal} mid>
+                <ViewApp w={'90%'} h={'50%'} bgW mid borderR={20}>
+                    <TextApp colorP size22 bold pV20>{AppLang('chon_loai_dat_hang')}</TextApp>
+                    <ViewApp flex1 pad20 row>
+                        <TouchApp flex1 borderW={5} marH10 mid h={'80%'} borderR={20} borderC={COLORS.primary}
+                            onPress={() =>{
+                                refModal.current.close(),
+                                navigate('Screen_request_order',{totalPrice:totalPriceCart})
+                            }}
+                        >
+                            <Image style={{width:'80%'}} source={imgApp.iconDelivery} resizeMode='contain' />
+                            <TextApp colorP bold>{AppLang('dat_online')}</TextApp>
+                        </TouchApp>
+                        <TouchApp flex1 borderW={5} marH10 mid h={'80%'} borderR={20} borderC={COLORS.primary}>
+                            <Image style={{width:'80%'}} source={imgApp.iconTable} resizeMode='contain' />
+                            <TextApp colorP bold>{AppLang('dung_tai_quan')}</TextApp>
+                        </TouchApp>
+                    </ViewApp>
+                </ViewApp>
+            </ModalApp>
         </LayoutApp>
     )
 }

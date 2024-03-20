@@ -47,18 +47,20 @@ export const userApi = {
 
     setUserInfo: async (params: any) => {
         const userId: any = await AsyncStorage.getItem('userId')
-        try {
+        // try {
             firestore()
                 .collection('user')
                 .doc(userId)
                 .update(params)
                 .then(() => {
-                    ToastService.showToast(AppLang('cap_nhat_thong_tin_thanh_cong'))
-                });
-        } catch (error) {
-            console.log(error);
+                    ToastService.showToast(AppLang('cap_nhat_thong_tin_thanh_cong'),0)
+                })
+                .catch((error) =>console.log(error))
+                
+        // } catch (error) {
+        //     console.log(error);
 
-        }
+        // }
     },
 
     updateFile: async (url: any, name: any, idUser: any) => {
@@ -73,24 +75,6 @@ export const userApi = {
         }
     },
 
-    getListAddress: async (params: any) => {
-        try {
-            const addresses: any[] = []
-            await firestore()
-                .collection('address')
-                .where('idUser', '==', params)
-                .get()
-                .then((querysnapshot: any) => {
-                    querysnapshot.forEach((documentSnapshot: any) => {
-                        addresses.push(documentSnapshot.data())
-                    })
-                })
-            return addresses
-        } catch (error) {
-            console.log(error);
-
-        }
-    },
     getCartUser: async () => {
         const userId: any = await AsyncStorage.getItem('userId')
         try {
@@ -119,10 +103,10 @@ export const userApi = {
         .doc(id)
         .update(params)
         .then(() =>{
-            ToastService.showToast(AppLang('them_do_uong_thanh_cong'))
+            ToastService.showToast(AppLang('them_do_uong_thanh_cong'),0)
         })
         .catch(() =>{
-            ToastService.showToast(AppLang('them_do_uong_that_bai'))
+            ToastService.showToast(AppLang('them_do_uong_that_bai'),1)
         })
     }
 }

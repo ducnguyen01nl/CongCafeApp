@@ -7,9 +7,11 @@ import IconApp from './IconApp'
 const ToastMessage = forwardRef(({timeout=2000}:any,ref) => {
     const [isVisiable,setIsVisiable] = useState(false)
     const [toastMessage,setToastMessage] = useState('')
+    const [type,setType] = useState<number|undefined>(0)
 
-    const showToast = (mesage:string) =>{
+    const showToast = (mesage:string,type?:number) =>{
         setToastMessage(mesage)
+        setType(type)
         setIsVisiable(true)
         const timer:any = setTimeout(() =>{
             setIsVisiable(false)
@@ -24,8 +26,8 @@ const ToastMessage = forwardRef(({timeout=2000}:any,ref) => {
   return (
     <>
     {
-        isVisiable && <ViewApp style={styles.toast} animated={true}>
-                        <IconApp name='warning' type='AntDesign' size={26} color='white'/>
+        isVisiable && <ViewApp style={[styles.toast,{backgroundColor:type == 0 ? COLORS.green : COLORS.yl,}]} animated={true}>
+                        <IconApp name={type == 0 ? 'checkcircleo' : 'warning'} type='AntDesign' size={26} color='white'/>
                         <Text style={styles.textToast}>{toastMessage}</Text>
                     </ViewApp>
     }
@@ -44,7 +46,6 @@ const styles = StyleSheet.create({
         zIndex:100,
         borderRadius:20,
         padding:15,
-        backgroundColor:COLORS.primary,
         shadowColor: '#000',
         shadowOffset:{
             height:2,
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     
     },
     textToast:{
-        color:COLORS.white,
+        color: COLORS.white,
         marginHorizontal:10,
         fontSize:16
     }

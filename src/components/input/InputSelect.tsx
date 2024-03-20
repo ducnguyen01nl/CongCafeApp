@@ -29,6 +29,7 @@ interface Props extends TextInputMaskProps {
     background?: any,
     option?: { title: string }
     multiSelect?: boolean
+    onSelectItem?:(item:any) => void
 }
 const TEXT_COLOR = '#1E2E3D'
 const TEXT_PLACE_HOLDER = '#A4A4A4'
@@ -139,6 +140,9 @@ const InputSelect = React.forwardRef<any, Props>(({ label, valueInit, placeholde
                                             else {
                                                 setValue({ ...item, name: item[keyString] });
                                                 ref_RBSheet.current.close();
+                                                if(props.onSelectItem){
+                                                    props.onSelectItem(item)
+                                                }
                                             }
                                         }}
                                         content={item?.name}

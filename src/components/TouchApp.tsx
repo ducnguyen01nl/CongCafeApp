@@ -11,6 +11,7 @@ interface T_TouchApp extends ViewStyle, TouchableWithoutFeedbackProps {
   w100?: boolean | undefined
   animated?: boolean | undefined
   onPress?: () => void
+  disabled?: boolean | undefined
   //
   h?: number | string | undefined
   minH?: number | string | undefined
@@ -285,7 +286,8 @@ const TouchApp: React.FC<T_TouchApp> = (props) => {
   return (
     <>
       {props.animated
-        ? 
+        ? <TouchableOpacity>
+
           <Animated.View style={[defaultStyle.block, styleProps, props.styleBox]} {...props}
             entering={FadeInUp.delay(200)}
             exiting={FadeOutUp}
@@ -293,7 +295,8 @@ const TouchApp: React.FC<T_TouchApp> = (props) => {
           >
             {props.children}
           </Animated.View>
-        : <TouchableOpacity style={[defaultStyle.block, styleProps, props.styleBox]} {...props}
+        </TouchableOpacity>
+        : <TouchableOpacity disabled={props.disabled} style={[defaultStyle.block, styleProps, props.styleBox]} {...props}
           onPress={props.onPress}
         >
           {props.children}

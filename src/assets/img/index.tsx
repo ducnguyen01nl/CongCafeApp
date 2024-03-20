@@ -9,4 +9,6 @@ export const imgApp = {
     imgDemo: require('../img/imgDemo.png'),
     iconStar: require('../img/star.png'),
     iconDiscount: require('../img/discount.png'),
+    iconTable: require('../img/iconTable.png'),
+    iconDelivery: require('../img/iconDelivery.png'),
 }

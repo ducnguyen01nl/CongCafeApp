@@ -8,14 +8,15 @@ import { COLORS, shadowP } from '../colors/colors'
 import TextApp from '../components/TextApp'
 import { AppLang } from '../assets/languages'
 import TouchApp from '../components/TouchApp'
-import { navigate } from '../root/RootNavigation'
+import { goBack, navigate } from '../root/RootNavigation'
 import { formatMoney, moneyDiscount } from '../utils/format'
 import { DATA_TYPE_ITEMS } from '../data/dataLocal'
 import ListViewItems from './home/components/ListViewItems'
 import { drinksApi } from '../api/drinksApi'
 import { useSelector } from 'react-redux'
-import { useCartUser, useGetItemDrink } from '../service/useLocalMater'
+import { useAddressActive, useAddressActive2, useCartUser, useGetItemDrink } from '../service/useLocalMater'
 import moment from 'moment'
+import { useFocusEffect } from '@react-navigation/native'
 
 type Props = {}
 
@@ -45,30 +46,36 @@ const Home = (props: Props) => {
 
   const {user} = useSelector((state:any) => state.user)
   const [isLoading,data,onRefresh] = useCartUser()
+  const [isLoadingAddress,dataAddress, onRefreshAddress] = useAddressActive2()
+  useFocusEffect(
+    React.useCallback(() =>{
+      onRefreshAddress()
+    },[goBack])
+  )
+
   return (
     <LayoutApp>
       <ViewApp h={'24%'} bg={COLORS.primary}>
         <ViewApp pad10 row centerH>
-          <ViewApp row>
+          <ViewApp row flex2>
             <TouchApp borderW={3} square={50} borderC={COLORS.Secondary} borderR={10} mid overF='hidden'
               onPress={() => navigate('Screen_info_user')}
             >
               <Image style={{ width: '100%', height:'100%' }} source={user.img ? {uri:user.img} : imgApp.userDefault} resizeMode='cover' />
             </TouchApp>
-            <TouchApp row alignCenter marH10>
+            <TouchApp row alignCenter marH10
+              onPress={() => navigate('Screen_address',{select:true})}
+            >
               <IconApp size={24} name='location' color={COLORS.Secondary} />
-              <ViewApp>
-                <TextApp color={COLORS.Secondary}>{`Nguyên`}</TextApp>
-                <TextApp color={COLORS.Secondary}>{`96 Định Công, Hà Nội`}</TextApp>
+              <ViewApp flex1 padR={25}>
+                <TextApp color={COLORS.Secondary}>{dataAddress?.name}</TextApp>
+                <TextApp numberOfLines={1} color={COLORS.Secondary}>{dataAddress?.address}</TextApp>
               </ViewApp>
             </TouchApp>
           </ViewApp>
 
-          <ViewApp row>
+          <ViewApp row w={'28%'}>
             <TouchApp square={40} borderR={20} mid onPress={() => {
-              data.map((item:any) =>{
-                drinksApi.addNewDrinks(item)
-              })
             }}>
               <IconApp color={COLORS.Secondary} size={26} name='search' />
             </TouchApp>
