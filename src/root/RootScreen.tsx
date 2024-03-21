@@ -6,6 +6,7 @@ import BottomTab from '../components/BottomTab'
 import home from '../screen/home/index'
 import user from '../screen/user/index'
 import auth from '../screen/auth'
+import order from '../screen/order/index'
 import { useSelector } from 'react-redux'
 
 export type NameScreenApp = keyof typeof ScreenApp
@@ -13,6 +14,7 @@ export const ScreenApp = {
   ...home,
   ...auth,
   ...user,
+  ...order,
 }
 
 const Stack = createStackNavigator()
