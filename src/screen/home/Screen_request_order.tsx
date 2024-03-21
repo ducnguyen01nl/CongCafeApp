@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Image, TextInput } from 'react-native'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import LayoutApp from '../../components/LayoutApp'
 import HeaderApp from '../../components/HeaderApp'
 import { AppLang } from '../../assets/languages'
@@ -17,18 +17,35 @@ import InputCustom from '../../components/input/InputCustom'
 import ButtonApp from '../../components/ButtonApp'
 import { useFocusEffect } from '@react-navigation/native'
 import LoadingApp from '../../components/LoadingApp'
+import { orderApi } from '../../api/orderApi'
 
 const Screen_request_order = ({ route }: any) => {
     const { totalPrice } = route?.params
     const [isLoading, data, onRefresh] = useCartUser();
     const [isLoadingActive, addressActive, onRefreshActive] = useAddressActive2()
     const refMessage = useRef<any>()
+    const [message, setMessage] = useState<string>()
 
     useFocusEffect(
         React.useCallback(() => {
             onRefreshActive()
         }, [goBack])
     )
+
+    const handleRequestOrder = async () => {
+        await orderApi.addOrder({
+            idUser: data?.userId,
+            idAddress: addressActive?.id,
+            totalPrice: totalPrice,
+            creatAt: new Date(),
+            status: 0,
+            type: 0,
+            message: message ? message : '',
+            orderList:data?.order
+        })
+        navigate('BottomTab')
+    }
+
     return (
         <LayoutApp>
             <HeaderApp
@@ -51,7 +68,7 @@ const Screen_request_order = ({ route }: any) => {
                                     <IconApp size={24} name='location' color={COLORS.red} />
                                     <ViewApp>
                                         <TextApp color1>{AppLang('dia_chi_nhan_hang')}</TextApp>
-                                        <ViewApp row>
+                                        <ViewApp row alignCenter>
                                             <TextApp color1>{addressActive?.name}</TextApp>
                                             <IconApp size={12} name='minus' type='Entypo' />
                                             <TextApp color1>{addressActive?.phone}</TextApp>
@@ -71,10 +88,10 @@ const Screen_request_order = ({ route }: any) => {
                             <ViewApp row centerH padH10 height={50} borderTW={1} borderBW={1}>
                                 <TextApp color1>{`${AppLang('tin_nhan')}: `}</TextApp>
                                 <TextInput
-                                    ref={refMessage}
                                     placeholder={AppLang('luu_y_cho_cua_hang')}
                                     placeholderTextColor={COLORS.text2}
                                     style={{ textAlign: "right", flex: 1 }}
+                                    onChangeText={text => setMessage(text)}
                                 />
                             </ViewApp>
                             <ViewApp bg={COLORS.text4} pad5 />
@@ -84,7 +101,9 @@ const Screen_request_order = ({ route }: any) => {
                                 <TextApp colorP bold>{AppLang('tong_thanh_toan')}</TextApp>
                                 <TextApp color='#FF7428' bold size16>{formatMoney(totalPrice)}</TextApp>
                             </ViewApp>
-                            <ButtonApp styleButton={{ flex: 1 }} title={AppLang('dat_hang')} />
+                            <ButtonApp styleButton={{ flex: 1 }} title={AppLang('dat_hang')}
+                                onPress={handleRequestOrder}
+                            />
                         </ViewApp>
                     </>
             }

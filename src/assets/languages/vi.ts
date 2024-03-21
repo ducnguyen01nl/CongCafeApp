@@ -103,6 +103,14 @@ const vi = {
     xoa_thanh_cong:   'Xóa thành công',
     ban_co_chac_muon_xoa_dia_chi_nay_k:   'Bạn có chắc muốn xóa địa chỉ này không?',
     xac_nhan:   'Xác nhận',
+    cho_xac_nhan:   'Chờ xác nhận',
+    luu:   'Lưu',
+    xoa:   'Xóa',
+    ban_co_chac_muon_xoa_tat_ca_k:   'Bạn có chắc muốn xóa tất cả không',
+    gio_hang_cua_ban_dang_trong:   'Giỏ hàng của bạn đang trống',
+    them_yeu_cau_dat_hang_thanh_cong:   'Thêm yêu cầu đặt hàng thành công',
+    them_yeu_cau_dat_hang_that_bai:   'Thêm yêu cầu đặt hàng thất bại',
+    don_mua:   'Đơn mua',
   };
   
   export default vi;

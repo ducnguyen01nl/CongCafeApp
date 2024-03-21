@@ -4,6 +4,7 @@ import IconApp from './IconApp'
 import { COLORS } from '../colors/colors'
 import { isString } from 'formik'
 import TextApp from './TextApp'
+import { AppLang } from '../assets/languages'
 const PADDING_HORIZONTAL = 15
 const PADDING_LEFT = 10
 const PADDING_RIGHT = 10
@@ -56,6 +57,7 @@ type RightComponentProps = {
         styleIcon?: StyleProp<ViewStyle>
         iconType?: string
         type?: boolean
+        title?: string
     }
 }
 
@@ -66,7 +68,7 @@ const RightComponent = ({right}:RightComponentProps) => {
             style={[styles.boxHorizontal, styles.boxRight, right?.style]}
             onPress={right?.onPress}>
               {
-                right?.type ? <Text style={{color:'white',fontSize:16}} >Lưu</Text>
+                right?.type ? <Text style={{color:'white',fontSize:16}} >{right?.title ? right?.title: AppLang('luu')}</Text>
                 : <IconApp
                 name={right?.icon ? right.icon : 'chevron-forward-sharp'}
                 size={right?.size ? right.size : SIZE_ICON}

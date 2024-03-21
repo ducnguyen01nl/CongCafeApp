@@ -1,5 +1,5 @@
-import { View, StyleSheet, Image, Modal, Alert } from 'react-native'
-import React, { useRef, useState } from 'react'
+import { View, StyleSheet, Image, Modal, Alert, Button } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import ViewApp from '../../components/ViewApp'
 import HeaderApp from '../../components/HeaderApp'
 import LayoutApp from '../../components/LayoutApp'
@@ -33,7 +33,7 @@ const Login_phone = () => {
     const webViewRef = useRef<any>();
 
 
-    
+
     const recaptchaRef = React.useRef<any>(null)
 
     const formik = useFormik({
@@ -50,17 +50,65 @@ const Login_phone = () => {
     })
 
     const handleLogin = async () => {
-        formik.validateForm().then((errors) => {
+        formik.validateForm().then(async(errors) => {
             if (errors.phone) {
                 toastRef.current?.show(errors.phone);
             }
             else {
                 console.log(formik.values.phone);
-                console.log(phone);
+                console.log('1',phone);
+                try {
+                    const confirmation = await auth().verifyPhoneNumber(phone);
+                    setConfirm(confirmation);
+                    console.log('123',confirmation);
+                    
+                } catch (error) {
+                    console.log(error);
+                    
+                }
             }
         });
     }
-    
+
+    // // Handle login
+    // function onAuthStateChanged(user) {
+    //     if (user) {
+    //         // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
+    //         // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
+    //         // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
+    //         // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    //     return subscriber; // unsubscribe on unmount
+    // }, []);
+
+    // Handle the button press
+    // async function signInWithPhoneNumber(phone) {
+    //     const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+    //     setConfirm(confirmation);
+    // }
+
+    async function confirmCode() {
+        try {
+            await confirm.confirm(code);
+        } catch (error) {
+            console.log('Invalid code.');
+        }
+    }
+
+    // if (!confirm) {
+    //     return (
+    //         <Button
+    //             title="Phone Number Sign In"
+    //             onPress={() => signInWithPhoneNumber('+1 650-555-3434')}
+    //         />
+    //     );
+    // }
+
+
 
     return (
         <LayoutApp>
@@ -91,7 +139,7 @@ const Login_phone = () => {
                 <ViewApp backgroundColor={'white'} width={'90%'} padH20 padV={40} borderR={20}>
                     <TextInputForm placeholder='Nhận mã xác nhận' value={otp} onChangeText={(text: any) => setOtp(text)} />
                     <ButtonApp title='Xác nhận' bR={20} mV20
-                        onPress={() => {}}
+                        onPress={() => { }}
                     />
                 </ViewApp>
             </ModalApp>

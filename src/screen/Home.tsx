@@ -50,6 +50,7 @@ const Home = (props: Props) => {
   useFocusEffect(
     React.useCallback(() =>{
       onRefreshAddress()
+      onRefresh()
     },[goBack])
   )
 

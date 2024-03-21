@@ -86,11 +86,22 @@ const User = (props: Props) => {
             mid
             borderW={1}
             borderC={COLORS.transparent}
+            onPress={() =>{navigate('Screen_order_manage')}}
+          >
+            <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='archive-check-outline'/>
+            <TextApp colorW size12>{AppLang(`cho_xac_nhan`)}</TextApp>
+            <Count top={-10} right={'20%'} count={10}/>
+          </TouchApp>
+          <TouchApp
+            flex1
+            mid
+            borderW={1}
+            borderC={COLORS.transparent}
             onPress={() =>{}}
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='clipboard-clock-outline'/>
-            <TextApp colorW>{AppLang(`dang_xu_ly`)}</TextApp>
-            <Count top={-10} right={'30%'} count={10}/>
+            <TextApp colorW size12>{AppLang(`dang_xu_ly`)}</TextApp>
+            <Count top={-10} right={'20%'} count={10}/>
           </TouchApp>
           <TouchApp
             flex1
@@ -100,8 +111,8 @@ const User = (props: Props) => {
             onPress={() =>{}}
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='truck-fast-outline'/>
-            <TextApp colorW>{AppLang('dang_giao')}</TextApp>
-            <Count top={-10} right={'30%'} count={10}/>
+            <TextApp colorW size12>{AppLang('dang_giao')}</TextApp>
+            <Count top={-10} right={'20%'} count={10}/>
           </TouchApp>
           <TouchApp
             flex1
@@ -111,8 +122,8 @@ const User = (props: Props) => {
             onPress={() =>{}}
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='star-outline'/>
-            <TextApp colorW>{AppLang(`danh_gia`)}</TextApp>
-            <Count top={-10} right={'30%'} count={10}/>
+            <TextApp colorW size12>{AppLang(`danh_gia`)}</TextApp>
+            <Count top={-10} right={'20%'} count={10}/>
           </TouchApp>
 
         </ViewApp>

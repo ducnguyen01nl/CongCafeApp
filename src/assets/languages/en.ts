@@ -103,6 +103,14 @@ const en = {
     xoa_thanh_cong:   `Successful erasing`,
     ban_co_chac_muon_xoa_dia_chi_nay_k:   `Are you sure you want to delete this address?`,
     xac_nhan:   `Confirm`,
+    cho_xac_nhan:   `Wait for confirmation`,
+    luu:   `Save`,
+    xoa:   `Erase`,
+    ban_co_chac_muon_xoa_tat_ca_k:   `Are you sure you want to delete everything?`,
+    gio_hang_cua_ban_dang_trong:   `Your shopping cart is empty`,
+    them_yeu_cau_dat_hang_thanh_cong:   `Add order request successfully`,
+    them_yeu_cau_dat_hang_that_bai:   `Add failed order request`,
+    don_mua:   `Purchase order`,
   };
   
   export default en;

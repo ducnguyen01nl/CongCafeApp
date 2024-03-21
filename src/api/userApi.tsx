@@ -108,5 +108,19 @@ export const userApi = {
         .catch(() =>{
             ToastService.showToast(AppLang('them_do_uong_that_bai'),1)
         })
+    },
+    deleteDrinksToCart: async(id:any,params:any) => {
+        firestore()
+        .collection('cart')
+        .doc(id)
+        .update(params)
+        .then(() =>{
+            console.log('delete success');
+            
+        })
+        .catch((error) =>{
+            console.log(error);
+            
+        })
     }
 }
