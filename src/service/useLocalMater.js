@@ -3,6 +3,7 @@ import { useSelector } from "react-redux"
 import { userApi } from "../api/userApi"
 import { addressApi } from "../api/addressApi"
 import { drinksApi } from "../api/drinksApi"
+import { orderApi } from "../api/orderApi"
 
 export const useLocalMater = (type,callBackApi) => {
     const [isLoading,setIsLoading] = useState(false)
@@ -44,6 +45,11 @@ export const useAddressActive = () => {
     addressApi.getAddressActive())
     return data
 }
+export const useAddressById = (id) => {
+    const [isLoading,data,onRefresh] = useLocalMater({},() =>
+    addressApi.getAddressById(id))
+    return [isLoading,data,onRefresh]
+}
 export const useAddressActive2 = () => {
     const [isLoading,data,onRefresh] = useLocalMater({},() =>
     addressApi.getAddressActive())
@@ -76,5 +82,18 @@ export const useGetItemDrink = (id) => {
     drinksApi.getItemDrink(id))
 
     return [isLoading,data,onRefresh]
+}
+export const useListOrder = (status) =>{
+    const [isLoading, data, onRefresh] = useLocalMater([],() =>
+        orderApi.getListOrderByStatus(status)
+    )
+    return [isLoading, data, onRefresh]
+}
+
+export const useListOrderAll = () =>{
+    const [isLoading, data, onRefresh] = useLocalMater([],() =>
+        orderApi.getListOrderAll()
+    )
+    return [isLoading, data, onRefresh]
 }
 

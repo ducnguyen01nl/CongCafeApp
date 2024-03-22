@@ -6,7 +6,7 @@ import ViewApp from '../components/ViewApp'
 import { COLORS } from '../colors/colors'
 import { imgApp } from '../assets/img'
 import TextApp from '../components/TextApp'
-import { useInfoUserCurrent } from '../service/useLocalMater'
+import { useInfoUserCurrent, useListOrder, useListOrderAll } from '../service/useLocalMater'
 import IconApp from '../components/IconApp'
 import ButtonApp from '../components/ButtonApp'
 import ToastMessage from '../components/ToastMessage'
@@ -26,7 +26,7 @@ type Props = {}
 
 const User = (props: Props) => {
   const { user, userLoading } = useSelector((state: any) => state.user)
-  // const [isLoading, data, onRefresh] = useInfoUserCurrent();
+  const [isLoading, data, onRefresh] = useListOrderAll();
   const refToast = useRef<any>();
   const _langue = useRef<any>();
   const auth = getAuth()
@@ -53,6 +53,7 @@ const User = (props: Props) => {
     //   RNRestart.Restart()
     // },500)
   };
+  
 
   return (
     <LayoutApp
@@ -86,7 +87,7 @@ const User = (props: Props) => {
             mid
             borderW={1}
             borderC={COLORS.transparent}
-            onPress={() =>{navigate('Screen_order_manage')}}
+            onPress={() =>{navigate('Screen_order_manage',{idTab:0})}}
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='archive-check-outline'/>
             <TextApp colorW size12>{AppLang(`cho_xac_nhan`)}</TextApp>
@@ -97,7 +98,7 @@ const User = (props: Props) => {
             mid
             borderW={1}
             borderC={COLORS.transparent}
-            onPress={() =>{}}
+            onPress={() =>{navigate('Screen_order_manage',{idTab:1})}}
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='clipboard-clock-outline'/>
             <TextApp colorW size12>{AppLang(`dang_xu_ly`)}</TextApp>
@@ -108,7 +109,7 @@ const User = (props: Props) => {
             mid
             borderW={1}
             borderC={COLORS.transparent}
-            onPress={() =>{}}
+            onPress={() =>{navigate('Screen_order_manage',{idTab:2})}}
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='truck-fast-outline'/>
             <TextApp colorW size12>{AppLang('dang_giao')}</TextApp>
@@ -119,7 +120,7 @@ const User = (props: Props) => {
             mid
             borderW={1}
             borderC={COLORS.transparent}
-            onPress={() =>{}}
+            onPress={() =>{navigate('Screen_order_manage',{idTab:3})}}
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='star-outline'/>
             <TextApp colorW size12>{AppLang(`danh_gia`)}</TextApp>

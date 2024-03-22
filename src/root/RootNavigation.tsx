@@ -12,6 +12,10 @@ export function push (name: NameScreenApp, params = {}){
     navigationRef.current?.dispatch(StackActions.push(name,params))
 }
 
+export function pop() {
+    navigationRef.current.dispatch(StackActions.pop())
+  }
+
 export function goBack() {
     navigationRef.current.goBack()
 }

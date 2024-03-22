@@ -11,7 +11,9 @@ export const COLORS = {
     transparent:'rgba(0, 0, 0, 0)',
     trans:'rgba(52, 52, 52, 0.6)',
     yl:'#FEA509',
-    green:'#2BB300'
+    green:'#2BB300',
+    orange:'#FF752A',
+    blue:'#009197'
 
 }
 

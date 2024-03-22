@@ -38,6 +38,23 @@ export const addressApi = {
 
         }
     },
+    getAddressById: async(idItem:string) =>{
+      try {
+        const documentSnapshot = await firestore()
+            .collection('address')
+            .doc(idItem)
+            .get();
+        if (documentSnapshot.exists) {
+            const item = documentSnapshot.data();
+            return item;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.log(error);
+
+    }
+  },
     getAddressActive: async() =>{
         const userId: any = await AsyncStorage.getItem('userId')
         try {

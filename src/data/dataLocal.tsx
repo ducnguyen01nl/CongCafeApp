@@ -13,11 +13,27 @@ export const formatDateTimestamp = (time:any) => {
         const month = newDate.getMonth() + 1; // Tháng bắt đầu từ 0, cần cộng thêm 1
         const year = newDate.getFullYear();
         const formattedDate = `${day}-${month}-${year}`;
-        return formattedDate
+        return formattedDate;
 
     }
     
-    // return formattedDate
+    return ''
+}
+
+export const formatDateTimestampAll = (time:any) => {
+    if(time){
+        const newDate = new Date(time.seconds * 1000 + time.nanoseconds / 1000000);
+        const day = newDate.getDate();
+        const month = newDate.getMonth() + 1; // Tháng bắt đầu từ 0, cần cộng thêm 1
+        const year = newDate.getFullYear();
+        const hours = newDate.getHours();
+        const minutes = newDate.getMinutes();
+        const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
+        return formattedDate;
+
+    }
+    
+    return ''
 }
 
 
@@ -39,3 +55,32 @@ export const DATA_TYPE_ITEMS = [
     {name:AppLang('sua_chua'), value:6},
     {name:AppLang('do_an'), value:7},
 ]
+
+export const titleTypeItem = (type: number) => {
+    switch (type) {
+        case 0:
+            return 'don_hang_cho_xac_nhan'
+        case 1:
+            return 'don_hang_dang_xu_ly'
+        case 2:
+            return 'don_hang_dang_giao'
+        case 3:
+            return 'don_hang_da_hoan_thanh'
+        case 4:
+            return 'don_hang_da_huy'
+    }
+}
+export const titleStatus = (type: number) => {
+    switch (type) {
+        case 0:
+            return 'xac_nhan'
+        case 1:
+            return 'dang_xu_ly2'
+        case 2:
+            return 'dang_giao2'
+        case 3:
+            return 'hoan_thanh'
+        case 4:
+            return 'huy'
+    }
+}

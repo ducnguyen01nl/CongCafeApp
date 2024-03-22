@@ -3,9 +3,13 @@ import React from 'react'
 import LayoutApp from '../../components/LayoutApp'
 import HeaderApp from '../../components/HeaderApp'
 import { AppLang } from '../../assets/languages'
-import { goBack } from '../../root/RootNavigation'
+import { goBack, pop } from '../../root/RootNavigation'
+import ViewApp from '../../components/ViewApp'
+import TopTab from '../order/components/TopTab'
 
-const Screen_order_manage = () => {
+const Screen_order_manage = ({route}:any) => {
+
+  const {idTab} = route?.params;
   return (
     
     <LayoutApp>
@@ -13,7 +17,7 @@ const Screen_order_manage = () => {
         title={AppLang('don_mua')}
         left={{
           show:true,
-          onPress: () => goBack()
+          onPress: () => pop()
         }}
         right={{
           show:true,
@@ -21,6 +25,9 @@ const Screen_order_manage = () => {
           onPress:() =>{}
         }}
       />
+      <ViewApp flex1>
+        <TopTab idTab={idTab} />
+      </ViewApp>
     </LayoutApp>
   )
 }

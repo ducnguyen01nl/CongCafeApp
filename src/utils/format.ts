@@ -88,6 +88,7 @@ export const formatMoney = (number:number) => {
 }
 
 export const moneyDiscount = (money:any,discoust:any) =>{
+  
   const percent = 100 - Number(discoust);
   return Number(money)*(percent*0.01)
 }

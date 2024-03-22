@@ -1,11 +1,14 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import { useListOrder } from '../../service/useLocalMater'
+import Screen_default from './components/Screen_default'
 
 const Screen_delivery = () => {
+  const [isLoading, data, onRefresh] = useListOrder(2)
+  
   return (
-    <View>
-      <Text>Screen_delivery</Text>
-    </View>
+    <Screen_default isLoading={isLoading} data={data} onRefresh={onRefresh} />
+
   )
 }
 

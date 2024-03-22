@@ -23,6 +23,59 @@ export const orderApi = {
             console.log(error);
             
           }
+    },
+    getListOrderByStatus: async(status:number) =>{
+        const userId: any = await AsyncStorage.getItem('userId')
+      try {
+        const listOrder: any[] = []
+        await firestore()
+            .collection('order')
+            .where('idUser','==',userId)
+            .where('status','==',status)
+            .get()
+            .then((querysnapshot: any) => {
+                querysnapshot.forEach((documentSnapshot: any) => {
+                    listOrder.push(documentSnapshot.data())
+                })
+            })
+        return listOrder
+    } catch (error) {
+        console.log(error);
+
+    }
+    },
+    getListOrderAll: async() =>{
+        const userId: any = await AsyncStorage.getItem('userId')
+        try {
+          const listOrder: any[] = []
+          await firestore()
+              .collection('order')
+              .where('idUser','==',userId)
+              .get()
+              .then((querysnapshot: any) => {
+                  querysnapshot.forEach((documentSnapshot: any) => {
+                      listOrder.push(documentSnapshot.data())
+                  })
+              })
+          return listOrder
+      } catch (error) {
+          console.log(error);
+  
+      }
+      },
+    updateOrder: async(id:string,params:any) =>{
+        await firestore()
+        .collection('order')
+        .doc(id)  
+        .update(params)
+        .then(() =>{
+          console.log('success');
+          
+        })
+        .catch((error) =>{
+          console.log(error);
+          
+        })
     }
 
 }
