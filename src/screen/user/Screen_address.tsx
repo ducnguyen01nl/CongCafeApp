@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import LayoutApp from '../../components/LayoutApp'
 import HeaderApp from '../../components/HeaderApp'
 import { AppLang } from '../../assets/languages'
@@ -17,6 +17,7 @@ import { Modal } from 'react-native-paper'
 import ModalApp from '../../components/ModelApp'
 import ButtonApp from '../../components/ButtonApp'
 import { addressApi } from '../../api/addressApi'
+import { useFocusEffect } from '@react-navigation/native'
 const MAX_ADDRESS = 5;
 
 const Screen_address = ({ route }: any) => {
@@ -35,12 +36,19 @@ const Screen_address = ({ route }: any) => {
     onRefresh()
     modalDelete.current.close()
   }
+  useFocusEffect(
+    React.useCallback(() =>{
+      onRefresh()
+    },[])
+  )
 
   const handleSelectAddress = async(item:any) =>{
     try {
       await addressApi.updateAddress(dataAddress?.id,{active: false})
       await addressApi.updateAddress(item?.id,{active:true})  
-      ToastService.showToast(AppLang('cap_nhat_thong_tin_thanh_cong'),0)
+      if(!params?.select){
+        ToastService.showToast(AppLang('cap_nhat_thong_tin_thanh_cong'),0)
+      }
       goBack()
     } catch (error) {
       console.log(error);
@@ -108,8 +116,6 @@ const Screen_address = ({ route }: any) => {
 }
 
 const ItemAddress = ({ item, select, onRefresh, onPressDelete, onSelectItem }: any) => {
-  console.log('item', item);
-  console.log('item', select);
 
   return (
     <TouchApp disabled={select ? false : true} key={item.id} w100 minHeight={50} row centerH pad10 borderBW={1}
@@ -119,7 +125,7 @@ const ItemAddress = ({ item, select, onRefresh, onPressDelete, onSelectItem }: a
         <IconApp color={COLORS.primary} name='location' />
 
         <ViewApp>
-          {item.active &&
+          {item.active && !select &&
             // <ViewApp borderW={1} borderC='red' borderR={5} marL={5}>
             <TextApp color='red'>{AppLang('mac_dinh')}</TextApp>
             // </ViewApp>
@@ -148,7 +154,7 @@ const ItemAddress = ({ item, select, onRefresh, onPressDelete, onSelectItem }: a
         select ? <IconApp style={{ paddingHorizontal: 10 }} color={item.active ? COLORS.primary : COLORS.text3} name={item.active ? 'checkbox' : 'checkbox-outline'} />
           : <ViewApp row>
             <TouchApp pad10
-              onPress={() => navigate('Screen_add_address', { dataItem: item, onRefreshListAddress: onRefresh })}
+              onPress={() => navigate('Screen_add_address', { dataItem: item })}
             >
               <IconApp name='pencil' type='Entypo' />
             </TouchApp>

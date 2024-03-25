@@ -141,6 +141,12 @@ const vi = {
     dang_xu_ly2:   'đang xử lý',
     dang_giao2:   'đang giao',
     hoan_thanh:   'hoàn thành',
+    chua_co_du_lieu:   'Chưa có dữ liệu',
+    tim_kiem:   'Tìm kiếm',
+    tim_kiem_san_pham:   'Tìm kiếm sản phẩm',
+tim_kiem_don_hang:   'Tìm kiếm đơn hàng',
+tim_kiem_theo_ten_gia:   'Tìm kiếm theo tên, giá sản phẩm',
+khong_co_san_pham:   'Không có sản phẩm',
   };
   
   export default vi;

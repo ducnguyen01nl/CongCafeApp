@@ -12,22 +12,23 @@ import { formatMoney, moneyDiscount } from '../../../utils/format'
 import { useListDrinks } from '../../../service/useLocalMater'
 import LoadingApp from '../../../components/LoadingApp'
 import { navigate } from '../../../root/RootNavigation'
+import { AppLang } from '../../../assets/languages'
 
 const ListViewItems = () => {
     const [active, setActive] = useState<any>(0);
     const refList = useRef<any>();
     const [isLoading, data, onRefresh] = useListDrinks();
 
-    const listDrinkByType = useCallback(() =>{
-        if(data){
-            return data.filter((state:any) => state.type == active)
+    const listDrinkByType = useCallback(() => {
+        if (data) {
+            return data.filter((state: any) => state.type == active)
         }
-    },[data,active])
+    }, [data, active])
 
-    const handleChangeTypeItem = (value:any,index:number) => {
+    const handleChangeTypeItem = (value: any, index: number) => {
         setActive(value)
         onRefresh()
-        refList.current.scrollTo({x:index*70,animated:true})
+        refList.current.scrollTo({ x: index * 70, animated: true })
     }
 
     return (
@@ -38,9 +39,9 @@ const ListViewItems = () => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ alignItems: 'center', height: 70 }}
             >
-                {DATA_TYPE_ITEMS.map((item: any,index:number) => (
+                {DATA_TYPE_ITEMS.map((item: any, index: number) => (
                     <TouchApp key={item?.value} bg={active == item?.value ? COLORS.primary : COLORS.text2} borderR={15} pad10 marH5
-                        onPress={() => {handleChangeTypeItem(item.value,index)}}
+                        onPress={() => { handleChangeTypeItem(item.value, index) }}
                     >
                         <TextApp colorW bold={active == item.value ? true : false}>{item.name}</TextApp>
                     </TouchApp>
@@ -49,16 +50,21 @@ const ListViewItems = () => {
             </ScrollView>
 
             {
-                isLoading ? <ViewApp mid marT={50}><LoadingApp noBg /></ViewApp> 
-                :
-            <FlatList
-                data={listDrinkByType()}
-                renderItem={({ item }) => (
-                    <ItemDrinkHoz {...item} key={item.id} />
-                )}
-                contentContainerStyle={{ paddingBottom: 150 }}
-                onRefresh={onRefresh}
-            />
+                isLoading ? <ViewApp mid marT={50}><LoadingApp noBg /></ViewApp>
+                    :
+                    listDrinkByType().length > 0 
+                        ?
+                        <FlatList
+                            data={listDrinkByType()}
+                            renderItem={({ item }) => (
+                                <ItemDrinkHoz {...item} key={item.id} />
+                            )}
+                            contentContainerStyle={{ paddingBottom: 150 }}
+                            onRefresh={onRefresh}
+                        />
+                        : <ViewApp mid>
+                            <TextApp color1 size18>{AppLang('chua_co_du_lieu')}</TextApp>
+                        </ViewApp> 
             }
 
 
@@ -69,10 +75,10 @@ const ListViewItems = () => {
 const ItemDrinkHoz = (item: any) => {
     return (
         <TouchApp marH10 marV5 borderR={10} bgW overF='hidden' h={heightScreen * 0.2} row styleBox={{ ...shadowP }}
-            onPress={() => navigate('Screen_item_detail',{item:item})}
+            onPress={() => navigate('Screen_item_detail', { item: item })}
         >
             <ViewApp flex1 >
-                <Image source={{uri:item?.img}} style={{ width: '100%', height: '100%', position: 'relative' }} resizeMode='cover' />
+                <Image source={{ uri: item?.img }} style={{ width: '100%', height: '100%', position: 'relative' }} resizeMode='cover' />
                 {item?.discount != 0 && <Image source={imgApp.iconDiscount} style={{ width: 30, height: 30, position: 'absolute', right: 5, top: 5 }} />}
             </ViewApp>
             <ViewApp flex2 pad10 padV10 justifyContent='space-between'>

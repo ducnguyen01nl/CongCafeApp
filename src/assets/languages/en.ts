@@ -141,6 +141,12 @@ const en = {
     dang_xu_ly2:   `processing`,
     dang_giao2:   `are delivering`,
     hoan_thanh:   `complete`,
+    chua_co_du_lieu:   `No data yet`,
+    tim_kiem:   `Search`,
+    tim_kiem_san_pham:   `Search product`,
+tim_kiem_don_hang:   `Search for orders`,
+tim_kiem_theo_ten_gia:   `Search by product name and price`,
+khong_co_san_pham: 'No products',
   };
   
   export default en;

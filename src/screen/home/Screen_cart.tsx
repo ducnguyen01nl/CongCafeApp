@@ -24,21 +24,10 @@ import { userApi } from '../../api/userApi'
 
 const Screen_cart = () => {
     const [isLoading, data, onRefresh] = useCartUser();
-
-    const [totalPrice, setTotalPrice] = useState<number>(0);
     const [itemPrices, setItemPrices] = useState<number[]>([]); // Mảng lưu giá trị của từng mục
     const totalPriceCart = itemPrices.reduce((total, current) => total + current, 0)
     const refModal = useRef<any>()
     const modalDelete = useRef<any>()
-    // const [isReady, setIsReady] = useState<boolean>(false); // State để kiểm soát việc hiển thị trang
-    // if(itemPrices.length == data?.order?.length){
-    //     setIsReady(true)
-    // }
-
-    const handleOrder = () => {
-
-    }
-
     const onPressDelete = async (item: any) => {
         const listOrder = data?.order;
         const listNewOrder = listOrder?.filter((prev: any) => prev.idItem !== item.idItem)
@@ -58,7 +47,6 @@ const Screen_cart = () => {
     }
 
     return (
-
         <LayoutApp>
             <HeaderApp
                 title={AppLang('gio_hang_cua_ban')}

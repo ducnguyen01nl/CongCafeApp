@@ -20,7 +20,7 @@ import TouchApp from '../../components/TouchApp'
 
 const Screen_add_address = ({ route }: any) => {
 
-  const { dataItem, onRefreshListAddress } = route?.params
+  const { dataItem } = route?.params
   const [active, setActive] = useState<boolean>(dataItem?.active)
   const parts = dataItem?.address.split(',').map((part: any) => part.trim())
   const consciousPart = parts?.pop();
@@ -131,7 +131,6 @@ const Screen_add_address = ({ route }: any) => {
       await addressApi.updateAddress(idItemActive,{active: false})
       await addressApi.updateAddress(dataItem?.id,{active:true})  
     }
-    onRefreshListAddress()
     goBack()
 
   }
