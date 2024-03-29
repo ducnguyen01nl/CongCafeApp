@@ -29,7 +29,7 @@ const Screen_address = ({ route }: any) => {
   const dataAddress = useAddressActive()
   const handleAddAddress = () => {
     if (data.length >= 5) return ToastService.showToast(AppLang('so_luong_dia_chi_da_luu_tren_5'))
-    navigate('Screen_add_address',{dataItem:null,onRefreshListAddress: onRefresh})
+    navigate('Screen_add_address',{dataItem:null})
   }
   const handleDeleteAddress = async() => {
     await addressApi.deleteAddress(itemDelete?.id)

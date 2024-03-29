@@ -6,7 +6,7 @@ import { AppLang } from '../../assets/languages'
 import ViewApp from '../../components/ViewApp'
 import TextApp from '../../components/TextApp'
 import IconApp from '../../components/IconApp'
-import { useAddressById, useGetItemDrink } from '../../service/useLocalMater'
+import { useAddressById, useGetItemDrink, useGetTableById } from '../../service/useLocalMater'
 import { goBack } from '../../root/RootNavigation'
 import { COLORS } from '../../colors/colors'
 import { formatDateTimestamp, formatDateTimestampAll, heightScreen, titleStatus, titleTypeItem } from '../../data/dataLocal'
@@ -16,10 +16,18 @@ import ButtonApp from '../../components/ButtonApp'
 import { orderApi } from '../../api/orderApi'
 import ModalApp from '../../components/ModelApp'
 import ToastService from '../../service/ToastService'
+import { useSelector } from 'react-redux'
 
 
 const Screen_order_detail = ({ route }: any) => {
     const { item } = route?.params;
+    console.log(item);
+    const { user } = useSelector((state: any) => state.user)
+    const addressTable = item?.idAddress?.split("-").map(Number)
+    console.log(addressTable);
+
+    const [isLoadingTable, dataTable, onRefreshTable] = useGetTableById(item?.idTable)
+
     const [isLoading, data, onRefresh] = useAddressById(item?.idAddress)
     const refModal = useRef<any>()
 
@@ -27,12 +35,37 @@ const Screen_order_detail = ({ route }: any) => {
         try {
             await orderApi.updateOrder(item?.id, { status: 4, updateAt: new Date() })
             refModal.current.close()
-            ToastService.showToast('huy_don_hang_thanh_cong', 0)
+            ToastService.showToast(AppLang('huy_don_hang_thanh_cong'), 0)
             onRefresh()
             goBack()
         } catch (error) {
             console.log(error);
 
+        }
+    }
+    const handleConfirm = async() => {
+        switch(item?.status){
+            case 0:
+                await orderApi.updateOrder(item?.id,{status:1})
+                break;
+            case 1:
+                await orderApi.updateOrder(item?.id,{status:2})
+                break;
+            case 2:
+                await orderApi.updateOrder(item?.id,{status:3})
+                break;
+        }
+        goBack()
+    }
+
+    const titleButton = (status:number) =>{
+        switch(status){
+            case 0:
+                return 'xac_nhan'
+            case 1:
+                return 'xu_ly_xong'
+            case 2:
+                return 'giao_thanh_cong'
         }
     }
 
@@ -50,21 +83,24 @@ const Screen_order_detail = ({ route }: any) => {
                 />
                 <ScrollView>
                     <ViewApp>
-                        <ViewApp row centerH padH10 padV20 bg={item?.status == 4 ? COLORS.orange : COLORS.blue}>
-                            <ViewApp>
-                                <TextApp size16 colorW bold>{AppLang(titleTypeItem(item?.status))}</TextApp>
+                        {
+                            user?.role == 1 &&
+                            <ViewApp row centerH padH10 padV20 bg={item?.status == 4 ? COLORS.orange : COLORS.blue}>
+                                <ViewApp>
+                                    <TextApp size16 colorW bold>{AppLang(titleTypeItem(item?.status))}</TextApp>
+                                    {
+                                        item?.status == 4 ? <TextApp colorW>{`${AppLang('vao')} ${formatDateTimestampAll(item?.updateAt)}`}</TextApp>
+                                            : <TextApp colorW>{`${AppLang('cam_on_da_mua_sam_CCP')}`}</TextApp>
+                                    }
+
+                                </ViewApp>
                                 {
-                                    item?.status == 4 ? <TextApp colorW>{`${AppLang('vao')} ${formatDateTimestampAll(item?.updateAt)}`}</TextApp>
-                                        : <TextApp colorW>{`${AppLang('cam_on_da_mua_sam_CCP')}`}</TextApp>
+                                    item?.status == 4 ? <IconApp color={COLORS.white} size={40} name='restore' type='MaterialIcons' />
+                                        : <IconApp color={COLORS.white} size={40} name='thumbs-o-up' type='FontAwesome' />
                                 }
 
                             </ViewApp>
-                            {
-                                item?.status == 4 ? <IconApp color={COLORS.white} size={40} name='restore' type='MaterialIcons' />
-                                    : <IconApp color={COLORS.white} size={40} name='thumbs-o-up' type='FontAwesome' />
-                            }
-
-                        </ViewApp>
+                        }
                     </ViewApp>
                     <ViewApp pad10>
                         <ViewApp row>
@@ -81,7 +117,11 @@ const Screen_order_detail = ({ route }: any) => {
 
                                 </ViewApp>
                                 :
-                                <TextApp></TextApp>
+                                <ViewApp padL={24}>
+                                    <TextApp color1>{AppLang('cua_hang_cong_cafe')}</TextApp>
+                                    <TextApp color1>{`${AppLang('ban_so')} ${addressTable[0]} - ${AppLang('tang')} ${addressTable[1]}`}</TextApp>
+
+                                </ViewApp>
 
                         }
                     </ViewApp>
@@ -96,32 +136,63 @@ const Screen_order_detail = ({ route }: any) => {
                     </ViewApp>
                     <ViewApp pad5 bg={COLORS.Secondary} />
                     <ViewApp pad10>
+                        <TextApp color1>{ `${AppLang('luu_y')}: ${item?.message ? item?. message : AppLang('khong_co')}`}</TextApp>
+                    </ViewApp>
+                    <ViewApp pad5 bg={COLORS.Secondary} />
+                    <ViewApp pad10>
                         <ViewApp row centerH>
                             <TextApp color1 bold size16>{AppLang('thanh_tien')}</TextApp>
                             <TextApp color={COLORS.orange} bold size16>{formatMoney(item?.totalPrice)}</TextApp>
                         </ViewApp>
-                        <TextApp>{AppLang('vui_long_thanh_toan_khi_nhan_hang')}</TextApp>
+                        {
+                            user?.role == 1 && <TextApp color1>{AppLang('vui_long_thanh_toan_khi_nhan_hang')}</TextApp>
+                        }
+
                     </ViewApp>
                     <ViewApp pad5 bg={COLORS.Secondary} />
                     <ViewApp>
+                        <ItemTime title={AppLang('ma_don')} date={item?.id} />
                         <ItemTime title={AppLang('thoi_gian_dat_hang')} date={formatDateTimestampAll(item?.createAt)} />
-                        <ItemTime title={`${AppLang('thoi_gian')} ${AppLang(titleStatus(item?.status))}`} date={formatDateTimestampAll(item?.updateAt)} />
+                        {
+                            item?.status != 0 && <ItemTime title={`${AppLang('thoi_gian')} ${AppLang(titleStatus(item?.status))}`} date={formatDateTimestampAll(item?.updateAt)} />
+                        }
                     </ViewApp>
                     <ViewApp pad5 bg={COLORS.Secondary} />
                 </ScrollView>
-                <ViewApp row borderTW={1} padH10>
-                    <ViewApp flex1 marH5>
-                        {
-                            item?.status == 3 && <ButtonApp title={AppLang('danh_gia')} />
-                        }
-                    </ViewApp>
-                    <ViewApp flex1 marH5>
-                        {
-                            item?.status == 0 ? <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
-                                : <ButtonApp title={AppLang('mua_lai')} />
-                        }
-                    </ViewApp>
-                </ViewApp>
+                {
+                    user?.role == 1
+                        ?
+                        <ViewApp row borderTW={1} padH10>
+                            <ViewApp flex1 marH5>
+                                {
+                                    item?.status == 3 && <ButtonApp title={AppLang('danh_gia')} />
+                                }
+                            </ViewApp>
+                            <ViewApp flex1 marH5>
+                                {
+                                    item?.status == 0 && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
+                                }
+                                {
+                                    item?.status == 3 || item?.status == 4 && <ButtonApp title={AppLang('mua_lai')} />
+                                }
+                            </ViewApp>
+                        </ViewApp>
+                        :
+                        <ViewApp row borderTW={1} padH10>
+                            <ViewApp flex1 marH5>
+                                {
+                                    item?.status == 0 && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
+
+                                }
+                            </ViewApp>
+                            <ViewApp flex1 marH5>
+                                <ButtonApp title={AppLang(titleButton(item?.status))} 
+                                    onPress={handleConfirm}
+                                />
+                            </ViewApp>
+                        </ViewApp>
+
+                }
                 <ModalApp ref={refModal} mid>
                     <ViewApp w={'90%'} h={'40%'} bgW mid borderR={20} padH10>
                         <TextApp colorP size18 bold pV20>{AppLang('ban_co_chac_muon_huy_don_nay_k')}</TextApp>

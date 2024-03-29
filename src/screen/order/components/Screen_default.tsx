@@ -2,8 +2,8 @@ import { View, Text, ScrollView, Image, FlatList } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import ViewApp from '../../../components/ViewApp'
 import TouchApp from '../../../components/TouchApp'
-import { COLORS } from '../../../colors/colors'
-import { useListOrder } from '../../../service/useLocalMater'
+import { COLORS, shadowP } from '../../../colors/colors'
+import { useGetTableById, useListOrder } from '../../../service/useLocalMater'
 import { number } from 'yup'
 import LoadingApp from '../../../components/LoadingApp'
 import TextApp from '../../../components/TextApp'
@@ -17,12 +17,14 @@ import { orderApi } from '../../../api/orderApi'
 import ToastService from '../../../service/ToastService'
 import { useIsFocused } from '@react-navigation/native'
 import { navigate } from '../../../root/RootNavigation'
-import { titleTypeItem } from '../../../data/dataLocal'
+import { formatDateTimestampAll, titleTypeItem } from '../../../data/dataLocal'
+import { useSelector } from 'react-redux'
+import App from '../../../../App'
 
 const Screen_default = ({ isLoading, data, onRefresh }: any) => {
-
   const refModal = useRef<any>()
   const [itemActive, setItemActive] = useState<any>()
+
 
   const focus = useIsFocused()
   useEffect(() => {
@@ -31,7 +33,7 @@ const Screen_default = ({ isLoading, data, onRefresh }: any) => {
 
   const handleCancelOrder = async () => {
     try {
-      await orderApi.updateOrder(itemActive?.id, { status: 4,updateAt: new Date() })
+      await orderApi.updateOrder(itemActive?.id, { status: 4, updateAt: new Date() })
       refModal.current.close()
       ToastService.showToast('huy_don_hang_thanh_cong', 0)
       onRefresh()
@@ -44,6 +46,7 @@ const Screen_default = ({ isLoading, data, onRefresh }: any) => {
   //mua lại
   const handleRepurchase = () => {
     console.log(itemActive);
+    navigate('Screen_cart', { repurchase: itemActive })
 
   }
 
@@ -64,6 +67,7 @@ const Screen_default = ({ isLoading, data, onRefresh }: any) => {
                   refModal?.current.open()
                 }} />
             )}
+            contentContainerStyle={{ paddingBottom: 70 }}
           />
           : <ViewApp mid flex1>
             <TextApp size18 colorP bold pV10>{AppLang('khong_co_don_hang')}</TextApp>
@@ -91,15 +95,19 @@ const Screen_default = ({ isLoading, data, onRefresh }: any) => {
 
 
 const ItemOrder = ({ item, onPress, onPressButton }: any) => {
-
+  console.log('====================================');
+  console.log('item', item);
+  console.log('====================================');
+  const { user } = useSelector((state: any) => state.user)
   const totalCount = item?.orderList?.reduce((count: number, item: any) => count + item.count, 0)
   return (
-    <TouchApp minHeight={'30%'} bgW borderW={1}
-      onPress={() => navigate('Screen_order_detail',{item:item})}
+    <TouchApp minHeight={'30%'} mar10 borderR={20} bgW
+      onPress={() => navigate('Screen_order_detail', { item: item })}
+      styleBox={{ ...shadowP }}
     >
-      <ViewApp pad5 bg={COLORS.Secondary} />
+      {/* <ViewApp pad5 bg={COLORS.Secondary} /> */}
       <ViewApp flex1 pad10>
-        {item?.orderList.map((item: any, index: number) => (
+        {user?.role == 1 && item?.orderList.map((item: any, index: number) => (
           <ViewApp key={index} row centerH marB10>
             <ViewApp row alignCenter flex1>
               <Image source={{ uri: item?.imgItem }}
@@ -109,36 +117,58 @@ const ItemOrder = ({ item, onPress, onPressButton }: any) => {
             </ViewApp>
             <TextApp pad5 color2>{`x${item?.count}`}</TextApp>
           </ViewApp>
-        ))}
+        ))
+        }
+        <ViewApp row centerH padV10>
+          <TextApp style={{ flex: 1 }} color1>{`${AppLang('ma_don')}: ${item?.id}`}</TextApp>
+          <TextApp color1>{formatDateTimestampAll(item?.createAt)}</TextApp>
+        </ViewApp>
+
         <ViewApp row centerH padV10 borderTW={1} borderBW={1}>
-          <TextApp>{`${totalCount} ${AppLang('san_pham')}`}</TextApp>
+          <TextApp color1>{`${totalCount} ${AppLang('san_pham')}`}</TextApp>
           <ViewApp row mid>
             <IconApp color={COLORS.orange} name='dollar-sign' type='FontAwesome5' />
-            <TextApp>{`${AppLang('thanh_tien')}:`}</TextApp>
+            <TextApp color1>{`${AppLang('thanh_tien')}:`}</TextApp>
             <TextApp bold color={COLORS.orange}>{formatMoney(item?.totalPrice)}</TextApp>
           </ViewApp>
         </ViewApp>
 
         <ViewApp row centerH padV10 borderBW={1}>
-          <TextApp>{`${AppLang('hinh_thuc')}:`}</TextApp>
+          <TextApp color1>{`${AppLang('hinh_thuc')}:`}</TextApp>
           <ViewApp row mid>
-            <TextApp>{item?.type == 1 ? `${AppLang('tai_quan')},${AppLang('ban_so')} ${item?.idTable}` : AppLang('tai_nha')}</TextApp>
+            <TextApp color1>{item?.type == 1 ? AppLang('tai_quan') : AppLang('tai_nha')}</TextApp>
           </ViewApp>
         </ViewApp>
       </ViewApp>
+      {
+        user?.role == 1 &&
+        <ViewApp marH10 row alignCenter>
+          <IconApp color='#009197' name={'shipping-fast'} type='FontAwesome5' />
+          <TextApp pV10 color={'#009197'}>{AppLang(titleTypeItem(item?.status))}</TextApp>
+        </ViewApp>
+      }
+      {
+        user?.role == 1 &&
+        <ViewApp row centerH marH10 padH20>
 
-          <ViewApp marH10 row alignCenter>
-            <IconApp color='#009197' name={'shipping-fast'} type='FontAwesome5' />
-            <TextApp pV10 color={'#009197'}>{AppLang(titleTypeItem(item?.status))}</TextApp>
-          </ViewApp>
-          <ViewApp row centerH marH10>
-            <ViewApp>
-              {/* <TextApp>thục</TextApp> */}
-            </ViewApp>
-            <ButtonApp with4 title={AppLang(item?.status == 0 ? 'huy' : 'mua_lai')}
-              onPress={() => onPressButton(item)}
-            />
-          </ViewApp>
+          {
+            item?.status == 3
+              ? <ButtonApp with4 title={AppLang('danh_gia')}
+                onPress={() => onPressButton(item)}
+              />
+              : <ViewApp>
+                {/* <TextApp>thục</TextApp> */}
+              </ViewApp>
+          }
+          {
+            item?.status == 1 || item?.status == 2 ? null
+              :
+              <ButtonApp with4 title={AppLang(item?.status == 0 ? 'huy' : 'mua_lai')}
+                onPress={() => onPressButton(item)}
+              />
+          }
+        </ViewApp>
+      }
     </TouchApp>
   )
 }

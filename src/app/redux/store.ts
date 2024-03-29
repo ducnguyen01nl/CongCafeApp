@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./slices/userSlice";
+import table from './slices/tableSlice'
 
 export const store = configureStore({
     reducer: {
-        user
+        user,
+        table
     },
 })
 

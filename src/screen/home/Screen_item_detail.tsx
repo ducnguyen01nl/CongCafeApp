@@ -16,11 +16,14 @@ import { useCartUser } from '../../service/useLocalMater';
 import { userApi } from '../../api/userApi';
 import ToastService from '../../service/ToastService';
 import { useFocusEffect } from '@react-navigation/native';
+import { object } from 'underscore';
 
 const Screen_item_detail = ({ route }: any) => {
     const { item } = route?.params;
     const [count,setCount] = useState<number>(1)
     const [isLoading, data, onRefresh] = useCartUser()
+    console.log('000',data);
+    
     const countData = data?.order?.length;
 
     useFocusEffect(
@@ -29,6 +32,7 @@ const Screen_item_detail = ({ route }: any) => {
         },[goBack])
     )
     const handleAddDrinkToCart = async() => {
+        
         let isItemExist = false;
         const dataAdd = {
             count:count,

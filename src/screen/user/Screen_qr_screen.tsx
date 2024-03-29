@@ -1,35 +1,34 @@
 import React, { useEffect } from 'react'
 import LayoutApp from '../../components/LayoutApp';
-const Screen_qr_screen = () => {
 
-//   const { hasPermission, requestPermission } = useCameraPermission()
-//   const device = useCameraDevice('back')
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { setTable } from '../../app/redux/slices/tableSlice';
+import TextApp from '../../components/TextApp';
+import { AppLang } from '../../assets/languages';
+import { navigate } from '../../root/RootNavigation';
+const Screen_qr_screen = ({route}:any) => {
+  const {totalPrice} = route?.params
 
-//   React.useEffect(() =>{
-//     requestPermission()
-//   },[])
-
-//   if (device == null) return <LoadingApp />
-
-
-//   const codeScanner = useCodeScanner({
-//     codeTypes: ['qr', 'ean-13'],
-//     onCodeScanned: (codes: Code[]) => {
-//       console.log(`Scanned ${codes[0].value} codes!`)
-//     }
-//   })
-
-//   return (
-//     <Camera
-//       style={StyleSheet.absoluteFill}
-//       device={device}
-//       isActive={true}
-//       codeScanner={codeScanner} 
-//     />
-//   )
+const dispatch = useDispatch()
+const handleScanner = (value:any) =>{
+  console.log(JSON.parse(value.data));
+  dispatch(setTable(JSON.parse(value.data)))
+  navigate('Screen_request_order',{totalPrice:totalPrice})
+}
 
 return(
-  <LayoutApp></LayoutApp>
+  <QRCodeScanner 
+    onRead={(value:any) => handleScanner(value)}
+    flashMode={RNCamera.Constants.FlashMode.torch}
+    topContent={
+      <TextApp colorP size18 bold>{AppLang('hay_quet_ma_qr_tren_ban')}</TextApp>
+    }
+      
+    
+  />
 )
 
 

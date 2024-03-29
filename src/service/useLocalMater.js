@@ -4,6 +4,7 @@ import { userApi } from "../api/userApi"
 import { addressApi } from "../api/addressApi"
 import { drinksApi } from "../api/drinksApi"
 import { orderApi } from "../api/orderApi"
+import { tableApi } from "../api/tableApi"
 
 export const useLocalMater = (type,callBackApi) => {
     const [isLoading,setIsLoading] = useState(false)
@@ -93,6 +94,26 @@ export const useListOrder = (status) =>{
 export const useListOrderAll = () =>{
     const [isLoading, data, onRefresh] = useLocalMater([],() =>
         orderApi.getListOrderAll()
+    )
+    return [isLoading, data, onRefresh]
+}
+
+export const useListOrderAllApp = (status) => {
+    const [isLoading, data, onRefresh] = useLocalMater([],() =>
+        orderApi.getListOrderAllAppByStatus(status)
+    )
+    return [isLoading, data, onRefresh]
+}
+
+export const useGetListTable = () => {
+    const [isLoading, data, onRefresh] = useLocalMater([],() =>
+        tableApi.getListTable()
+    )
+    return [isLoading, data, onRefresh]
+}
+export const useGetTableById = (id) => {
+    const [isLoading, data, onRefresh] = useLocalMater([],() =>
+        tableApi.getTableById(id)
     )
     return [isLoading, data, onRefresh]
 }

@@ -63,6 +63,24 @@ export const orderApi = {
   
       }
       },
+      getListOrderAllAppByStatus: async(status:number) =>{
+        try {
+          const listOrder: any[] = []
+          await firestore()
+              .collection('order')
+              .where('status','==',status)
+              .get()
+              .then((querysnapshot: any) => {
+                  querysnapshot.forEach((documentSnapshot: any) => {
+                      listOrder.push(documentSnapshot.data())
+                  })
+              })
+          return listOrder
+      } catch (error) {
+          console.log(error);
+  
+      }
+      },
     updateOrder: async(id:string,params:any) =>{
         await firestore()
         .collection('order')

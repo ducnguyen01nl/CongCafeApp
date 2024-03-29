@@ -88,8 +88,8 @@ export const userApi = {
                 const dataCart = querySnapshot.docs[0].data();
                 return dataCart;
             } else {
-                // Không tìm thấy dữ liệu
-                return null;
+                await userApi.addCart()
+                await userApi.getCartUser()
             }
         } catch (error) {
             console.log(error);
@@ -108,6 +108,20 @@ export const userApi = {
         .catch(() =>{
             ToastService.showToast(AppLang('them_do_uong_that_bai'),1)
         })
+    },
+    addCart: async() =>{
+        const userId: any = await AsyncStorage.getItem('userId')
+        try {
+            const docRef = await firestore().collection('cart').add({
+                order:[],
+                userId:userId
+            })
+            const idItem = docRef.id
+            await docRef.update({id: idItem})
+          } catch (error) {
+            console.log(error);
+            
+          }
     },
     deleteDrinksToCart: async(id:any,params:any) => {
         firestore()

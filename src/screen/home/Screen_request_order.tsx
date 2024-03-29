@@ -18,6 +18,8 @@ import ButtonApp from '../../components/ButtonApp'
 import { useFocusEffect } from '@react-navigation/native'
 import LoadingApp from '../../components/LoadingApp'
 import { orderApi } from '../../api/orderApi'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useSelector } from 'react-redux'
 
 const Screen_request_order = ({ route }: any) => {
     const { totalPrice } = route?.params
@@ -25,7 +27,9 @@ const Screen_request_order = ({ route }: any) => {
     const [isLoadingActive, addressActive, onRefreshActive] = useAddressActive2()
     const refMessage = useRef<any>()
     const [message, setMessage] = useState<string>()
-
+    const {table} = useSelector((state:any) => state.table)
+    console.log(table?.numberTable);
+    
     useFocusEffect(
         React.useCallback(() => {
             onRefreshActive()
@@ -33,17 +37,17 @@ const Screen_request_order = ({ route }: any) => {
     )
 
     const handleRequestOrder = async () => {
-        await orderApi.addOrder({
-            idUser: data?.userId,
-            idAddress: addressActive?.id,
-            totalPrice: totalPrice,
-            createAt: new Date(),
-            updateAt: new Date(),
-            status: 0,
-            type: 0,
-            message: message ? message : '',
-            orderList:data?.order
-        })
+            await orderApi.addOrder({
+                idUser: data?.userId,
+                idAddress: table ?  `${table?.numberTable}-${table?.floor}` : addressActive?.id,
+                totalPrice: totalPrice,
+                createAt: new Date(),
+                updateAt: new Date(),
+                status: 0,
+                type: table ? 1 : 0,
+                message: message ? message : '',
+                orderList: data?.order,
+            })
         navigate('BottomTab')
     }
 
@@ -65,19 +69,33 @@ const Screen_request_order = ({ route }: any) => {
                             <TouchApp bg={COLORS.Secondary} row centerH pad10
                                 onPress={() => navigate('Screen_address', { select: true })}
                             >
-                                <ViewApp row mid padH10>
+                                <ViewApp flex1 row padH10>
                                     <IconApp size={24} name='location' color={COLORS.red} />
                                     <ViewApp>
                                         <TextApp color1>{AppLang('dia_chi_nhan_hang')}</TextApp>
-                                        <ViewApp row alignCenter>
-                                            <TextApp color1>{addressActive?.name}</TextApp>
-                                            <IconApp size={12} name='minus' type='Entypo' />
-                                            <TextApp color1>{addressActive?.phone}</TextApp>
-                                        </ViewApp>
-                                        <TextApp color1>{addressActive?.address}</TextApp>
+                                        {
+                                            table
+                                                ? <ViewApp>
+                                                    <TextApp color1>{AppLang('cua_hang_cong_cafe')}</TextApp>
+                                                    <TextApp color1>{`${AppLang('ban_so')} ${table.numberTable} - ${AppLang('tang')} ${table.floor}`}</TextApp>
+                                                </ViewApp>
+                                                :
+                                                <ViewApp row alignCenter>
+                                                    <TextApp color1>{addressActive?.name}</TextApp>
+                                                    <IconApp size={12} name='minus' type='Entypo' />
+                                                    <TextApp color1>{addressActive?.phone}</TextApp>
+                                                </ViewApp>
+                                        }
+                                        {
+                                            !table && <TextApp color1>{addressActive?.address}</TextApp>
+                                        }
+                                        
                                     </ViewApp>
                                 </ViewApp>
-                                <IconApp name='chevron-right' type='Entypo' />
+                                {
+                                    !table && <IconApp name='chevron-right' type='Entypo' />
+                                }
+                                
                             </TouchApp>
                             <ViewApp bg={COLORS.text4} pad5 />
                             <TextApp colorP size18 pad10>{AppLang('danh_sach_do_uong')}</TextApp>

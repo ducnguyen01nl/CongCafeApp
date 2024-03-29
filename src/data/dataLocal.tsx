@@ -28,7 +28,7 @@ export const formatDateTimestampAll = (time:any) => {
         const year = newDate.getFullYear();
         const hours = newDate.getHours();
         const minutes = newDate.getMinutes();
-        const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
+        const formattedDate = ` ${hours}:${minutes} ${day}-${month}-${year}`;
         return formattedDate;
 
     }
@@ -46,14 +46,14 @@ export const DATA_GENDER = [
 ]
 
 export const DATA_TYPE_ITEMS = [
-    {name:AppLang('dac_san_cua_cong'), value:0},
-    {name:AppLang('ca_phe_pho'), value:1},
-    {name:AppLang('ca_phe_ta'), value:2},
-    {name:AppLang('tra_co_thu'), value:3},
-    {name:AppLang('do_dia_phuong'), value:4},
-    {name:AppLang('trai_cay'), value:5},
-    {name:AppLang('sua_chua'), value:6},
-    {name:AppLang('do_an'), value:7},
+    {name:'dac_san_cua_cong', value:0},
+    {name:'ca_phe_pho', value:1},
+    {name:'ca_phe_ta', value:2},
+    {name:'tra_co_thu', value:3},
+    {name:'do_dia_phuong', value:4},
+    {name:'trai_cay', value:5},
+    {name:'sua_chua', value:6},
+    {name:'do_an', value:7},
 ]
 
 export const titleTypeItem = (type: number) => {

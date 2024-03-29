@@ -14,7 +14,7 @@ import { DATA_TYPE_ITEMS } from '../data/dataLocal'
 import ListViewItems from './home/components/ListViewItems'
 import { drinksApi } from '../api/drinksApi'
 import { useSelector } from 'react-redux'
-import { useAddressActive, useAddressActive2, useCartUser, useGetItemDrink } from '../service/useLocalMater'
+import { useAddressActive, useAddressActive2, useCartUser, useGetItemDrink, useListAddress } from '../service/useLocalMater'
 import moment from 'moment'
 import { useFocusEffect } from '@react-navigation/native'
 import LoadingApp from '../components/LoadingApp'
@@ -51,6 +51,7 @@ const Home = (props: Props) => {
   console.log(data);
 
   const [isLoadingAddress, dataAddress, onRefreshAddress] = useAddressActive2()
+  const [isLoadingListAddress,dataListAddress,onRefreshListAddress] = useListAddress()
   useFocusEffect(
     React.useCallback(() => {
       onRefreshAddress()
@@ -71,15 +72,21 @@ const Home = (props: Props) => {
               <TouchApp borderW={3} square={50} borderC={COLORS.Secondary} borderR={10} mid overF='hidden'
                 onPress={() => navigate('Screen_info_user')}
               >
-                <Image style={{ width: '100%', height: '100%' }} source={user.img ? { uri: user.img } : imgApp.userDefault} resizeMode='cover' />
+                <Image style={{ width: '100%', height: '100%' }} source={user?.img ? { uri: user.img } : imgApp.userDefault} resizeMode='cover' />
               </TouchApp>
               <TouchApp row alignCenter marH10
                 onPress={() => navigate('Screen_address', { select: true })}
               >
                 <IconApp size={24} name='location' color={COLORS.Secondary} />
                 <ViewApp flex1 padR={25}>
-                  <TextApp color={COLORS.Secondary}>{dataAddress?.name}</TextApp>
-                  <TextApp numberOfLines={1} color={COLORS.Secondary}>{dataAddress?.address}</TextApp>
+                  {
+                    dataListAddress?.length > 0
+                    ? <>
+                  <TextApp colorS>{dataAddress?.name}</TextApp>
+                  <TextApp numberOfLines={1} colorS>{dataAddress?.address}</TextApp>
+                    </>
+                    : <TextApp colorS>{AppLang('ban_chua_co_dia_chi')}</TextApp>
+                  }
                 </ViewApp>
               </TouchApp>
             </ViewApp>

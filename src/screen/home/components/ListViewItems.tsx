@@ -43,7 +43,7 @@ const ListViewItems = () => {
                     <TouchApp key={item?.value} bg={active == item?.value ? COLORS.primary : COLORS.text2} borderR={15} pad10 marH5
                         onPress={() => { handleChangeTypeItem(item.value, index) }}
                     >
-                        <TextApp colorW bold={active == item.value ? true : false}>{item.name}</TextApp>
+                        <TextApp colorW bold={active == item.value ? true : false}>{AppLang(item.name)}</TextApp>
                     </TouchApp>
                 ))}
 

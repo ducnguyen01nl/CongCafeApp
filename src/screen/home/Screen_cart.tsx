@@ -21,13 +21,20 @@ import ModalApp from '../../components/ModelApp'
 import { userRef } from '../../firebase/firebaseConfig'
 import { imgApp } from '../../assets/img'
 import { userApi } from '../../api/userApi'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useDispatch } from 'react-redux'
+import { setTable } from '../../app/redux/slices/tableSlice'
 
-const Screen_cart = () => {
+const Screen_cart = ({route}:any) => {
+    const {repurchase} = route?.params;
+    console.log('repu',repurchase);
+    
     const [isLoading, data, onRefresh] = useCartUser();
     const [itemPrices, setItemPrices] = useState<number[]>([]); // Mảng lưu giá trị của từng mục
     const totalPriceCart = itemPrices.reduce((total, current) => total + current, 0)
     const refModal = useRef<any>()
     const modalDelete = useRef<any>()
+    const dispatch = useDispatch()
     const onPressDelete = async (item: any) => {
         const listOrder = data?.order;
         const listNewOrder = listOrder?.filter((prev: any) => prev.idItem !== item.idItem)
@@ -64,7 +71,9 @@ const Screen_cart = () => {
                 }}
             />
             {
-                isLoading ? <LoadingApp noBg />
+                isLoading ? <ViewApp flex1>
+                                <LoadingApp noBg />
+                            </ViewApp>
                     :
                     data?.order?.length > 0 ?
                         <ScrollView
@@ -112,13 +121,20 @@ const Screen_cart = () => {
                         <TouchApp flex1 borderW={5} marH10 mid h={'80%'} borderR={20} borderC={COLORS.primary}
                             onPress={() => {
                                 refModal.current.close(),
-                                    navigate('Screen_request_order', { totalPrice: totalPriceCart })
+                                    dispatch(setTable(null))
+                                navigate('Screen_request_order', { totalPrice: totalPriceCart })
                             }}
                         >
                             <Image style={{ width: '80%' }} source={imgApp.iconDelivery} resizeMode='contain' />
                             <TextApp colorP bold>{AppLang('dat_online')}</TextApp>
                         </TouchApp>
-                        <TouchApp flex1 borderW={5} marH10 mid h={'80%'} borderR={20} borderC={COLORS.primary}>
+                        <TouchApp flex1 borderW={5} marH10 mid h={'80%'} borderR={20} borderC={COLORS.primary}
+                            onPress={() => {
+                                refModal.current.close(),
+                                    navigate('Screen_qr_screen', { totalPrice: totalPriceCart })
+                                // navigate('Screen_request_order', { totalPrice: totalPriceCart })
+                            }}
+                        >
                             <Image style={{ width: '80%' }} source={imgApp.iconTable} resizeMode='contain' />
                             <TextApp colorP bold>{AppLang('dung_tai_quan')}</TextApp>
                         </TouchApp>
@@ -171,7 +187,10 @@ const ItemOrder = ({ item, index, itemPrices, setItemPrices, onPressDelete }: an
                 <ViewApp row centerH>
                     <TextApp size18 colorP bold>{item.nameItem}</TextApp>
                     <TouchApp
-                        onPress={onPressDelete}
+                        onPress={() => {
+                            setCount(0)
+                            onPressDelete()
+                        }}
                     >
                         <IconApp color={COLORS.primary} name='delete' type='MaterialIcons' />
                     </TouchApp>

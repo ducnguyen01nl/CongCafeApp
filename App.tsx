@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -32,6 +32,7 @@ import { navigationRef } from './src/root/RootNavigation';
 import ToastService from './src/service/ToastService';
 import RootScreen from './src/root/RootScreen';
 import ToastMessage from './src/components/ToastMessage';
+import { getToken, requestUserPermission } from './src/utils/notification';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -39,6 +40,10 @@ function App(): React.JSX.Element {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+  useEffect(() =>{
+    requestUserPermission()
+    getToken()
+  },[])
 
   return (
     

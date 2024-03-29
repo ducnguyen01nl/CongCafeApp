@@ -31,6 +31,13 @@ const User = (props: Props) => {
   const _langue = useRef<any>();
   const auth = getAuth()
 
+  const countOrder = (status:number) =>{
+    return data.filter((item:any) => item.status == status).length
+  }
+  useEffect(() =>{
+    onRefresh()
+  },[data])
+
   const handleLogOut = async () => {
 
     try {
@@ -91,7 +98,7 @@ const User = (props: Props) => {
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='archive-check-outline'/>
             <TextApp colorW size12>{AppLang(`cho_xac_nhan`)}</TextApp>
-            <Count top={-10} right={'20%'} count={10}/>
+            <Count top={-10} right={'20%'} count={countOrder(0)}/>
           </TouchApp>
           <TouchApp
             flex1
@@ -102,7 +109,7 @@ const User = (props: Props) => {
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='clipboard-clock-outline'/>
             <TextApp colorW size12>{AppLang(`dang_xu_ly`)}</TextApp>
-            <Count top={-10} right={'20%'} count={10}/>
+            <Count top={-10} right={'20%'} count={countOrder(1)}/>
           </TouchApp>
           <TouchApp
             flex1
@@ -113,7 +120,7 @@ const User = (props: Props) => {
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='truck-fast-outline'/>
             <TextApp colorW size12>{AppLang('dang_giao')}</TextApp>
-            <Count top={-10} right={'20%'} count={10}/>
+            <Count top={-10} right={'20%'} count={countOrder(2)}/>
           </TouchApp>
           <TouchApp
             flex1
@@ -124,7 +131,7 @@ const User = (props: Props) => {
           >
             <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='star-outline'/>
             <TextApp colorW size12>{AppLang(`danh_gia`)}</TextApp>
-            <Count top={-10} right={'20%'} count={10}/>
+            <Count top={-10} right={'20%'} count={countOrder(3)}/>
           </TouchApp>
 
         </ViewApp>
