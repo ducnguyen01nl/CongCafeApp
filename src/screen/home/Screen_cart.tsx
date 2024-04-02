@@ -164,6 +164,12 @@ const ItemOrder = ({ item, index, itemPrices, setItemPrices, onPressDelete }: an
     const [count, setCount] = useState<number>(item?.count)
     const [isLoading, data, onRefresh] = useGetItemDrink(item?.idItem)
 
+    useEffect(() =>{
+        if(data?.status == false){
+            onPressDelete()
+        }
+    },[data])
+
     useEffect(() => {
         if (data && data.price !== undefined) {
             // Tính toán giá trị và cập nhật mảng giá trị của từng mục

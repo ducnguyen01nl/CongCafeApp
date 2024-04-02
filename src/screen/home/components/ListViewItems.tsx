@@ -18,7 +18,6 @@ const ListViewItems = () => {
     const [active, setActive] = useState<any>(0);
     const refList = useRef<any>();
     const [isLoading, data, onRefresh] = useListDrinks();
-
     const listDrinkByType = useCallback(() => {
         if (data) {
             return data.filter((state: any) => state.type == active)
@@ -52,7 +51,7 @@ const ListViewItems = () => {
             {
                 isLoading ? <ViewApp mid marT={50}><LoadingApp noBg /></ViewApp>
                     :
-                    listDrinkByType().length > 0 
+                    listDrinkByType().length > 0
                         ?
                         <FlatList
                             data={listDrinkByType()}
@@ -64,7 +63,7 @@ const ListViewItems = () => {
                         />
                         : <ViewApp mid>
                             <TextApp color1 size18>{AppLang('chua_co_du_lieu')}</TextApp>
-                        </ViewApp> 
+                        </ViewApp>
             }
 
 
@@ -74,7 +73,7 @@ const ListViewItems = () => {
 
 const ItemDrinkHoz = (item: any) => {
     return (
-        <TouchApp marH10 marV5 borderR={10} bgW overF='hidden' h={heightScreen * 0.2} row styleBox={{ ...shadowP }}
+        <TouchApp disabled={item?.status ? false : true} marH10 marV5 borderR={10} bgW overF='hidden' h={heightScreen * 0.2} row styleBox={{ ...shadowP,opacity:item?.status ? 1 : 0.7 }}
             onPress={() => navigate('Screen_item_detail', { item: item })}
         >
             <ViewApp flex1 >
@@ -95,10 +94,19 @@ const ItemDrinkHoz = (item: any) => {
                         <Image source={imgApp.iconStar} style={{ width: 20, height: 20 }} />
                         <TextApp color2 size16>{item?.star}</TextApp>
                     </ViewApp>
-                    <ViewApp>
-                        <TextApp color={item?.discount != 0 ? COLORS.red : COLORS.primary} bold size16 style={{ textDecorationLine: item?.discount != 0 ? 'line-through' : 'none' }}>{formatMoney(item?.price)}</TextApp>
-                        {item?.discount != 0 && <TextApp size16 colorP bold>{formatMoney(moneyDiscount(item?.price, item?.discount))}</TextApp>}
-                    </ViewApp>
+                    {
+                        item?.status
+                            ?
+                            <ViewApp>
+                                <TextApp color={item?.discount != 0 ? COLORS.red : COLORS.primary} bold size16 style={{ textDecorationLine: item?.discount != 0 ? 'line-through' : 'none' }}>{formatMoney(item?.price)}</TextApp>
+                                {item?.discount != 0 && <TextApp size16 colorP bold>{formatMoney(moneyDiscount(item?.price, item?.discount))}</TextApp>}
+                            </ViewApp>
+                            :
+                            <ViewApp borderW={1} borderC={COLORS.red} pad5 borderR={10}>
+                                <TextApp color={COLORS.red} size18>{AppLang('het_hang')}</TextApp>
+                            </ViewApp> 
+                    }
+
                 </ViewApp>
             </ViewApp>
         </TouchApp>

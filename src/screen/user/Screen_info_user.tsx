@@ -36,7 +36,7 @@ const Screen_info_user = () => {
   const refModalImage = useRef<any>();
   const refModal = useRef<any>();
   const [isLoading, data, onRefresh] = useInfoUserCurrent();
-  const {user,userLoading} = useSelector((state:any) => state.user)
+  const { user, userLoading } = useSelector((state: any) => state.user)
   const [choseImage, setChoseImage] = useState<any>(user.img);
   const dispatch = useDispatch()
 
@@ -45,38 +45,6 @@ const Screen_info_user = () => {
     _input.current['birthday'].setValue(covertStringToDate(user.birthday))
     _input.current['gender'].setValue(data_gender)
   }, [])
-  // const formik = useFormik({
-  //   initialValues: {
-  //     userName: '',
-  //     email: '',
-  //     phone: '',
-  //     dateOfBirth: '',
-  //     updateAt: '',
-  //     gender: null,
-  //   },
-  //   validationSchema: Yup.object({
-  //     email: Yup.string().trim().lowercase().email(AppLang(`phai_la_email`)),
-  //     phone: Yup.string().trim().matches(regPhone2, AppLang(`sdt_sai_dinh_dang`)),
-  //   }),
-  //   onSubmit: (values) => {
-  //     console.log('value', values);
-
-  //   }
-  // })
-  // useEffect(() => {
-
-  //   // Gán giá trị vào formik khi dữ liệu đã tải xong
-  //   if (data) {
-  //     formik.setValues({
-  //       userName: data.userName || '',
-  //       email: data.email || '',
-  //       phone: data.phone || '',
-  //       dateOfBirth: formatDateTimestamp(data.date_of_birth) || '',
-  //       updateAt: formatDateTimestamp(data.updateAt) || '',
-  //       gender: data.gender || null
-  //     });
-  //   }
-  // }, [data]);
 
   const handlSaveInfo = async () => {
     refModal.current.close()
@@ -91,34 +59,34 @@ const Screen_info_user = () => {
     const fileName = pathArray[pathArray.length - 1];
 
     const urlImageUpload = choseImage !== user.img
-    ? await userApi.updateFile(choseImage, fileName, user.user_id)
-    : user.img;
-try {
-  dispatch(setUser({
-    userName: full_name,
-    img: urlImageUpload,
-    birthday: moment(new Date(birthday)).format('DD-MM-YYYY'),
-    gender: gender.value,
-    email:email,
-    phone:phone,
-    updateAt: moment(new Date()).format('DD-MM-YYYY'),
-  }));
-  await userApi.setUserInfo({
-    userName: full_name,
-    img: urlImageUpload,
-    birthday: new Date(birthday),
-    gender: gender.value,
-    email:email,
-    phone:phone,
-    updateAt: new Date(),
-  });
-} catch (error) {
-  console.log(error);
-  dispatch(setUserLoading(false))
-  
-}
-  dispatch(setUserLoading(false))
-  goBack()
+      ? await userApi.updateFile(choseImage, fileName, user.user_id)
+      : user.img;
+    try {
+      dispatch(setUser({
+        userName: full_name,
+        img: urlImageUpload,
+        birthday: moment(new Date(birthday)).format('DD-MM-YYYY'),
+        gender: gender.value,
+        email: email,
+        phone: phone,
+        updateAt: moment(new Date()).format('DD-MM-YYYY'),
+      }));
+      await userApi.setUserInfo({
+        userName: full_name,
+        img: urlImageUpload,
+        birthday: new Date(birthday),
+        gender: gender.value,
+        email: email,
+        phone: phone,
+        updateAt: new Date(),
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch(setUserLoading(false))
+
+    }
+    dispatch(setUserLoading(false))
+    goBack()
 
   }
   useEffect(() => {
@@ -278,23 +246,23 @@ try {
           <ViewApp w={'90%'} mid pad20 backgroundColor={'white'} borderR={10} animated>
             <TextApp size18 bold>{AppLang('ban_co_chac_muon_thay_doi_tt')}</TextApp>
             <ViewApp row w={'90%'} justifyContent='flex-end' marT={20}>
-              <ButtonApp 
-                title={AppLang('huy')} 
+              <ButtonApp
+                title={AppLang('huy')}
                 onPress={() => refModal.current.close()}
                 styleText={{
-                  fontSize:16,
-                  paddingHorizontal:10
+                  fontSize: 16,
+                  paddingHorizontal: 10
                 }}
                 styleButton={{
-                  marginRight:10
+                  marginRight: 10
                 }}
               />
-              <ButtonApp 
-                title={AppLang('dong_y')} 
+              <ButtonApp
+                title={AppLang('dong_y')}
                 onPress={() => handlSaveInfo()}
                 styleText={{
-                  fontSize:16,
-                  paddingHorizontal:10
+                  fontSize: 16,
+                  paddingHorizontal: 10
                 }}
               />
             </ViewApp>

@@ -20,6 +20,7 @@ type Props = {
     User: undefined
 }
 const Tab = createBottomTabNavigator()
+// const tab = createMaterialBottomTabNavigator
 
 const BottomTab = (props: Props) => {
   const {user} = useSelector((state:any) => state.user)
@@ -72,6 +73,7 @@ const BottomTab = (props: Props) => {
               marginHorizontal:'5%'
             },
             tabBarCentered: true,
+            tabBarHideOnKeyboard:true,
         })}
     >
       <Tab.Screen name='Home' component={Home} />
@@ -128,6 +130,7 @@ const BottomTab = (props: Props) => {
               marginHorizontal:'5%'
             },
             tabBarCentered: true,
+            tabBarHideOnKeyboard:true,
         })}
     >
       <Tab.Screen name='OrderAdmin' component={OrderAdmin} />

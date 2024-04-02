@@ -45,7 +45,6 @@ const Screen_default = ({ isLoading, data, onRefresh }: any) => {
   }
   //mua lại
   const handleRepurchase = () => {
-    console.log(itemActive);
     navigate('Screen_cart', { repurchase: itemActive })
 
   }
@@ -95,9 +94,6 @@ const Screen_default = ({ isLoading, data, onRefresh }: any) => {
 
 
 const ItemOrder = ({ item, onPress, onPressButton }: any) => {
-  console.log('====================================');
-  console.log('item', item);
-  console.log('====================================');
   const { user } = useSelector((state: any) => state.user)
   const totalCount = item?.orderList?.reduce((count: number, item: any) => count + item.count, 0)
   return (

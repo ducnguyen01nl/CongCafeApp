@@ -6,7 +6,7 @@ import { AppLang } from '../../assets/languages'
 import ViewApp from '../../components/ViewApp'
 import TextApp from '../../components/TextApp'
 import IconApp from '../../components/IconApp'
-import { useAddressById, useGetItemDrink, useGetTableById } from '../../service/useLocalMater'
+import { useAddressById, useGetItemDrink, useGetTableById, useGetTokenById } from '../../service/useLocalMater'
 import { goBack } from '../../root/RootNavigation'
 import { COLORS } from '../../colors/colors'
 import { formatDateTimestamp, formatDateTimestampAll, heightScreen, titleStatus, titleTypeItem } from '../../data/dataLocal'
@@ -17,14 +17,14 @@ import { orderApi } from '../../api/orderApi'
 import ModalApp from '../../components/ModelApp'
 import ToastService from '../../service/ToastService'
 import { useSelector } from 'react-redux'
+import { pushNotificationApi } from '../../api/pushNotificationApi'
 
 
 const Screen_order_detail = ({ route }: any) => {
     const { item } = route?.params;
-    console.log(item);
     const { user } = useSelector((state: any) => state.user)
     const addressTable = item?.idAddress?.split("-").map(Number)
-    console.log(addressTable);
+    const tokenUser = useGetTokenById(item?.idUser)
 
     const [isLoadingTable, dataTable, onRefreshTable] = useGetTableById(item?.idTable)
 
@@ -47,6 +47,10 @@ const Screen_order_detail = ({ route }: any) => {
         switch(item?.status){
             case 0:
                 await orderApi.updateOrder(item?.id,{status:1})
+                pushNotificationApi.pushNotification(tokenUser?.tokenFCM,{
+                    title:'Cộng Cà Phê',
+                    body:'Đơn hàng mã xxxxxxxxx của bạn đã được xác nhận'
+                })
                 break;
             case 1:
                 await orderApi.updateOrder(item?.id,{status:2})

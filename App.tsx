@@ -32,7 +32,7 @@ import { navigationRef } from './src/root/RootNavigation';
 import ToastService from './src/service/ToastService';
 import RootScreen from './src/root/RootScreen';
 import ToastMessage from './src/components/ToastMessage';
-import { getToken, requestUserPermission } from './src/utils/notification';
+import { notificationListener, requestUserPermission, useToken } from './src/utils/notification';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -42,7 +42,8 @@ function App(): React.JSX.Element {
   };
   useEffect(() =>{
     requestUserPermission()
-    getToken()
+    useToken()
+    notificationListener()
   },[])
 
   return (

@@ -1,5 +1,5 @@
 import { View, StyleSheet, Image, ScrollView } from 'react-native'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import ViewApp from '../../components/ViewApp'
 import HeaderApp from '../../components/HeaderApp'
 import LayoutApp from '../../components/LayoutApp'
@@ -25,11 +25,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { convertFirebaseTimestamp } from '../../components/convertData'
 import { covertFirebaseTimeStampToString } from '../../utils/format'
 import moment from 'moment'
+import { useGetListNotification } from '../../service/useLocalMater'
+import { pushNotificationApi } from '../../api/pushNotificationApi'
+import messaging from '@react-native-firebase/messaging'
 const Login_email = () => {
   const toastRef:any = useRef(null)
   const formik = useFormik({
     initialValues: {
-      email:'admin@gmail.com',
+      email:'ducnguyen01nl@gmail.com',
       password:'12345678',
     },
     validationSchema: Yup.object({
@@ -68,14 +71,14 @@ const Login_email = () => {
           await auth().signInWithEmailAndPassword(formik.values.email,formik.values.password)
           .then(async(userCredential) => {
               const userInfo:any = await userApi.getUserInfoByUid(userCredential.user.uid)
-              userInfo.birthday = covertFirebaseTimeStampToString(userInfo?.birthday)
-              userInfo.createAt = covertFirebaseTimeStampToString(userInfo?.createAt)
-              userInfo.updateAt = covertFirebaseTimeStampToString(userInfo?.updateAt)
-              // console.log(userInfo);
+              console.log(userInfo);
+                userInfo.birthday = covertFirebaseTimeStampToString(userInfo?.birthday)
+                userInfo.createAt = covertFirebaseTimeStampToString(userInfo?.createAt)
+                userInfo.updateAt = covertFirebaseTimeStampToString(userInfo?.updateAt)
+                dispatch(setUser(userInfo))
+                AsyncStorage.setItem('userId',userInfo?.user_id)
+                navigate('BottomTab')
               
-              dispatch(setUser(userInfo))
-              AsyncStorage.setItem('userId',userInfo?.user_id)
-              navigate('BottomTab')
             })
           .catch(error => {
             if(error.code === 'auth/invalid-credential'){
@@ -95,8 +98,7 @@ const Login_email = () => {
         // }
       }
     });
-
-
+    
   }
 
   return (

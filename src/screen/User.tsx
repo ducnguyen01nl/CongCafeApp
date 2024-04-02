@@ -31,26 +31,26 @@ const User = (props: Props) => {
   const _langue = useRef<any>();
   const auth = getAuth()
 
-  const countOrder = (status:number) =>{
-    return data.filter((item:any) => item.status == status).length
+  const countOrder = (status: number) => {
+    return data.filter((item: any) => item.status == status).length
   }
-  useEffect(() =>{
+  useEffect(() => {
     onRefresh()
-  },[data])
+  }, [data])
 
   const handleLogOut = async () => {
 
     try {
       await signOut(auth);
       console.log('User signed out successfully');
-      ToastService.showToast(AppLang(`dang_xuat_thanh_cong`),0)
+      ToastService.showToast(AppLang(`dang_xuat_thanh_cong`), 0)
       navigate('Login_email')
     } catch (error) {
       console.error('Error signing out:', error);
     }
   }
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
-  const changeLanguage = (language:any) => {
+  const changeLanguage = (language: any) => {
     i18n.locale = language
     forceUpdate()
     _langue.current.close()
@@ -60,7 +60,7 @@ const User = (props: Props) => {
     //   RNRestart.Restart()
     // },500)
   };
-  
+
 
   return (
     <LayoutApp
@@ -73,7 +73,7 @@ const User = (props: Props) => {
           <ViewApp row alignItems='center' flex3>
 
             <ViewApp square={60} overF='hidden' mid styleBox={styles.imageUser}>
-              <Image source={user.img ? {uri:user.img} : imgApp.userDefault} style={{height:'100%', width:'100%'}} resizeMode='cover' />
+              <Image source={user.img ? { uri: user.img } : imgApp.userDefault} style={{ height: '100%', width: '100%' }} resizeMode='cover' />
             </ViewApp>
 
             <ViewApp flex1>
@@ -88,53 +88,56 @@ const User = (props: Props) => {
           </ViewApp>
         </TouchApp>
 
-        <ViewApp pad20 row>
-          <TouchApp
-            flex1
-            mid
-            borderW={1}
-            borderC={COLORS.transparent}
-            onPress={() =>{navigate('Screen_order_manage',{idTab:0})}}
-          >
-            <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='archive-check-outline'/>
-            <TextApp colorW size12>{AppLang(`cho_xac_nhan`)}</TextApp>
-            <Count top={-10} right={'20%'} count={countOrder(0)}/>
-          </TouchApp>
-          <TouchApp
-            flex1
-            mid
-            borderW={1}
-            borderC={COLORS.transparent}
-            onPress={() =>{navigate('Screen_order_manage',{idTab:1})}}
-          >
-            <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='clipboard-clock-outline'/>
-            <TextApp colorW size12>{AppLang(`dang_xu_ly`)}</TextApp>
-            <Count top={-10} right={'20%'} count={countOrder(1)}/>
-          </TouchApp>
-          <TouchApp
-            flex1
-            mid
-            borderW={1}
-            borderC={COLORS.transparent}
-            onPress={() =>{navigate('Screen_order_manage',{idTab:2})}}
-          >
-            <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='truck-fast-outline'/>
-            <TextApp colorW size12>{AppLang('dang_giao')}</TextApp>
-            <Count top={-10} right={'20%'} count={countOrder(2)}/>
-          </TouchApp>
-          <TouchApp
-            flex1
-            mid
-            borderW={1}
-            borderC={COLORS.transparent}
-            onPress={() =>{navigate('Screen_order_manage',{idTab:3})}}
-          >
-            <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='star-outline'/>
-            <TextApp colorW size12>{AppLang(`danh_gia`)}</TextApp>
-            <Count top={-10} right={'20%'} count={countOrder(3)}/>
-          </TouchApp>
+        {
+          user?.role == 1 &&
+          <ViewApp pad20 row>
+            <TouchApp
+              flex1
+              mid
+              borderW={1}
+              borderC={COLORS.transparent}
+              onPress={() => { navigate('Screen_order_manage', { idTab: 0 }) }}
+            >
+              <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='archive-check-outline' />
+              <TextApp colorW size12>{AppLang(`cho_xac_nhan`)}</TextApp>
+              <Count top={-10} right={'20%'} count={countOrder(0)} />
+            </TouchApp>
+            <TouchApp
+              flex1
+              mid
+              borderW={1}
+              borderC={COLORS.transparent}
+              onPress={() => { navigate('Screen_order_manage', { idTab: 1 }) }}
+            >
+              <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='clipboard-clock-outline' />
+              <TextApp colorW size12>{AppLang(`dang_xu_ly`)}</TextApp>
+              <Count top={-10} right={'20%'} count={countOrder(1)} />
+            </TouchApp>
+            <TouchApp
+              flex1
+              mid
+              borderW={1}
+              borderC={COLORS.transparent}
+              onPress={() => { navigate('Screen_order_manage', { idTab: 2 }) }}
+            >
+              <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='truck-fast-outline' />
+              <TextApp colorW size12>{AppLang('dang_giao')}</TextApp>
+              <Count top={-10} right={'20%'} count={countOrder(2)} />
+            </TouchApp>
+            <TouchApp
+              flex1
+              mid
+              borderW={1}
+              borderC={COLORS.transparent}
+              onPress={() => { navigate('Screen_order_manage', { idTab: 3 }) }}
+            >
+              <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='star-outline' />
+              <TextApp colorW size12>{AppLang(`danh_gia`)}</TextApp>
+              <Count top={-10} right={'20%'} count={countOrder(3)} />
+            </TouchApp>
 
-        </ViewApp>
+          </ViewApp>
+        }
 
         <ViewApp flex1 backgroundColor={COLORS.text4}
           borderTopLeftRadius={40}
@@ -143,22 +146,27 @@ const User = (props: Props) => {
         >
           <ScrollView
             showsVerticalScrollIndicator={false}
-            style={{ marginBottom:50}}
+            style={{ marginBottom: 50 }}
           >
             <ItemTitle title={AppLang(`tai_khoan`)}>
-              <ItemChildren title={AppLang(`thong_tin_tai_khoan`)} icon='user' first onPress={()=>navigate('Screen_info_user')}/>
-              <ItemChildren title={AppLang(`danh_sach_dia_chi`)} icon='map-marker' onPress={() =>navigate('Screen_address',{select:false})}/>
-              <ItemChildren title={AppLang(`doi_mat_khau`)} icon='lock'/>
+              <ItemChildren title={AppLang(`thong_tin_tai_khoan`)} icon='user' first onPress={() => navigate('Screen_info_user')} />
+              {
+                user?.role == 1 && <ItemChildren title={AppLang(`danh_sach_dia_chi`)} icon='map-marker' onPress={() => navigate('Screen_address', { select: false })} />
+              }
+              <ItemChildren title={AppLang(`doi_mat_khau`)} icon='lock' onPress={() => navigate('Screen_change_password')} />
             </ItemTitle>
 
             <ItemTitle title={AppLang(`ung_dung`)}>
-              <ItemChildren title={i18n.t('ngon_ngu')} icon='user' first onPress={() => _langue.current.open()}/>
-              <ItemChildren title={i18n.t('qr_code')} icon='qrcode' type='AntDesign' onPress={() => {navigate('Screen_qr_code')}}/>
+              <ItemChildren title={i18n.t('ngon_ngu')} icon='user' first onPress={() => _langue.current.open()} />
+              {
+                user?.role == 0 && <ItemChildren title={i18n.t('qr_code')} icon='qrcode' type='AntDesign' onPress={() => { navigate('Screen_qr_code') }} />
+              }
+              
             </ItemTitle>
-            
+
             <ItemTitle title={AppLang(`trung_tam_tro_giup`)}>
-              <ItemChildren title={AppLang(`cau_hoi_thuong_gap`)} icon='comments' first/>
-              <ItemChildren title={AppLang(`phan_hoi_ho_tro`)} icon='headset' type='FontAwesome5'/>
+              <ItemChildren title={AppLang(`cau_hoi_thuong_gap`)} icon='comments' first />
+              <ItemChildren title={AppLang(`phan_hoi_ho_tro`)} icon='headset' type='FontAwesome5' />
             </ItemTitle>
 
             <ButtonApp title={AppLang(`dang_xuat`)} styleButton={{ borderRadius: 10 }}
@@ -172,18 +180,18 @@ const User = (props: Props) => {
         </ModalApp>
 
       </ViewApp>
-    {/* }  */}
-    <ToastMessage ref={refToast} />
+      {/* }  */}
+      <ToastMessage ref={refToast} />
     </LayoutApp>
   )
 }
 
-const ItemTitle = ({ title,children}: any) => {
+const ItemTitle = ({ title, children }: any) => {
   return (
     <ViewApp >
       <TextApp size18 bold color1>{title}</TextApp>
       <ViewApp w100 bgW borderR={10} marT10 marB={25}>
-      {children}
+        {children}
       </ViewApp>
     </ViewApp>
   )
@@ -195,7 +203,7 @@ const ItemChildren = ({ title, icon, type, first, onPress }: any) => {
     <ViewApp marH20 borderTW={first ? 0 : 1}>
       <TouchableOpacity style={styles.itemChildren} onPress={onPress}>
         <ViewApp row alignCenter>
-          <IconApp name={icon} type= {type ? type :'FontAwesome'} color={COLORS.primary} />
+          <IconApp name={icon} type={type ? type : 'FontAwesome'} color={COLORS.primary} />
           <TextApp color2>{title}</TextApp>
         </ViewApp>
 
@@ -254,8 +262,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderColor: COLORS.text3
   },
-  iconOrder:{
-    color:'white',
-    position:"relative"
+  iconOrder: {
+    color: 'white',
+    position: "relative"
   }
 })

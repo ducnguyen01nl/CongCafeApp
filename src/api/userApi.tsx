@@ -136,5 +136,6 @@ export const userApi = {
             console.log(error);
             
         })
-    }
+    },
+    
 }

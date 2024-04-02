@@ -45,6 +45,7 @@ export const DATA_GENDER = [
     { name: AppLang(`nu`), value: false }
 ]
 
+
 export const DATA_TYPE_ITEMS = [
     {name:'dac_san_cua_cong', value:0},
     {name:'ca_phe_pho', value:1},
@@ -55,6 +56,18 @@ export const DATA_TYPE_ITEMS = [
     {name:'sua_chua', value:6},
     {name:'do_an', value:7},
 ]
+
+export const DATA_TYPE_ITEMS2 = [
+    {name:AppLang('dac_san_cua_cong'), value:0},
+    {name:AppLang('ca_phe_pho'), value:1},
+    {name:AppLang('ca_phe_ta'), value:2},
+    {name:AppLang('tra_co_thu'), value:3},
+    {name:AppLang('do_dia_phuong'), value:4},
+    {name:AppLang('trai_cay'), value:5},
+    {name:AppLang('sua_chua'), value:6},
+    {name:AppLang('do_an'), value:7},
+]
+
 
 export const titleTypeItem = (type: number) => {
     switch (type) {
@@ -84,3 +97,5 @@ export const titleStatus = (type: number) => {
             return 'huy'
     }
 }
+
+export const ipLocal = '192.168.1.18'

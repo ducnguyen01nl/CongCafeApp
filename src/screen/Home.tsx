@@ -1,5 +1,5 @@
 import { Dimensions, FlatList, Image, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import LayoutApp from '../components/LayoutApp'
 import ViewApp from '../components/ViewApp'
 import { imgApp } from '../assets/img'
@@ -8,17 +8,21 @@ import { COLORS, shadowP } from '../colors/colors'
 import TextApp from '../components/TextApp'
 import { AppLang } from '../assets/languages'
 import TouchApp from '../components/TouchApp'
-import { goBack, navigate } from '../root/RootNavigation'
+import { goBack, navigate, push } from '../root/RootNavigation'
 import { formatMoney, moneyDiscount } from '../utils/format'
 import { DATA_TYPE_ITEMS } from '../data/dataLocal'
 import ListViewItems from './home/components/ListViewItems'
 import { drinksApi } from '../api/drinksApi'
 import { useSelector } from 'react-redux'
-import { useAddressActive, useAddressActive2, useCartUser, useGetItemDrink, useListAddress } from '../service/useLocalMater'
+import { useAddressActive, useAddressActive2, useCartUser, useGetItemDrink, useGetListNotification, useListAddress } from '../service/useLocalMater'
 import moment from 'moment'
 import { useFocusEffect } from '@react-navigation/native'
 import LoadingApp from '../components/LoadingApp'
-import {LinearGradient} from 'react-native-linear-gradient'
+import { LinearGradient } from 'react-native-linear-gradient'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import messaging from '@react-native-firebase/messaging'
+import { pushNotificationApi } from '../api/pushNotificationApi'
+import { useToken } from '../utils/notification'
 
 type Props = {}
 
@@ -48,10 +52,12 @@ const Home = (props: Props) => {
 
   const { user } = useSelector((state: any) => state.user)
   const [isLoading, data, onRefresh] = useCartUser()
+  // const token = useToken()
+  const { token } = useSelector((state: any) => state.token)
   console.log(data);
 
   const [isLoadingAddress, dataAddress, onRefreshAddress] = useAddressActive2()
-  const [isLoadingListAddress,dataListAddress,onRefreshListAddress] = useListAddress()
+  const [isLoadingListAddress, dataListAddress, onRefreshListAddress] = useListAddress()
   useFocusEffect(
     React.useCallback(() => {
       onRefreshAddress()
@@ -59,13 +65,46 @@ const Home = (props: Props) => {
     }, [])
   )
 
+  const [isLoadingNo, dataNo, onRefreshNo] = useGetListNotification()
+
+  useEffect(() => {
+    if (dataNo.length > 0 && token) {
+      handleUpdateTokenFCM();
+    }
+  }, [dataNo, token]);
+
+  const handleUpdateTokenFCM = async () => {
+    const userId: any = await AsyncStorage.getItem('userId')
+    try {
+      // console.log('1111', dataNo);
+      // console.log('2222', token);
+
+      const tokenCurrent = dataNo.find((state: any) => state.tokenFCM === token);
+      if (tokenCurrent) {
+
+        if (tokenCurrent.userId === userId) {
+          return null;
+        } else {
+          await pushNotificationApi.updateTokenFCM(tokenCurrent.id, {
+            userId: userId
+          });
+        }
+      } else {
+        await pushNotificationApi.addTokenFCM(token)
+      }
+
+    } catch (error) {
+      console.log(error, 'getToken');
+    }
+  };
+
   return (
 
     !isLoadingAddress &&
     <LayoutApp>
       <ViewApp h={'24%'} bg={COLORS.primary} backgroundColor={'#ECF6F8'}>
         <LinearGradient
-          colors={[COLORS.primary,'#ECF6F8']}
+          colors={[COLORS.primary, '#ECF6F8']}
         >
           <ViewApp pad10 row centerH>
             <ViewApp row flex2>
@@ -81,11 +120,11 @@ const Home = (props: Props) => {
                 <ViewApp flex1 padR={25}>
                   {
                     dataListAddress?.length > 0
-                    ? <>
-                  <TextApp colorS>{dataAddress?.name}</TextApp>
-                  <TextApp numberOfLines={1} colorS>{dataAddress?.address}</TextApp>
-                    </>
-                    : <TextApp colorS>{AppLang('ban_chua_co_dia_chi')}</TextApp>
+                      ? <>
+                        <TextApp colorS>{dataAddress?.name}</TextApp>
+                        <TextApp numberOfLines={1} colorS>{dataAddress?.address}</TextApp>
+                      </>
+                      : <TextApp colorS>{AppLang('ban_chua_co_dia_chi')}</TextApp>
                   }
                 </ViewApp>
               </TouchApp>
