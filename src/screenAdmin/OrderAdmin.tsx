@@ -52,9 +52,6 @@ useEffect(() => {
 const handleUpdateTokenFCM = async () => {
     const userId: any = await AsyncStorage.getItem('userId')
     try {
-        // console.log('1111', dataNo);
-        // console.log('2222', token);
-
         const tokenCurrent = dataNo.find((state: any) => state.tokenFCM === token);
         if (tokenCurrent) {
 

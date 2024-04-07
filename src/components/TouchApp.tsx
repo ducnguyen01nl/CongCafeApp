@@ -296,7 +296,7 @@ const TouchApp: React.FC<T_TouchApp> = (props) => {
             {props.children}
           </Animated.View>
         </TouchableOpacity>
-        : <TouchableOpacity disabled={props.disabled} style={[defaultStyle.block, styleProps, props.styleBox]} {...props}
+        : <TouchableOpacity disabled={props.disabled} style={[{opacity:props.disabled ? 0.3 : 1},defaultStyle.block, styleProps, props.styleBox]} {...props}
           onPress={props.onPress}
         >
           {props.children}

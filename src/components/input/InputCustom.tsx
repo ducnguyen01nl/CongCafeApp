@@ -4,6 +4,7 @@ import {
     TextStyle,
     ViewStyle,
     StyleProp,
+    TextInput,
 } from 'react-native'
 import {
     TextInputMaskProps,

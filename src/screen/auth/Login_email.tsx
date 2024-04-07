@@ -71,7 +71,6 @@ const Login_email = () => {
           await auth().signInWithEmailAndPassword(formik.values.email,formik.values.password)
           .then(async(userCredential) => {
               const userInfo:any = await userApi.getUserInfoByUid(userCredential.user.uid)
-              console.log(userInfo);
                 userInfo.birthday = covertFirebaseTimeStampToString(userInfo?.birthday)
                 userInfo.createAt = covertFirebaseTimeStampToString(userInfo?.createAt)
                 userInfo.updateAt = covertFirebaseTimeStampToString(userInfo?.updateAt)

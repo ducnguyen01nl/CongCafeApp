@@ -155,7 +155,7 @@ const ButtonApp: React.FC<T_Button> = (props) => {
     >
         <TextApp
             size18
-            style={[props.styleText,styles.text]}
+            style={[styles.text,props.styleText]}
 
         >{props.title}</TextApp>
         {props.children}
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         marginVertical:10,
-        borderRadius:10
+        borderRadius:10,
         
     },
     styleButtonDisabled:{

@@ -63,7 +63,7 @@ const InputCore = React.forwardRef<Handle, Props>((props, ref) => {
   }, [props.valueInit])
 
   return (
-    <View style={[styles.box, props.styleBoxInput, { backgroundColor: props.background }]}>
+    <View style={[styles.box, { backgroundColor: props.background }, props.styleBoxInput]}>
       <TextInput
         ref={refCore}
         value={value}

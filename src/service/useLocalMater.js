@@ -6,6 +6,7 @@ import {drinksApi} from '../api/drinksApi';
 import {orderApi} from '../api/orderApi';
 import {tableApi} from '../api/tableApi';
 import {pushNotificationApi} from '../api/pushNotificationApi';
+import { newsApi } from '../api/newsApi';
 
 export const useLocalMater = (type, callBackApi) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -139,4 +140,10 @@ export const useGetTokenById = (userId) =>{
     pushNotificationApi.getTokenByIdUser(userId)
   );
   return data
+}
+export const useGetListNews = () =>{
+  const [isLoading, data, onRefresh] = useLocalMater([],() =>
+    newsApi.getListNews()
+  );
+  return [isLoading, data, onRefresh] 
 }

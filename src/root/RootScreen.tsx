@@ -8,6 +8,7 @@ import user from '../screen/user/index'
 import auth from '../screen/auth'
 import order from '../screen/order/index'
 import drinks from '../screenAdmin/drinks/index'
+import news from '../screenAdmin/news'
 import { useSelector } from 'react-redux'
 
 export type NameScreenApp = keyof typeof ScreenApp
@@ -17,6 +18,7 @@ export const ScreenApp = {
   ...user,
   ...order,
   ...drinks,
+  ...news
 }
 
 const Stack = createStackNavigator()

@@ -26,8 +26,8 @@ export const formatDateTimestampAll = (time:any) => {
         const day = newDate.getDate();
         const month = newDate.getMonth() + 1; // Tháng bắt đầu từ 0, cần cộng thêm 1
         const year = newDate.getFullYear();
-        const hours = newDate.getHours();
-        const minutes = newDate.getMinutes();
+        const hours = newDate.getHours().toString().padStart(2, '0');
+        const minutes = newDate.getMinutes().toString().padStart(2, '0');
         const formattedDate = ` ${hours}:${minutes} ${day}-${month}-${year}`;
         return formattedDate;
 
@@ -68,6 +68,24 @@ export const DATA_TYPE_ITEMS2 = [
     {name:AppLang('do_an'), value:7},
 ]
 
+export const DATA_FILTER_DATE = [
+    {name:AppLang('tat_ca'), value:0},
+    {name:AppLang('hom_nay'), value:1},
+    {name:AppLang('bay_ngay_truoc'), value:2},
+    {name:AppLang('thang_truoc'), value:3},
+]
+export const DATA_FILTER_TYPE = [
+    {name:AppLang('tat_ca'), value:0},
+    {name:AppLang('thong_bao'), value:1},
+    {name:AppLang('su_kien'), value:2},
+    {name:AppLang('tin_tuc'), value:3},
+]
+export const DATA_FILTER_TYPE_2 = [
+    {name:AppLang('thong_bao'), value:1},
+    {name:AppLang('su_kien'), value:2},
+    {name:AppLang('tin_tuc'), value:3},
+]
+
 
 export const titleTypeItem = (type: number) => {
     switch (type) {
@@ -98,4 +116,4 @@ export const titleStatus = (type: number) => {
     }
 }
 
-export const ipLocal = '192.168.1.18'
+export const ipLocal = '192.168.6.57'

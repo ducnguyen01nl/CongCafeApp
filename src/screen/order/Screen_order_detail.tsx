@@ -18,6 +18,7 @@ import ModalApp from '../../components/ModelApp'
 import ToastService from '../../service/ToastService'
 import { useSelector } from 'react-redux'
 import { pushNotificationApi } from '../../api/pushNotificationApi'
+import App from '../../../App'
 
 
 const Screen_order_detail = ({ route }: any) => {
@@ -49,14 +50,22 @@ const Screen_order_detail = ({ route }: any) => {
                 await orderApi.updateOrder(item?.id,{status:1})
                 pushNotificationApi.pushNotification(tokenUser?.tokenFCM,{
                     title:'Cộng Cà Phê',
-                    body:'Đơn hàng mã xxxxxxxxx của bạn đã được xác nhận'
+                    body:`${AppLang('don_hang_ma')} ${item?.id} ${AppLang('dang_xu_ly2')}`
                 })
                 break;
             case 1:
                 await orderApi.updateOrder(item?.id,{status:2})
+                pushNotificationApi.pushNotification(tokenUser?.tokenFCM,{
+                    title:'Cộng Cà Phê',
+                    body:`${AppLang('don_hang_ma')} ${item?.id} ${AppLang('dang_giao_hang')}`
+                })
                 break;
             case 2:
                 await orderApi.updateOrder(item?.id,{status:3})
+                pushNotificationApi.pushNotification(tokenUser?.tokenFCM,{
+                    title:'Cộng Cà Phê',
+                    body:`${AppLang('don_hang_ma')} ${item?.id} ${AppLang('da_giao_thanh_cong')}`
+                })
                 break;
         }
         goBack()
