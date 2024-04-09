@@ -5,12 +5,14 @@ import { userApi } from '../../../api/userApi'
 export interface CounterState {
   user: any,
   userLoading:boolean,
+  userRepurchase:any
 
 }
 
 const initialState: CounterState = {
   user: null,
-  userLoading: false
+  userLoading: false,
+  userRepurchase:null
 }
 
 export const userSlice = createSlice({
@@ -24,11 +26,14 @@ export const userSlice = createSlice({
     },
     setUserLoading: (state, action) => {
         state.userLoading = action.payload;
+    },
+    setUserRepurchase:(state, action) =>{
+      state.userRepurchase = action.payload;
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, setUserLoading } = userSlice.actions
+export const { setUser, setUserLoading, setUserRepurchase } = userSlice.actions
 
 export default userSlice.reducer

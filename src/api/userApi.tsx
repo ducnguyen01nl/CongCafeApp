@@ -12,12 +12,16 @@ import { utils } from '@react-native-firebase/app';
 export const userApi = {
 
     getUserInfoByUid: async (params: any) => {
-        const q = query(userRef, where('uid', '==', params))
-        const querySnapshot = await getDocs(q)
-        // querySnapshot.forEach((doc) =>{
-        if (!querySnapshot.empty) {
-            const userData = querySnapshot.docs[0].data();
-            return userData
+        try {
+            const q = query(userRef, where('uid', '==', params))
+            const querySnapshot = await getDocs(q)
+            // querySnapshot.forEach((doc) =>{
+            if (!querySnapshot.empty) {
+                const userData = querySnapshot.docs[0].data();
+                return userData
+            }
+        } catch (error) {
+            console.log(error);     
         }
         // })
 

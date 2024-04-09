@@ -19,9 +19,11 @@ import LoadingApp from '../components/LoadingApp'
 import { coverDateTimeStamp } from '../utils/format'
 import { isToday, isWithinInterval, subMonths, subDays } from 'date-fns';
 import InputCustom from '../components/input/InputCustom'
+import { useSelector } from 'react-redux'
 
 const NewsAdmin = () => {
   // const [search, setSearch] = useState<any>(null)
+  const {user} = useSelector((state:any) => state.user)
   const _input = useRef<any>({})
   const [isLoading, data, onRefresh] = useGetListNews()
 
@@ -101,16 +103,19 @@ const NewsAdmin = () => {
 
   return (
     <LayoutApp>
-      <ViewApp row padV10 padL10>
-        <TouchApp row pad10 alignCenter
-          borderW={1}
-          borderR={10}
-          borderC={COLORS.text1}
-          onPress={() => navigate('Screen_add_news')}
-        >
-          <IconApp size={30} name='pluscircleo' color={COLORS.primary} type='AntDesign' />
-          <TextApp colorP>{AppLang('them')}</TextApp>
+      <ViewApp row padV10 padL={user.role == 0 ? 10 : 0}>
+        {
+          user.role == 0 &&
+          <TouchApp row pad10 alignCenter
+            borderW={1}
+            borderR={10}
+            borderC={COLORS.text1}
+            onPress={() => navigate('Screen_add_news')}
+          >
+            <IconApp size={30} name='pluscircleo' color={COLORS.primary} type='AntDesign' />
+            <TextApp colorP>{AppLang('them')}</TextApp>
         </TouchApp>
+        }
 
         <ViewApp flex1 row marH10 borderR={10} padH10 alignCenter bg={COLORS.white} borderW={1} borderC={COLORS.text1}>
           <IconApp name='search' />

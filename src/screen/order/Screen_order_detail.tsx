@@ -7,7 +7,7 @@ import ViewApp from '../../components/ViewApp'
 import TextApp from '../../components/TextApp'
 import IconApp from '../../components/IconApp'
 import { useAddressById, useGetItemDrink, useGetTableById, useGetTokenById } from '../../service/useLocalMater'
-import { goBack } from '../../root/RootNavigation'
+import { goBack, navigate } from '../../root/RootNavigation'
 import { COLORS } from '../../colors/colors'
 import { formatDateTimestamp, formatDateTimestampAll, heightScreen, titleStatus, titleTypeItem } from '../../data/dataLocal'
 import { formatMoney, moneyDiscount } from '../../utils/format'
@@ -186,7 +186,7 @@ const Screen_order_detail = ({ route }: any) => {
                                     item?.status == 0 && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
                                 }
                                 {
-                                    item?.status == 3 || item?.status == 4 && <ButtonApp title={AppLang('mua_lai')} />
+                                    (item?.status == 3 || item?.status == 4) && <ButtonApp title={AppLang('mua_lai')}  onPress={() =>navigate('Screen_cart', { repurchase: item })}/>
                                 }
                             </ViewApp>
                         </ViewApp>

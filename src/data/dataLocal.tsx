@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 import { AppLang } from "../assets/languages";
 import { Dimensions } from "react-native";
+import { navigate } from "../root/RootNavigation";
 
 
 export const regPhone: RegExp = /([3|5|7|8|9])+([0-9]{8})\b/
@@ -86,6 +87,15 @@ export const DATA_FILTER_TYPE_2 = [
     {name:AppLang('tin_tuc'), value:3},
 ]
 
+export const LINK_TO = (id:number) =>{
+    switch(id){
+        case 0:
+            return "Screen_add_news"
+        case 1:
+            return "Screen_address"
+    }
+}
+
 
 export const titleTypeItem = (type: number) => {
     switch (type) {
@@ -116,4 +126,4 @@ export const titleStatus = (type: number) => {
     }
 }
 
-export const ipLocal = '192.168.6.57'
+export const ipLocal = '192.168.1.229'

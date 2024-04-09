@@ -24,11 +24,13 @@ import { userApi } from '../../api/userApi'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch } from 'react-redux'
 import { setTable } from '../../app/redux/slices/tableSlice'
+import { store } from '../../app/redux/store'
+import { setUserRepurchase } from '../../app/redux/slices/userSlice'
 
-const Screen_cart = ({route}:any) => {
-    const {repurchase} = route?.params;
-    console.log('repu',repurchase);
-    
+const Screen_cart = ({ route }: any) => {
+    const { repurchase } = route?.params;
+    console.log('repu', repurchase);
+
     const [isLoading, data, onRefresh] = useCartUser();
     const [itemPrices, setItemPrices] = useState<number[]>([]); // Mảng lưu giá trị của từng mục
     const totalPriceCart = itemPrices.reduce((total, current) => total + current, 0)
@@ -52,7 +54,19 @@ const Screen_cart = ({route}:any) => {
         onRefresh()
         modalDelete.current.close()
     }
-
+    const handleCreateRequestOrder = (type: number) => {
+        refModal.current.close()
+        if(type == 0) {
+            dispatch(setTable(null))
+            navigate('Screen_request_order',{totalPrice:totalPriceCart})
+        }
+        else{
+            navigate('Screen_qr_screen', { totalPrice: totalPriceCart })
+        }
+        if(repurchase){
+            store.dispatch(setUserRepurchase(repurchase?.orderList))
+        }
+    }
     return (
         <LayoutApp>
             <HeaderApp
@@ -71,27 +85,42 @@ const Screen_cart = ({route}:any) => {
                 }}
             />
             {
-                isLoading ? <ViewApp flex1>
-                                <LoadingApp noBg />
-                            </ViewApp>
-                    :
-                    data?.order?.length > 0 ?
-                        <ScrollView
-                        >
-                            <ViewApp bg={COLORS.text4} pad5></ViewApp>
-                            {
-                                data?.order?.map((item: any, index: number) => (
-                                    <ItemOrder key={index} item={item} index={index} itemPrices={itemPrices} setItemPrices={setItemPrices} onPressDelete={() => onPressDelete(item)} />
-                                ))
+                repurchase ?
+                    <ScrollView
+                    >
+                        <ViewApp bg={COLORS.text4} pad5></ViewApp>
+                        {
+                            repurchase?.orderList?.map((item: any, index: number) => (
+                                <ItemOrder key={index} item={item} index={index} itemPrices={itemPrices} setItemPrices={setItemPrices} onPressDelete={() => onPressDelete(item)} />
+                            ))
 
-                            }
-                            <ViewApp bg={COLORS.text4} pad5></ViewApp>
-                        </ScrollView>
+                        }
+                        <ViewApp bg={COLORS.text4} pad5></ViewApp>
+                    </ScrollView>
+
+                    :
+                    isLoading ? <ViewApp flex1>
+                        <LoadingApp noBg />
+                    </ViewApp>
                         :
-                        <ViewApp mid flex1>
-                            <TextApp size18 colorP bold pV10>{AppLang('gio_hang_cua_ban_dang_trong')}</TextApp>
-                            <Image source={imgApp.boxNothing} style={{ width: '60%', height: '40%' }} resizeMode='contain' />
-                        </ViewApp>
+                        data?.order?.length > 0 ?
+                            <ScrollView
+                            >
+                                <ViewApp bg={COLORS.text4} pad5></ViewApp>
+                                {
+                                    data?.order?.map((item: any, index: number) => (
+                                        <ItemOrder key={index} item={item} index={index} itemPrices={itemPrices} setItemPrices={setItemPrices} onPressDelete={() => onPressDelete(item)} />
+                                    ))
+
+                                }
+                                <ViewApp bg={COLORS.text4} pad5></ViewApp>
+                            </ScrollView>
+                            :
+                            <ViewApp mid flex1>
+                                <TextApp size18 colorP bold pV10>{AppLang('gio_hang_cua_ban_dang_trong')}</TextApp>
+                                <Image source={imgApp.boxNothing} style={{ width: '60%', height: '40%' }} resizeMode='contain' />
+                            </ViewApp>
+
 
             }
             <ViewApp w100 mid padH10 borderTW={1}>
@@ -120,9 +149,8 @@ const Screen_cart = ({route}:any) => {
                     <ViewApp flex1 pad20 row>
                         <TouchApp flex1 borderW={5} marH10 mid h={'80%'} borderR={20} borderC={COLORS.primary}
                             onPress={() => {
-                                refModal.current.close(),
-                                    dispatch(setTable(null))
-                                navigate('Screen_request_order', { totalPrice: totalPriceCart })
+                                handleCreateRequestOrder(0)
+
                             }}
                         >
                             <Image style={{ width: '80%' }} source={imgApp.iconDelivery} resizeMode='contain' />
@@ -130,8 +158,7 @@ const Screen_cart = ({route}:any) => {
                         </TouchApp>
                         <TouchApp flex1 borderW={5} marH10 mid h={'80%'} borderR={20} borderC={COLORS.primary}
                             onPress={() => {
-                                refModal.current.close(),
-                                    navigate('Screen_qr_screen', { totalPrice: totalPriceCart })
+                                handleCreateRequestOrder(1)
                                 // navigate('Screen_request_order', { totalPrice: totalPriceCart })
                             }}
                         >
@@ -164,11 +191,11 @@ const ItemOrder = ({ item, index, itemPrices, setItemPrices, onPressDelete }: an
     const [count, setCount] = useState<number>(item?.count)
     const [isLoading, data, onRefresh] = useGetItemDrink(item?.idItem)
 
-    useEffect(() =>{
-        if(data?.status == false){
+    useEffect(() => {
+        if (data?.status == false) {
             onPressDelete()
         }
-    },[data])
+    }, [data])
 
     useEffect(() => {
         if (data && data.price !== undefined) {

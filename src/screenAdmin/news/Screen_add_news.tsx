@@ -20,6 +20,8 @@ import IconApp from '../../components/IconApp'
 import ToastService from '../../service/ToastService'
 import { newsApi } from '../../api/newsApi'
 import LoadingApp from '../../components/LoadingApp'
+import { pushNotificationApi } from '../../api/pushNotificationApi'
+import { useGetListToken } from '../../service/useLocalMater'
 
 const Screen_add_news = ({ route }: any) => {
 
@@ -29,6 +31,7 @@ const Screen_add_news = ({ route }: any) => {
     const refModal = useRef<any>();
     const [listImage, setListImage] = useState<any>(data ? data?.images : [])
     const [loading,setLoading] = useState<any>(false);
+    const [isLoadingToken, dataToken, onRefreshToken] = useGetListToken()
 
     useEffect(() => {
         if (data?.id) {
@@ -78,9 +81,19 @@ const Screen_add_news = ({ route }: any) => {
             })
         }
         setLoading(false)
-
         // }
         goBack()
+        // await pushNotificationApi.pushNotificationAll(dataToken,{
+        //     title:AppLang('cong_ca_phe'),
+        //     body:data ? AppLang('cong_ca_phe_da_cap_nhat_1_bai_viet') : AppLang('cong_ca_phe_da_them_1_bai_viet_moi')
+        // })
+        await pushNotificationApi.pushNotify({
+            title:'Cộng Cà phê xin chào',
+            body:data ? AppLang('cong_ca_phe_da_cap_nhat_1_bai_viet') : AppLang('cong_ca_phe_da_them_1_bai_viet_moi'),
+            arrayToken:dataToken,
+            data:{id:data?.id,screen:1},
+            
+        })
     }
 
 

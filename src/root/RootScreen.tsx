@@ -29,7 +29,7 @@ const RootScreen = () => {
 
     return (
 
-      <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName='Screen_splash' screenOptions={{ headerShown: false }}>
         {/* <Stack.Screen  name='BottomTab' component={BottomTab}/> */}
         {
           Object.entries(ScreenApp).map(([name, component]) => (

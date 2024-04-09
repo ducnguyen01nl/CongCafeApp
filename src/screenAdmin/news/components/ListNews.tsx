@@ -14,13 +14,16 @@ import ButtonApp from '../../../components/ButtonApp'
 import { newsApi } from '../../../api/newsApi'
 import { navigate } from '../../../root/RootNavigation'
 import { coverDateTimeStamp } from '../../../utils/format'
+import { useSelector } from 'react-redux'
 
 const ListNews = ({ data, onRefresh }: any) => {
   const refModal = useRef<any>()
   const [itemActive, setItemActive] = useState<any>()
+
+  //sắp xếp theo ngày
   const dataSort = [...data].sort((a, b): any => {
-    const dateA: any = coverDateTimeStamp(a?.createAt)
-    const dateB: any = coverDateTimeStamp(b?.createAt)
+    const dateA: any = coverDateTimeStamp(a?.updateAt)
+    const dateB: any = coverDateTimeStamp(b?.updateAt)
     return dateB - dateA
     // if (dateA && dateB) {
     //   return dateB - dateA;
@@ -94,7 +97,7 @@ const styles = StyleSheet.create({
 })
 
 const ItemNews = ({ item, onOpenModal }: any) => {
-
+  const {user} = useSelector((state:any) => state.user)
   const [expanded, setExpanded] = useState<boolean>(false)
 
   const toggleExpand = () => {
@@ -106,10 +109,13 @@ const ItemNews = ({ item, onOpenModal }: any) => {
       <ViewApp row centerH borderBW={1} padV5>
         <TextApp colorP bold>{DATA_FILTER_TYPE_2[item?.type - 1]?.name}</TextApp>
         <ViewApp row>
-          <TextApp color1>{formatDateTimestampAll(item?.createAt)}</TextApp>
-          <TouchApp onPress={onOpenModal}>
-            <IconApp size={20} name='dots-three-vertical' type='Entypo' />
-          </TouchApp>
+          <TextApp color1>{formatDateTimestampAll(item?.updateAt)}</TextApp>
+          {
+            user.role == 0 &&
+            <TouchApp onPress={onOpenModal}>
+              <IconApp size={20} name='dots-three-vertical' type='Entypo' />
+            </TouchApp>
+          }
         </ViewApp>
       </ViewApp>
       <ViewApp marV10>

@@ -219,6 +219,9 @@ chon_tac_vu:   `Select task`,
 sua_tin_tuc:   `Edit news`,
 xem_them:   `see more`,
 an_bot:   `hide less`,
+cong_ca_phe:'Cong Coffee',
+cong_ca_phe_da_them_1_bai_viet_moi:   `Cong Ca Phe added a new post`,
+cong_ca_phe_da_cap_nhat_1_bai_viet:   `Cong Coffee updated 1 post`,
   };
   
   export default en;

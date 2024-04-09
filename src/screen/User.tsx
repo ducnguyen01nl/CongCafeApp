@@ -22,6 +22,7 @@ import ModalApp from '../components/ModelApp'
 import { AppLang } from '../assets/languages'
 import { useFocusEffect } from '@react-navigation/native'
 import Count from '../components/Count'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 type Props = {}
 
 const User = (props: Props) => {
@@ -44,7 +45,8 @@ const User = (props: Props) => {
       await signOut(auth);
       console.log('User signed out successfully');
       ToastService.showToast(AppLang(`dang_xuat_thanh_cong`), 0)
-      navigate('Login_email')
+      await AsyncStorage.removeItem("userId")
+      navigate('Login')
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -54,7 +56,7 @@ const User = (props: Props) => {
     i18n.locale = language
     forceUpdate()
     _langue.current.close()
-    navigate('BottomTab')
+    navigate('Screen_splash')
     // setTimeout(() =>{
     //   // CodePush.restartApp()
     //   RNRestart.Restart()
@@ -73,12 +75,12 @@ const User = (props: Props) => {
           <ViewApp row alignItems='center' flex3>
 
             <ViewApp square={60} overF='hidden' mid styleBox={styles.imageUser}>
-              <Image source={user.img ? { uri: user.img } : imgApp.userDefault} style={{ height: '100%', width: '100%' }} resizeMode='cover' />
+              <Image source={user?.img ? { uri: user?.img } : imgApp.userDefault} style={{ height: '100%', width: '100%' }} resizeMode='cover' />
             </ViewApp>
 
             <ViewApp flex1>
-              <TextApp color4 size18 bold>{user.userName}</TextApp>
-              <TextApp color4 >{user.phone}</TextApp>
+              <TextApp color4 size18 bold>{user?.userName}</TextApp>
+              <TextApp color4 >{user?.phone}</TextApp>
             </ViewApp>
 
           </ViewApp>

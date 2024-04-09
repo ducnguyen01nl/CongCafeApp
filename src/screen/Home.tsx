@@ -54,7 +54,6 @@ const Home = (props: Props) => {
   const [isLoading, data, onRefresh] = useCartUser()
   // const token = useToken()
   const { token } = useSelector((state: any) => state.token)
-  console.log(data);
 
   const [isLoadingAddress, dataAddress, onRefreshAddress] = useAddressActive2()
   const [isLoadingListAddress, dataListAddress, onRefreshListAddress] = useListAddress()
