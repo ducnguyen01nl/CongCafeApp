@@ -28,8 +28,8 @@ import { store } from '../../app/redux/store'
 import { setUserRepurchase } from '../../app/redux/slices/userSlice'
 
 const Screen_cart = ({ route }: any) => {
-    const { repurchase } = route?.params;
-    console.log('repu', repurchase);
+    // const { repurchase } = route?.params;
+    // console.log('repu', repurchase);
 
     const [isLoading, data, onRefresh] = useCartUser();
     const [itemPrices, setItemPrices] = useState<number[]>([]); // Mảng lưu giá trị của từng mục
@@ -58,14 +58,14 @@ const Screen_cart = ({ route }: any) => {
         refModal.current.close()
         if(type == 0) {
             dispatch(setTable(null))
-            navigate('Screen_request_order',{totalPrice:totalPriceCart})
+            navigate('Screen_request_order')
         }
         else{
-            navigate('Screen_qr_screen', { totalPrice: totalPriceCart })
+            navigate('Screen_qr_screen')
         }
-        if(repurchase){
-            store.dispatch(setUserRepurchase(repurchase?.orderList))
-        }
+        // if(repurchase){
+        //     store.dispatch(setUserRepurchase(repurchase?.orderList))
+        // }
     }
     return (
         <LayoutApp>
@@ -85,20 +85,19 @@ const Screen_cart = ({ route }: any) => {
                 }}
             />
             {
-                repurchase ?
-                    <ScrollView
-                    >
-                        <ViewApp bg={COLORS.text4} pad5></ViewApp>
-                        {
-                            repurchase?.orderList?.map((item: any, index: number) => (
-                                <ItemOrder key={index} item={item} index={index} itemPrices={itemPrices} setItemPrices={setItemPrices} onPressDelete={() => onPressDelete(item)} />
-                            ))
+                // repurchase ?
+                //     <ScrollView
+                //     >
+                //         <ViewApp bg={COLORS.text4} pad5></ViewApp>
+                //         {
+                //             repurchase?.orderList?.map((item: any, index: number) => (
+                //                 <ItemOrder key={index} item={item} index={index} itemPrices={itemPrices} setItemPrices={setItemPrices} onPressDelete={() => onPressDelete(item)} />
+                //             ))
 
-                        }
-                        <ViewApp bg={COLORS.text4} pad5></ViewApp>
-                    </ScrollView>
-
-                    :
+                //         }
+                //         <ViewApp bg={COLORS.text4} pad5></ViewApp>
+                //     </ScrollView>
+                //     :
                     isLoading ? <ViewApp flex1>
                         <LoadingApp noBg />
                     </ViewApp>
@@ -109,7 +108,7 @@ const Screen_cart = ({ route }: any) => {
                                 <ViewApp bg={COLORS.text4} pad5></ViewApp>
                                 {
                                     data?.order?.map((item: any, index: number) => (
-                                        <ItemOrder key={index} item={item} index={index} itemPrices={itemPrices} setItemPrices={setItemPrices} onPressDelete={() => onPressDelete(item)} />
+                                        <ItemOrder key={index} item={item} index={index} setItemPrices={setItemPrices} onPressDelete={() => onPressDelete(item)} />
                                     ))
 
                                 }
@@ -186,7 +185,7 @@ const Screen_cart = ({ route }: any) => {
 }
 
 
-const ItemOrder = ({ item, index, itemPrices, setItemPrices, onPressDelete }: any) => {
+const ItemOrder = ({ item, index, setItemPrices, onPressDelete }: any) => {
 
     const [count, setCount] = useState<number>(item?.count)
     const [isLoading, data, onRefresh] = useGetItemDrink(item?.idItem)
@@ -214,11 +213,11 @@ const ItemOrder = ({ item, index, itemPrices, setItemPrices, onPressDelete }: an
 
         <ViewApp row height={heightScreen * 0.18} pad10 borderTW={index === 0 ? 0 : 1}>
             <ViewApp flex1 borderR={10} overF='hidden'>
-                <Image source={{ uri: item.imgItem }} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
+                <Image source={ data?.img ? { uri: data?.img } : imgApp.imgWhite} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
             </ViewApp>
             <ViewApp flex2 justifySB marH10>
                 <ViewApp row centerH>
-                    <TextApp size18 colorP bold>{item.nameItem}</TextApp>
+                    <TextApp size18 colorP bold>{data?.name}</TextApp>
                     <TouchApp
                         onPress={() => {
                             setCount(0)

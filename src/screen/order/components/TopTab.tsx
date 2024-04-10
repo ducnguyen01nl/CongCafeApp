@@ -46,7 +46,7 @@ const TopTab = ({idTab}:any) => {
           } else if (route.name === 'Screen_delivery') {
             labelText = AppLang(`dang_giao`); 
           } else if (route.name === 'Screen_evaluate') {
-            labelText = AppLang(`danh_gia`);
+            labelText = AppLang(`hoan_thanh2`);
           }
           else if (route.name === 'Screen_cancel') {
             labelText = AppLang(`huy`); 

@@ -44,10 +44,13 @@ export const useToken = () => {
 const config:any = {
   issuer: 'https://accounts.google.com',
   clientId: '956275766314-njl1jn8klh7ejh1pp1oa5827cm6r5fc5.apps.googleusercontent.com',
+  redirectUrl: 'congcafeapp://',
   scopes: ['openid', 'profile', 'email'],
 };
 
 export const getTokenOAuth = async () => {
+  console.log(1111);
+  
   try {
     const result = await authorize(config);
     const accessToken = result.accessToken;

@@ -134,7 +134,7 @@ const User = (props: Props) => {
               onPress={() => { navigate('Screen_order_manage', { idTab: 3 }) }}
             >
               <IconApp style={styles.iconOrder} size={38} type='MaterialCommunityIcons' name='star-outline' />
-              <TextApp colorW size12>{AppLang(`danh_gia`)}</TextApp>
+              <TextApp colorW size12>{AppLang(`hoan_thanh2`)}</TextApp>
               <Count top={-10} right={'20%'} count={countOrder(3)} />
             </TouchApp>
 

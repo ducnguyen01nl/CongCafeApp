@@ -40,8 +40,6 @@ const BottomTab = (props: Props) => {
                 iconName = focused ? 'home-sharp' : 'home-outline';
               } else if (route.name === 'NewsAdmin') {
                 iconName = focused ? 'newspaper' : 'newspaper-outline';
-              }else if (route.name === 'Order') {
-                iconName = focused ? 'basket-sharp' : 'basket-outline';
               }else if (route.name === 'User') {
                 iconName = focused ? 'person' : 'person-outline';
               }
@@ -53,9 +51,7 @@ const BottomTab = (props: Props) => {
               if (route.name === 'Home') {
                 labelText = AppLang(`trang_chu`); // Tên tùy chỉnh cho tab Home
               } else if (route.name === 'NewsAdmin') {
-                labelText = AppLang(`tin_tuc`); // Tên tùy chỉnh cho tab Favourite
-              } else if (route.name === 'Order') {
-                labelText = AppLang(`don_hang`); // Tên tùy chỉnh cho tab Order
+                labelText = AppLang(`tin_tuc`); // Tên tùy chỉnh cho tab News
               } else if (route.name === 'User') {
                 labelText = AppLang(`nguoi_dung`); // Tên tùy chỉnh cho tab User
               }
@@ -78,7 +74,6 @@ const BottomTab = (props: Props) => {
     >
       <Tab.Screen name='Home' component={Home} />
       <Tab.Screen name='NewsAdmin' component={NewsAdmin} />
-      <Tab.Screen name='Order' component={Order} />
       <Tab.Screen name='User' component={User} />
 
     </Tab.Navigator>

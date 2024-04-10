@@ -37,8 +37,6 @@ const Screen_item_detail = ({ route }: any) => {
         const dataAdd = {
             count:count,
             idItem:item.id,
-            imgItem:item.img,
-            nameItem:item.name
         }
         console.log('database',data?.order);
         

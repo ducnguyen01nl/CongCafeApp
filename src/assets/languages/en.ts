@@ -141,6 +141,7 @@ const en = {
     dang_xu_ly2:   `processing`,
     dang_giao2:   `are delivering`,
     hoan_thanh:   `complete`,
+    hoan_thanh2:   `Complete`,
     chua_co_du_lieu:   `No data yet`,
     tim_kiem:   `Search`,
     tim_kiem_san_pham:   `Search product`,

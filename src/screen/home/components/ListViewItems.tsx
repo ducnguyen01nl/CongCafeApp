@@ -55,11 +55,12 @@ const ListViewItems = () => {
                         ?
                         <FlatList
                             data={listDrinkByType()}
+                            onRefresh={onRefresh}
+                            // refreshing={false}
                             renderItem={({ item }) => (
                                 <ItemDrinkHoz {...item} key={item.id} />
                             )}
                             contentContainerStyle={{ paddingBottom: 150 }}
-                            onRefresh={onRefresh}
                         />
                         : <ViewApp mid>
                             <TextApp color1 size18>{AppLang('chua_co_du_lieu')}</TextApp>
@@ -73,7 +74,7 @@ const ListViewItems = () => {
 
 const ItemDrinkHoz = (item: any) => {
     return (
-        <TouchApp disabled={item?.status ? false : true} marH10 marV5 borderR={10} bgW overF='hidden' h={heightScreen * 0.2} row styleBox={{ ...shadowP,opacity:item?.status ? 1 : 0.7 }}
+        <TouchApp disabled={item?.status ? false : true} marH10 marV5 borderR={10} bgW overF='hidden' h={heightScreen * 0.2} row styleBox={{ ...shadowP, opacity: item?.status ? 1 : 0.7 }}
             onPress={() => navigate('Screen_item_detail', { item: item })}
         >
             <ViewApp flex1 >
@@ -104,7 +105,7 @@ const ItemDrinkHoz = (item: any) => {
                             :
                             <ViewApp borderW={1} borderC={COLORS.red} pad5 borderR={10}>
                                 <TextApp color={COLORS.red} size18>{AppLang('het_hang')}</TextApp>
-                            </ViewApp> 
+                            </ViewApp>
                     }
 
                 </ViewApp>

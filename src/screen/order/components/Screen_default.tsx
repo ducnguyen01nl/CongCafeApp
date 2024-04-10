@@ -35,7 +35,7 @@ const Screen_default = ({ isLoading, data, onRefresh }: any) => {
     try {
       await orderApi.updateOrder(itemActive?.id, { status: 4, updateAt: new Date() })
       refModal.current.close()
-      ToastService.showToast('huy_don_hang_thanh_cong', 0)
+      ToastService.showToast(AppLang('huy_don_hang_thanh_cong'), 0)
       onRefresh()
     } catch (error) {
       console.log(error);
@@ -45,7 +45,7 @@ const Screen_default = ({ isLoading, data, onRefresh }: any) => {
   }
   //mua lại
   const handleRepurchase = () => {
-    navigate('Screen_cart', { repurchase: itemActive })
+    navigate('Screen_request_order', { repurchase: itemActive })
 
   }
 
@@ -148,14 +148,15 @@ const ItemOrder = ({ item, onPress, onPressButton }: any) => {
         <ViewApp row centerH marH10 padH20>
 
           {
-            item?.status == 3
-              ? <ButtonApp with4 title={AppLang('danh_gia')}
-                onPress={() => onPressButton(item)}
-              />
-              : <ViewApp>
-                {/* <TextApp>thục</TextApp> */}
-              </ViewApp>
+            // item?.status == 3
+            //   ? <ButtonApp with4 title={AppLang('danh_gia')}
+            //     onPress={() => onPressButton(item)}
+            //   />
+            //   : <ViewApp>
+            //   </ViewApp>
           }
+          <ViewApp />
+
           {
             item?.status == 1 || item?.status == 2 ? null
               :

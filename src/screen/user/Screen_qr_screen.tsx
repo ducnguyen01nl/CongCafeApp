@@ -9,6 +9,7 @@ import { setTable } from '../../app/redux/slices/tableSlice';
 import TextApp from '../../components/TextApp';
 import { AppLang } from '../../assets/languages';
 import { navigate } from '../../root/RootNavigation';
+import ViewApp from '../../components/ViewApp';
 const Screen_qr_screen = ({route}:any) => {
   const {totalPrice} = route?.params
 
@@ -20,15 +21,15 @@ const handleScanner = (value:any) =>{
 }
 
 return(
-  <QRCodeScanner 
-    onRead={(value:any) => handleScanner(value)}
-    flashMode={RNCamera.Constants.FlashMode.torch}
-    topContent={
-      <TextApp colorP size18 bold>{AppLang('hay_quet_ma_qr_tren_ban')}</TextApp>
-    }
-      
-    
-  />
+  <ViewApp flex1 mid>
+    <TextApp colorP size18 bold>{AppLang('hay_quet_ma_qr_tren_ban')}</TextApp>
+    <QRCodeScanner 
+      onRead={(value:any) => handleScanner(value)}
+      flashMode={RNCamera.Constants.FlashMode.torch}
+      // topContent={
+      // }
+    />
+  </ViewApp>
 )
 
 

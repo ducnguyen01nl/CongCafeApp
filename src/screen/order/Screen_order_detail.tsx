@@ -23,6 +23,9 @@ import App from '../../../App'
 
 const Screen_order_detail = ({ route }: any) => {
     const { item } = route?.params;
+    console.log('====item================================');
+    console.log(item);
+    console.log('====================================');
     const { user } = useSelector((state: any) => state.user)
     const addressTable = item?.idAddress?.split("-").map(Number)
     const tokenUser = useGetTokenById(item?.idUser)
@@ -47,21 +50,21 @@ const Screen_order_detail = ({ route }: any) => {
     const handleConfirm = async() => {
         switch(item?.status){
             case 0:
-                await orderApi.updateOrder(item?.id,{status:1})
+                await orderApi.updateOrder(item?.id,{status:1, updateAt: new Date()})
                 pushNotificationApi.pushNotification(tokenUser?.tokenFCM,{
                     title:'Cộng Cà Phê',
                     body:`${AppLang('don_hang_ma')} ${item?.id} ${AppLang('dang_xu_ly2')}`
                 })
                 break;
             case 1:
-                await orderApi.updateOrder(item?.id,{status:2})
+                await orderApi.updateOrder(item?.id,{status:2, updateAt: new Date()})
                 pushNotificationApi.pushNotification(tokenUser?.tokenFCM,{
                     title:'Cộng Cà Phê',
                     body:`${AppLang('don_hang_ma')} ${item?.id} ${AppLang('dang_giao_hang')}`
                 })
                 break;
             case 2:
-                await orderApi.updateOrder(item?.id,{status:3})
+                await orderApi.updateOrder(item?.id,{status:3, updateAt: new Date()})
                 pushNotificationApi.pushNotification(tokenUser?.tokenFCM,{
                     title:'Cộng Cà Phê',
                     body:`${AppLang('don_hang_ma')} ${item?.id} ${AppLang('da_giao_thanh_cong')}`
@@ -186,7 +189,7 @@ const Screen_order_detail = ({ route }: any) => {
                                     item?.status == 0 && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
                                 }
                                 {
-                                    (item?.status == 3 || item?.status == 4) && <ButtonApp title={AppLang('mua_lai')}  onPress={() =>navigate('Screen_cart', { repurchase: item })}/>
+                                    (item?.status == 3 || item?.status == 4) && <ButtonApp title={AppLang('mua_lai')}  onPress={() =>navigate('Screen_request_order', { repurchase: item })}/>
                                 }
                             </ViewApp>
                         </ViewApp>
@@ -229,7 +232,7 @@ const Screen_order_detail = ({ route }: any) => {
 
 const ItemOrder = ({ item, index }: any) => {
 
-    const [isLoading, data, onRefresh] = useGetItemDrink(item?.idItem)
+    // const [isLoading, data, onRefresh] = useGetItemDrink(item?.idItem)
 
 
     return (
@@ -245,8 +248,8 @@ const ItemOrder = ({ item, index }: any) => {
                     </ViewApp>
                     <ViewApp row centerH>
                         <ViewApp row>
-                            <TextApp color='#FF7428' style={{ textDecorationLine: 'line-through' }} size16 bold>{formatMoney(data?.price)}</TextApp>
-                            <TextApp colorP size16 bold>{formatMoney(moneyDiscount(data?.price, data?.discount))}</TextApp>
+                            <TextApp color='#FF7428' style={{ textDecorationLine: 'line-through' }} size16 bold>{formatMoney(item?.price)}</TextApp>
+                            <TextApp colorP size16 bold>{formatMoney(moneyDiscount(item?.price, item?.discount))}</TextApp>
                         </ViewApp>
                     </ViewApp>
                 </ViewApp>
