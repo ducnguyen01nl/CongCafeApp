@@ -60,7 +60,7 @@ const InputSelect = React.forwardRef<any, Props>(({ label, valueInit, placeholde
         <ViewApp marB10 styleBox={styleBox} >
             {
                 label ? <ViewApp justifyCenter flex1 marB={5}>
-                    <TextApp bold style={styleLabel}>
+                    <TextApp color1 bold style={styleLabel}>
                         {label} {required ? <TextApp color='#EE8022'> *</TextApp> : ''}
                     </TextApp>
                 </ViewApp> : null

@@ -33,6 +33,7 @@ import ToastService from './src/service/ToastService';
 import RootScreen from './src/root/RootScreen';
 import ToastMessage from './src/components/ToastMessage';
 import { getTokenOAuth, notificationListener, requestUserPermission, useToken } from './src/utils/notification';
+import { linking } from './src/root/PressNotification/linking';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -44,14 +45,14 @@ function App(): React.JSX.Element {
     requestUserPermission()
     useToken()
     // getTokenOAuth()
-    notificationListener()
+    // notificationListener()
   },[])
 
   return (
     
     <Provider store={store}>
       <PaperProvider>
-        <NavigationContainer ref={navigationRef}>
+        <NavigationContainer ref={navigationRef} linking={linking}>
           <RootScreen />
           <ToastMessage ref={ToastService.ref} />
         </NavigationContainer>

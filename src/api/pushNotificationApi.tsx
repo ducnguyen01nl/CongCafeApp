@@ -4,10 +4,18 @@ import { ipLocal } from "../data/dataLocal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import firestore from '@react-native-firebase/firestore'
 import { useGetListNotification, useGetListToken } from "../service/useLocalMater";
+import { store } from "../app/redux/store";
+import { useToken } from "../utils/notification";
 type _Notify = {
     title?: any
     body?: any
     arrayToken: string[]
+    data?: any
+}
+type _Notify2 = {
+    title?: any
+    body?: any
+    token: string
     data?: any
 }
 export const pushNotificationApi = {
@@ -63,13 +71,39 @@ export const pushNotificationApi = {
                 console.error('Error sending notification:', error);
             });
     },
+    pushNotifyToUser: async (params: _Notify2) => {
+        const { title, body, token, data } = params
+        const key = 'AAAA3qZ6NCo:APA91bFk43soGMpEXiSAU3EVhUsXCG0j1cz9TQjc4J5pyjYYKwD34ik8ENIe99FSgZQ6PVB70pXGIBAqkWFxTemooW2J7wtzli0_v1LQEyDMMvlSxaCqnhube3SRPYs73KpcTwpTWTQW';
+        await axios({
+            method: 'post',
+            url: 'https://fcm.googleapis.com/fcm/send',
+            data: JSON.stringify({
+                "to": token,
+                "notification": {
+                    "title": title,
+                    "body": body,
+                },
+                "data":data,
+            }),
+            headers: {
+                Authorization: `key=${key}`,
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                console.log('Notification sent successfully:', response.data);
+            })
+            .catch(error => {
+                console.error('Error sending notification:', error);
+            });
+    },
 
-    addTokenFCM: async (token: any) => {
-        const userId: any = await AsyncStorage.getItem('userId')
+    addTokenFCM: async (token: any,userInfo:any) => {
         try {
             const docRef = await firestore().collection('notification').add({
-                userId: userId,
+                userId: userInfo.userId,
                 tokenFCM: token,
+                role:userInfo.role
 
             })
             const idItem = docRef.id
@@ -92,6 +126,51 @@ export const pushNotificationApi = {
                 console.log(error);
 
             })
+    },
+    deleteTokenFCM: async() =>{
+        const userId: any = await AsyncStorage.getItem('userId')
+        const token = await messaging().getToken();
+        try {
+            const querySnapshot = await firestore()
+                .collection('notification')
+                .where('userId','==',userId)
+                .where('tokenFCM','==',token)
+                .get()
+            if(querySnapshot.docs.length > 0){
+                const tokenCurrent = querySnapshot.docs[0].data()
+                firestore()
+                .collection('notification')
+                .doc(tokenCurrent?.id)
+                .delete()
+                .then(() =>{
+                    console.log('delete token succcess');
+                })
+                .catch((error) =>{
+                    console.log(error);
+                    
+                }) 
+            }
+            else{
+                return null
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        
+
+
+        // firestore()
+        // .collection('notification')
+        // .doc(id)
+        // .delete()
+        // .then(() =>{
+        //     console.log('delete token succcess');
+        // })
+        // .catch((error) =>{
+        //     console.log(error);
+            
+        // })  
     },
     getListNotification: async () => {
         try {
@@ -133,9 +212,6 @@ export const pushNotificationApi = {
                 .collection('notification')
                 .where('userId', '==', userId)
                 .get()
-            console.log('====================================');
-            console.log(querySnapshot);
-            console.log('====================================');
             if (querySnapshot.docs.length > 0) {
                 const token = querySnapshot.docs[0].data()
                 return token
@@ -147,5 +223,43 @@ export const pushNotificationApi = {
             console.log(error);
 
         }
+    },
+    getListTokenByIdUser: async (userId: string) => {
+        try {
+            const listToken:any[] = []
+            await firestore()
+                .collection('notification')
+                .where('userId', '==', userId)
+                .get()
+                .then((querysnapshot: any) => {
+                    querysnapshot.forEach((documentSnapshot: any) => {
+                        listToken.push(documentSnapshot.data().tokenFCM)
+                    })
+                })
+                return listToken
+        } catch (error) {
+            console.log(error);
+
+        }
+        
+    },
+    getListTokenRole: async (role:number) => {
+        try {
+            const listToken:any[] = []
+            await firestore()
+                .collection('notification')
+                .where('role', '==', role)
+                .get()
+                .then((querysnapshot: any) => {
+                    querysnapshot.forEach((documentSnapshot: any) => {
+                        listToken.push(documentSnapshot.data().tokenFCM)
+                    })
+                })
+                return listToken
+        } catch (error) {
+            console.log(error);
+
+        }
+        
     },
 }

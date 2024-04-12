@@ -26,6 +26,7 @@ import { useDispatch } from 'react-redux'
 import { setTable } from '../../app/redux/slices/tableSlice'
 import { store } from '../../app/redux/store'
 import { setUserRepurchase } from '../../app/redux/slices/userSlice'
+import { orderApi } from '../../api/orderApi'
 
 const Screen_cart = ({ route }: any) => {
     // const { repurchase } = route?.params;
@@ -53,6 +54,15 @@ const Screen_cart = ({ route }: any) => {
         })
         onRefresh()
         modalDelete.current.close()
+    }
+    const handleUpdateCart = async(params:any) =>{
+        const orderCurrent = data?.order
+        orderCurrent[params.index].count = params.count        
+        await userApi.updateCart(data.id,
+            {
+                order: orderCurrent
+            }
+        )
     }
     const handleCreateRequestOrder = (type: number) => {
         refModal.current.close()
@@ -108,7 +118,10 @@ const Screen_cart = ({ route }: any) => {
                                 <ViewApp bg={COLORS.text4} pad5></ViewApp>
                                 {
                                     data?.order?.map((item: any, index: number) => (
-                                        <ItemOrder key={index} item={item} index={index} setItemPrices={setItemPrices} onPressDelete={() => onPressDelete(item)} />
+                                        <ItemOrder key={index} item={item} index={index} 
+                                            setItemPrices={setItemPrices} 
+                                            onPressDelete={() => onPressDelete(item)} 
+                                            handleUpdateCart={(e:any) => handleUpdateCart(e)}/>
                                     ))
 
                                 }
@@ -185,10 +198,13 @@ const Screen_cart = ({ route }: any) => {
 }
 
 
-const ItemOrder = ({ item, index, setItemPrices, onPressDelete }: any) => {
+const ItemOrder = ({ item, index, setItemPrices, onPressDelete, handleUpdateCart }: any) => {
 
     const [count, setCount] = useState<number>(item?.count)
     const [isLoading, data, onRefresh] = useGetItemDrink(item?.idItem)
+    const handleUpdate = async() =>{
+        
+    }
 
     useEffect(() => {
         if (data?.status == false) {
@@ -197,6 +213,13 @@ const ItemOrder = ({ item, index, setItemPrices, onPressDelete }: any) => {
     }, [data])
 
     useEffect(() => {
+        //cập nhật count item
+        handleUpdateCart({
+            index:index,
+            count:count
+        })
+
+        //cập nhật price item
         if (data && data.price !== undefined) {
             // Tính toán giá trị và cập nhật mảng giá trị của từng mục
             const newItemPrice = moneyDiscount(data.price, data.discount) * count;

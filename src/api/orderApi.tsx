@@ -9,13 +9,21 @@ import ToastService from "../service/ToastService"
 import { AppLang } from "../assets/languages"
 import { goBack } from "../root/RootNavigation"
 import { utils } from '@react-native-firebase/app';
+import { pushNotificationApi } from "./pushNotificationApi";
 
 export const orderApi = {
-    addOrder: async(params:any) =>{
+    addOrder: async(params:any, listTokenAdmin:any) =>{
         try {
             const docRef = await firestore().collection('order').add(params)
             const idItem = docRef.id
             await docRef.update({id: idItem})
+            //thong bao cho admin
+            await pushNotificationApi.pushNotify({
+                    title: AppLang('cong_ca_phe_thong_bao'),
+                    body: `${AppLang('co_yc_dat_hang_moi')}`,
+                    arrayToken: listTokenAdmin,
+                    data: { id: docRef.id, screen: 1 },
+                })
             ToastService.showToast(AppLang('them_yeu_cau_dat_hang_thanh_cong'),0)
             console.log('thêm yêu cầu thành công', docRef.id);
           } catch (error) {
@@ -94,6 +102,23 @@ export const orderApi = {
           console.log(error);
           
         })
-    }
+    },
+    getItemOrder: async (idItem: string) => {
+        try {
+            const documentSnapshot = await firestore()
+                .collection('order')
+                .doc(idItem)
+                .get();
+            if (documentSnapshot.exists) {
+                const item = documentSnapshot.data();
+                return item;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
+    },
 
 }

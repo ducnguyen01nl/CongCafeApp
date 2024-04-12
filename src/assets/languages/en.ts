@@ -223,6 +223,11 @@ an_bot:   `hide less`,
 cong_ca_phe:'Cong Coffee',
 cong_ca_phe_da_them_1_bai_viet_moi:   `Cong Ca Phe added a new post`,
 cong_ca_phe_da_cap_nhat_1_bai_viet:   `Cong Coffee updated 1 post`,
+cong_ca_phe_thong_bao:   `Cong Coffee announced`,
+da_bi_huy:   `has been cancelled`,
+xem: 'View',
+dong: 'Close',
+co_yc_dat_hang_moi:   `There is a new order request`,
   };
   
   export default en;

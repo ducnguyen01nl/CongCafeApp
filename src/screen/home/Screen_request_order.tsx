@@ -10,7 +10,7 @@ import IconApp from '../../components/IconApp'
 import { COLORS } from '../../colors/colors'
 import TextApp from '../../components/TextApp'
 import { userApi } from '../../api/userApi'
-import { useAddressActive, useAddressActive2, useCartUser, useGetItemDrink, useListDrinks } from '../../service/useLocalMater'
+import { useAddressActive, useAddressActive2, useCartUser, useGetItemDrink, useGetTokenRole, useListDrinks } from '../../service/useLocalMater'
 import { heightScreen } from '../../data/dataLocal'
 import { formatMoney, moneyDiscount } from '../../utils/format'
 import InputCustom from '../../components/input/InputCustom'
@@ -21,13 +21,15 @@ import { orderApi } from '../../api/orderApi'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useSelector } from 'react-redux'
 import { imgApp } from '../../assets/img'
+import { pushNotificationApi } from '../../api/pushNotificationApi'
 
 const Screen_request_order = ({ route }: any) => {
-    const {repurchase } = route?.params
+    const { repurchase } = route?.params
     const [isLoading, data, onRefresh] = useCartUser();
     const [isLoadingDrinks, dataDrinks, onRefreshDrinks] = useListDrinks();
+    const listTokenAdmin = useGetTokenRole(0)
     console.log('====================================');
-    console.log('list order',data?.order);
+    console.log('list order', listTokenAdmin);
     console.log('====================================');
     const [isLoadingActive, addressActive, onRefreshActive] = useAddressActive2()
     const refMessage = useRef<any>()
@@ -43,22 +45,22 @@ const Screen_request_order = ({ route }: any) => {
         }, [goBack])
     )
 
-    const newDataOrder = data?.order?.map((orderItem:any) => {
-        const drink = dataDrinks.find((drinkItem:any) => drinkItem.id === orderItem.idItem);
+    const newDataOrder = data?.order?.map((orderItem: any) => {
+        const drink = dataDrinks.find((drinkItem: any) => drinkItem.id === orderItem.idItem);
         if (drink) {
             return {
                 ...orderItem,
                 imgItem: drink.img,
-                nameItem:drink.name,
-                price:drink.price,
-                discount:drink.discount
+                nameItem: drink.name,
+                price: drink.price,
+                discount: drink.discount
             };
         }
         return orderItem;
     });
 
     const handleRequestOrder = async () => {
-        await orderApi.addOrder({
+        const dataRequest = await orderApi.addOrder({
             idUser: data?.userId,
             idAddress: table ? `${table?.numberTable}-${table?.floor}` : addressActive?.id,
             totalPrice: totalPriceCart,
@@ -68,7 +70,15 @@ const Screen_request_order = ({ route }: any) => {
             type: table ? 1 : 0,
             message: message ? message : '',
             orderList: repurchase ? repurchase?.orderList : newDataOrder,
-        })
+        }, listTokenAdmin)
+        console.log('dddđ', dataRequest);
+
+        // await pushNotificationApi.pushNotify({
+        //     title: AppLang('cong_ca_phe_thong_bao'),
+        //     body: `${AppLang('co_yc_dat_hang_moi')}`,
+        //     arrayToken: listTokenAdmin,
+        //     data: { id: dataRequest?.id, screen: 1 },
+        // })
         navigate('BottomTab')
     }
 

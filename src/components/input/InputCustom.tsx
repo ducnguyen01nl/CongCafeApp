@@ -56,7 +56,7 @@ const InputCustom = React.forwardRef<Handle, Props>(({ isText, isUpdate, isModal
         <ViewApp marB10 styleBox={styleBox}>
             {
                 label ? <ViewApp justifyCenter flex1 marB={5}>
-                    <TextApp bold style={styleLabel}>
+                    <TextApp color1 bold style={styleLabel}>
                         {label} {required ? <TextApp color='#EE8022'> *</TextApp> : ''}
                     </TextApp>
                 </ViewApp> : null

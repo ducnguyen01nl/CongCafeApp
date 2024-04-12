@@ -52,8 +52,9 @@ const Home = (props: Props) => {
 
   const { user } = useSelector((state: any) => state.user)
   const [isLoading, data, onRefresh] = useCartUser()
-  // const token = useToken()
-  const { token } = useSelector((state: any) => state.token)
+  // const token = useToken()  
+  // const { token } = useSelector((state: any) => state.token)
+  // const [isLoadingNo, dataNo, onRefreshNo] = useGetListNotification()
 
   const [isLoadingAddress, dataAddress, onRefreshAddress] = useAddressActive2()
   const [isLoadingListAddress, dataListAddress, onRefreshListAddress] = useListAddress()
@@ -64,38 +65,37 @@ const Home = (props: Props) => {
     }, [])
   )
 
-  const [isLoadingNo, dataNo, onRefreshNo] = useGetListNotification()
 
-  useEffect(() => {
-    if (dataNo.length > 0 && token) {
-      handleUpdateTokenFCM();
-    }
-  }, [dataNo, token]);
+  // useEffect(() => {
+  //   if (dataNo.length > 0 && token) {
+  //     handleUpdateTokenFCM();
+  //   }
+  // }, [dataNo, token]);
 
-  const handleUpdateTokenFCM = async () => {
-    const userId: any = await AsyncStorage.getItem('userId')
-    try {
-      // console.log('1111', dataNo);
-      // console.log('2222', token);
+  // const handleUpdateTokenFCM = async () => {
+  //   const userId: any = await AsyncStorage.getItem('userId')
+  //   try {
+  //     // console.log('1111', dataNo);
+  //     // console.log('2222', token);
 
-      const tokenCurrent = dataNo.find((state: any) => state.tokenFCM === token);
-      if (tokenCurrent) {
+  //     const tokenCurrent = dataNo.find((state: any) => state.tokenFCM === token);
+  //     if (tokenCurrent) {
 
-        if (tokenCurrent.userId === userId) {
-          return null;
-        } else {
-          await pushNotificationApi.updateTokenFCM(tokenCurrent.id, {
-            userId: userId
-          });
-        }
-      } else {
-        await pushNotificationApi.addTokenFCM(token)
-      }
+  //       if (tokenCurrent.userId === userId) {
+  //         return null;
+  //       } else {
+  //         await pushNotificationApi.updateTokenFCM(tokenCurrent.id, {
+  //           userId: userId
+  //         });
+  //       }
+  //     } else {
+  //       await pushNotificationApi.addTokenFCM(token, user)
+  //     }
 
-    } catch (error) {
-      console.log(error, 'getToken');
-    }
-  };
+  //   } catch (error) {
+  //     console.log(error, 'getToken');
+  //   }
+  // };
 
   return (
 

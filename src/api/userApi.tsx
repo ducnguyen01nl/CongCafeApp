@@ -28,7 +28,7 @@ export const userApi = {
     },
     getUserInfoById: async (params: any) => {
         try {
-            const q = query(userRef, where('user_id', '==', params));
+            const q = query(userRef, where('userId', '==', params));
             const querySnapshot = await getDocs(q);
 
             if (querySnapshot.size > 0) {
@@ -140,6 +140,22 @@ export const userApi = {
             console.log(error);
             
         })
+    },
+    updateCart: async (id:any,params:any) => {
+        // try {
+            firestore()
+                .collection('cart')
+                .doc(id)
+                .update(params)
+                .then(() => {
+                    console.log('update success');
+                })
+                .catch((error) =>console.log(error))
+                
+        // } catch (error) {
+        //     console.log(error);
+
+        // }
     },
     
 }

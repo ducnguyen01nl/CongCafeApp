@@ -59,7 +59,7 @@ const Screen_info_user = () => {
     const fileName = pathArray[pathArray.length - 1];
 
     const urlImageUpload = choseImage !== user.img
-      ? await userApi.updateFile(choseImage, fileName, user.user_id)
+      ? await userApi.updateFile(choseImage, fileName, user.userId)
       : user.img;
     try {
       dispatch(setUser({

@@ -23,6 +23,7 @@ import { AppLang } from '../assets/languages'
 import { useFocusEffect } from '@react-navigation/native'
 import Count from '../components/Count'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { pushNotificationApi } from '../api/pushNotificationApi'
 type Props = {}
 
 const User = (props: Props) => {
@@ -44,8 +45,9 @@ const User = (props: Props) => {
     try {
       await signOut(auth);
       console.log('User signed out successfully');
-      ToastService.showToast(AppLang(`dang_xuat_thanh_cong`), 0)
+      await pushNotificationApi.deleteTokenFCM()
       await AsyncStorage.removeItem("userId")
+      ToastService.showToast(AppLang(`dang_xuat_thanh_cong`), 0)
       navigate('Login')
     } catch (error) {
       console.error('Error signing out:', error);
@@ -62,7 +64,6 @@ const User = (props: Props) => {
     //   RNRestart.Restart()
     // },500)
   };
-
 
   return (
     <LayoutApp

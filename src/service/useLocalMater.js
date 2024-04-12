@@ -90,6 +90,13 @@ export const useGetItemDrink = id => {
 
   return [isLoading, data, onRefresh];
 };
+export const useGetItemOrder = id => {
+  const [isLoading, data, onRefresh] = useLocalMater({}, () =>
+    orderApi.getItemOrder(id),
+  );
+
+  return [isLoading, data, onRefresh];
+};
 export const useListOrder = status => {
   const [isLoading, data, onRefresh] = useLocalMater([], () =>
     orderApi.getListOrderByStatus(status),
@@ -140,6 +147,18 @@ export const useGetTokenById = (userId) =>{
     pushNotificationApi.getTokenByIdUser(userId)
   );
   return data
+}
+export const useGetTokenRole = (role) =>{
+  const [isLoading, data, onRefresh] = useLocalMater([],() =>
+    pushNotificationApi.getListTokenRole(role)
+  );
+  return data
+}
+export const useGetListTokenById = (userId) =>{
+  const [isLoading, data, onRefresh] = useLocalMater([],() =>
+    pushNotificationApi.getListTokenByIdUser(userId)
+  );
+  return [isLoading, data, onRefresh] 
 }
 export const useGetListNews = () =>{
   const [isLoading, data, onRefresh] = useLocalMater([],() =>

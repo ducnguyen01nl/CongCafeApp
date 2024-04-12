@@ -223,6 +223,11 @@ an_bot:   'ẩn bớt',
 cong_ca_phe:'Cộng Cà Phê',
 cong_ca_phe_da_them_1_bai_viet_moi:   'Cộng Cà Phê đã thêm 1 bài viết mới',
 cong_ca_phe_da_cap_nhat_1_bai_viet:   'Cộng Cà Phê đã cập nhật 1 bài viết',
+cong_ca_phe_thong_bao:   'Cộng Cà Phê thông báo',
+da_bi_huy:   'đã bị hủy',
+xem:   'Xem',
+dong:   'Đóng',
+co_yc_dat_hang_moi:   'Có yêu cầu đặt hàng mới',
 
   };
   

@@ -45,7 +45,35 @@ const Login_email = () => {
     }
   })
   const { user, userLoading } = useSelector((state: any) => state.user);
+  
+  const { token } = useSelector((state: any) => state.token)
+  const [isLoadingNo, dataNo, onRefreshNo] = useGetListNotification()
   const dispatch = useDispatch();
+
+  const handleUpdateTokenFCM = async () => {
+    const userId: any = await AsyncStorage.getItem('userId')
+    try {
+      // console.log('1111', dataNo);
+      // console.log('2222', token);
+
+      const tokenCurrent = dataNo.find((state: any) => state.tokenFCM === token);
+      if (tokenCurrent) {
+
+        if (tokenCurrent.userId === userId) {
+          return null;
+        } else {
+          await pushNotificationApi.updateTokenFCM(tokenCurrent.id, {
+            userId: userId
+          });
+        }
+      } else {
+        await pushNotificationApi.addTokenFCM(token, user)
+      }
+
+    } catch (error) {
+      console.log(error, 'getToken');
+    }
+  };
 
   const handleLogin = async () => {
     formik.validateForm().then(async (errors) => {
@@ -61,7 +89,7 @@ const Login_email = () => {
         // await signInWithEmailAndPassword(auth,formik.values.email,formik.values.password)
         // .then(async(userCredential) => {
         //   const userInfo = await userApi.getUserInfoByUid(userCredential.user.uid)
-        //   dispatch(setUser(userInfo?.user_id))
+        //   dispatch(setUser(userInfo?.userId))
         //   navigate('BottomTab')
         // })
         // .catch((error) => {
@@ -71,6 +99,7 @@ const Login_email = () => {
         await auth().signInWithEmailAndPassword(formik.values.email, formik.values.password)
           .then(async (userCredential) => {
             const userInfoResponse: any = await userApi.getUserInfoByUid(userCredential.user.uid);
+            AsyncStorage.setItem('userId', userInfoResponse?.userId);
             if (userInfoResponse) {
               const userInfo = {
                 ...userInfoResponse,
@@ -79,7 +108,7 @@ const Login_email = () => {
                 updateAt: covertFirebaseTimeStampToString(userInfoResponse?.updateAt)
               };
               dispatch(setUser(userInfo));
-              AsyncStorage.setItem('userId', userInfo?.user_id);
+              handleUpdateTokenFCM()
               navigate('BottomTab');
             } else {
               console.error("User information not found");

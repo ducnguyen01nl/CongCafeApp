@@ -1,12 +1,12 @@
 import { View, Text, Image, ScrollView, Button } from 'react-native'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import LayoutApp from '../../components/LayoutApp'
 import HeaderApp from '../../components/HeaderApp'
 import { AppLang } from '../../assets/languages'
 import ViewApp from '../../components/ViewApp'
 import TextApp from '../../components/TextApp'
 import IconApp from '../../components/IconApp'
-import { useAddressById, useGetItemDrink, useGetTableById, useGetTokenById } from '../../service/useLocalMater'
+import { useAddressById, useGetItemDrink, useGetItemOrder, useGetListTokenById, useGetTableById, useGetTokenById } from '../../service/useLocalMater'
 import { goBack, navigate } from '../../root/RootNavigation'
 import { COLORS } from '../../colors/colors'
 import { formatDateTimestamp, formatDateTimestampAll, heightScreen, titleStatus, titleTypeItem } from '../../data/dataLocal'
@@ -19,63 +19,68 @@ import ToastService from '../../service/ToastService'
 import { useSelector } from 'react-redux'
 import { pushNotificationApi } from '../../api/pushNotificationApi'
 import App from '../../../App'
+import { useFocusEffect } from '@react-navigation/native'
 
 
 const Screen_order_detail = ({ route }: any) => {
-    const { item } = route?.params;
-    console.log('====item================================');
-    console.log(item);
-    console.log('====================================');
+    const { id } = route?.params?.data;
+    const [isLoadingItem, dataItem, onRefreshItem] = useGetItemOrder(id)
     const { user } = useSelector((state: any) => state.user)
-    const addressTable = item?.idAddress?.split("-").map(Number)
-    const tokenUser = useGetTokenById(item?.idUser)
+    const addressTable = dataItem?.type == 0 ? null : dataItem?.idAddress?.split("-").map(Number)
+    const [isLoadingToken, dataToken, onRefreshToken]  = useGetListTokenById(dataItem?.idUser)
 
-    const [isLoadingTable, dataTable, onRefreshTable] = useGetTableById(item?.idTable)
-
-    const [isLoading, data, onRefresh] = useAddressById(item?.idAddress)
+    const [isLoading, data, onRefresh] = useAddressById(dataItem?.idAddress)
+    useEffect(() => {
+        onRefresh()
+        onRefreshToken()
+    }, [dataItem])
     const refModal = useRef<any>()
 
     const handleCancelOrder = async () => {
         try {
-            await orderApi.updateOrder(item?.id, { status: 4, updateAt: new Date() })
+            await orderApi.updateOrder(dataItem?.id, { status: 4, updateAt: new Date() })
+            if(user.role == 0){
+                handlePushNotification(AppLang('da_bi_huy'))
+            }
             refModal.current.close()
             ToastService.showToast(AppLang('huy_don_hang_thanh_cong'), 0)
             onRefresh()
             goBack()
         } catch (error) {
             console.log(error);
-
         }
     }
-    const handleConfirm = async() => {
-        switch(item?.status){
+
+    const handlePushNotification = async (body: string) => {
+        await pushNotificationApi.pushNotify({
+            title: AppLang('cong_ca_phe_thong_bao'),
+            body: `${AppLang('don_hang_ma')} ${dataItem?.id} ${body}`,
+            arrayToken: dataToken,
+            data: { id: dataItem?.id, screen: 1 },
+
+        })
+    }
+
+    const handleConfirm = async () => {
+        switch (dataItem?.status) {
             case 0:
-                await orderApi.updateOrder(item?.id,{status:1, updateAt: new Date()})
-                pushNotificationApi.pushNotification(tokenUser?.tokenFCM,{
-                    title:'Cộng Cà Phê',
-                    body:`${AppLang('don_hang_ma')} ${item?.id} ${AppLang('dang_xu_ly2')}`
-                })
+                await orderApi.updateOrder(dataItem?.id, { status: 1, updateAt: new Date() })
+                handlePushNotification(AppLang('da_xac_nhan'))
                 break;
             case 1:
-                await orderApi.updateOrder(item?.id,{status:2, updateAt: new Date()})
-                pushNotificationApi.pushNotification(tokenUser?.tokenFCM,{
-                    title:'Cộng Cà Phê',
-                    body:`${AppLang('don_hang_ma')} ${item?.id} ${AppLang('dang_giao_hang')}`
-                })
+                await orderApi.updateOrder(dataItem?.id, { status: 2, updateAt: new Date() })
+                handlePushNotification(AppLang('dang_giao_hang'))
                 break;
             case 2:
-                await orderApi.updateOrder(item?.id,{status:3, updateAt: new Date()})
-                pushNotificationApi.pushNotification(tokenUser?.tokenFCM,{
-                    title:'Cộng Cà Phê',
-                    body:`${AppLang('don_hang_ma')} ${item?.id} ${AppLang('da_giao_thanh_cong')}`
-                })
+                await orderApi.updateOrder(dataItem?.id, { status: 3, updateAt: new Date() })
+                handlePushNotification(AppLang('da_giao_thanh_cong'))
                 break;
         }
         goBack()
     }
 
-    const titleButton = (status:number) =>{
-        switch(status){
+    const titleButton = (status: number) => {
+        switch (status) {
             case 0:
                 return 'xac_nhan'
             case 1:
@@ -87,7 +92,7 @@ const Screen_order_detail = ({ route }: any) => {
 
     return (
 
-        isLoading ? <LoadingApp noBg />
+        Object.keys(data).length == 0 ? <LoadingApp noBg />
             :
             <LayoutApp>
                 <HeaderApp
@@ -101,17 +106,17 @@ const Screen_order_detail = ({ route }: any) => {
                     <ViewApp>
                         {
                             user?.role == 1 &&
-                            <ViewApp row centerH padH10 padV20 bg={item?.status == 4 ? COLORS.orange : COLORS.blue}>
+                            <ViewApp row centerH padH10 padV20 bg={dataItem?.status == 4 ? COLORS.orange : COLORS.blue}>
                                 <ViewApp>
-                                    <TextApp size16 colorW bold>{AppLang(titleTypeItem(item?.status))}</TextApp>
+                                    <TextApp size16 colorW bold>{AppLang(titleTypeItem(dataItem?.status))}</TextApp>
                                     {
-                                        item?.status == 4 ? <TextApp colorW>{`${AppLang('vao')} ${formatDateTimestampAll(item?.updateAt)}`}</TextApp>
+                                        dataItem?.status == 4 ? <TextApp colorW>{`${AppLang('vao')} ${formatDateTimestampAll(dataItem?.updateAt)}`}</TextApp>
                                             : <TextApp colorW>{`${AppLang('cam_on_da_mua_sam_CCP')}`}</TextApp>
                                     }
 
                                 </ViewApp>
                                 {
-                                    item?.status == 4 ? <IconApp color={COLORS.white} size={40} name='restore' type='MaterialIcons' />
+                                    dataItem?.status == 4 ? <IconApp color={COLORS.white} size={40} name='restore' type='MaterialIcons' />
                                         : <IconApp color={COLORS.white} size={40} name='thumbs-o-up' type='FontAwesome' />
                                 }
 
@@ -124,7 +129,7 @@ const Screen_order_detail = ({ route }: any) => {
                             <TextApp color1 bold size16>{AppLang('dia_diem_nhan_hang')}</TextApp>
                         </ViewApp>
                         {
-                            item?.type == 0
+                            dataItem?.type == 0
                                 ?
                                 <ViewApp padL={24}>
                                     <TextApp color1>{data?.name}</TextApp>
@@ -135,7 +140,10 @@ const Screen_order_detail = ({ route }: any) => {
                                 :
                                 <ViewApp padL={24}>
                                     <TextApp color1>{AppLang('cua_hang_cong_cafe')}</TextApp>
-                                    <TextApp color1>{`${AppLang('ban_so')} ${addressTable[0]} - ${AppLang('tang')} ${addressTable[1]}`}</TextApp>
+                                    {
+                                        addressTable && <TextApp color1>{`${AppLang('ban_so')} ${addressTable[0]} - ${AppLang('tang')} ${addressTable[1]}`}</TextApp>
+                                    }
+
 
                                 </ViewApp>
 
@@ -145,20 +153,20 @@ const Screen_order_detail = ({ route }: any) => {
                     <TextApp size16 pH10 pV5 bold color1>{AppLang('danh_sach_do_uong')}</TextApp>
                     <ViewApp>
                         {
-                            item?.orderList.map((prev: any, index: number) => (
+                            dataItem?.orderList?.map((prev: any, index: number) => (
                                 <ItemOrder item={prev} key={index} index={index} />
                             ))
                         }
                     </ViewApp>
                     <ViewApp pad5 bg={COLORS.Secondary} />
                     <ViewApp pad10>
-                        <TextApp color1>{ `${AppLang('luu_y')}: ${item?.message ? item?. message : AppLang('khong_co')}`}</TextApp>
+                        <TextApp color1>{`${AppLang('luu_y')}: ${dataItem?.message ? dataItem?.message : AppLang('khong_co')}`}</TextApp>
                     </ViewApp>
                     <ViewApp pad5 bg={COLORS.Secondary} />
                     <ViewApp pad10>
                         <ViewApp row centerH>
                             <TextApp color1 bold size16>{AppLang('thanh_tien')}</TextApp>
-                            <TextApp color={COLORS.orange} bold size16>{formatMoney(item?.totalPrice)}</TextApp>
+                            <TextApp color={COLORS.orange} bold size16>{formatMoney(dataItem?.totalPrice)}</TextApp>
                         </ViewApp>
                         {
                             user?.role == 1 && <TextApp color1>{AppLang('vui_long_thanh_toan_khi_nhan_hang')}</TextApp>
@@ -167,10 +175,10 @@ const Screen_order_detail = ({ route }: any) => {
                     </ViewApp>
                     <ViewApp pad5 bg={COLORS.Secondary} />
                     <ViewApp>
-                        <ItemTime title={AppLang('ma_don')} date={item?.id} />
-                        <ItemTime title={AppLang('thoi_gian_dat_hang')} date={formatDateTimestampAll(item?.createAt)} />
+                        <ItemTime title={AppLang('ma_don')} date={dataItem?.id} />
+                        <ItemTime title={AppLang('thoi_gian_dat_hang')} date={formatDateTimestampAll(dataItem?.createAt)} />
                         {
-                            item?.status != 0 && <ItemTime title={`${AppLang('thoi_gian')} ${AppLang(titleStatus(item?.status))}`} date={formatDateTimestampAll(item?.updateAt)} />
+                            dataItem?.status != 0 && <ItemTime title={`${AppLang('thoi_gian')} ${AppLang(titleStatus(dataItem?.status))}`} date={formatDateTimestampAll(dataItem?.updateAt)} />
                         }
                     </ViewApp>
                     <ViewApp pad5 bg={COLORS.Secondary} />
@@ -180,16 +188,16 @@ const Screen_order_detail = ({ route }: any) => {
                         ?
                         <ViewApp row borderTW={1} padH10>
                             <ViewApp flex1 marH5>
-                                {
-                                    item?.status == 3 && <ButtonApp title={AppLang('danh_gia')} />
-                                }
+                                {/* {
+                                    dataItem?.status == 3 && <ButtonApp title={AppLang('danh_gia')} />
+                                } */}
                             </ViewApp>
                             <ViewApp flex1 marH5>
                                 {
-                                    item?.status == 0 && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
+                                    dataItem?.status == 0 && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
                                 }
                                 {
-                                    (item?.status == 3 || item?.status == 4) && <ButtonApp title={AppLang('mua_lai')}  onPress={() =>navigate('Screen_request_order', { repurchase: item })}/>
+                                    (dataItem?.status == 3 || dataItem?.status == 4) && <ButtonApp title={AppLang('mua_lai')} onPress={() => navigate('Screen_request_order', { repurchase: dataItem })} />
                                 }
                             </ViewApp>
                         </ViewApp>
@@ -197,12 +205,12 @@ const Screen_order_detail = ({ route }: any) => {
                         <ViewApp row borderTW={1} padH10>
                             <ViewApp flex1 marH5>
                                 {
-                                    item?.status == 0 && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
+                                    dataItem?.status == 0 && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
 
                                 }
                             </ViewApp>
                             <ViewApp flex1 marH5>
-                                <ButtonApp title={AppLang(titleButton(item?.status))} 
+                                <ButtonApp title={AppLang(titleButton(dataItem?.status))}
                                     onPress={handleConfirm}
                                 />
                             </ViewApp>
@@ -232,7 +240,10 @@ const Screen_order_detail = ({ route }: any) => {
 
 const ItemOrder = ({ item, index }: any) => {
 
-    // const [isLoading, data, onRefresh] = useGetItemDrink(item?.idItem)
+    // console.log('===rêrrere=================================');
+    // console.log(item);
+    // console.log('====================================');
+    // const [isLoading, data, onRefresh] = useGetItemDrink(dataItem?.idItem)
 
 
     return (

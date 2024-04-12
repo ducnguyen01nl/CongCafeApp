@@ -98,7 +98,7 @@ const ItemOrder = ({ item, onPress, onPressButton }: any) => {
   const totalCount = item?.orderList?.reduce((count: number, item: any) => count + item.count, 0)
   return (
     <TouchApp minHeight={'30%'} mar10 borderR={20} bgW
-      onPress={() => navigate('Screen_order_detail', { item: item })}
+      onPress={() => navigate('Screen_order_detail', { data: { id: item?.id } })}
       styleBox={{ ...shadowP }}
     >
       {/* <ViewApp pad5 bg={COLORS.Secondary} /> */}

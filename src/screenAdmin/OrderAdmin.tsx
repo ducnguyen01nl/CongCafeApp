@@ -32,9 +32,6 @@ const OrderAdmin = () => {
     const [isLoadingToken, dataToken, onRefreshToken] = useGetListToken()
 
     const handlePushNotification = () => {
-        console.log('====================================');
-        console.log(dataToken);
-        console.log('====================================');
         pushNotificationApi.pushNotification('cJos7CrvS66crRlTy3in9I:APA91bEFKge3Qa_7hWI8-LvkvOxEK2YXB0V4RfkKzKew2m1tE60XvWct3NlIWoBLK-UFwy1czLqMVJMksMPFgaMfeVSj9JGVflic8ZAJSH9Zp4dG-ByyReZEnds26s8tXwwO9iSnfAjx',{
             title:'Cộng Cà Phê',
             body:'Đơn hàng mã xxxxxxxxx của bạn đã được xác nhận'
