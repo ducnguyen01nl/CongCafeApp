@@ -14,7 +14,7 @@ import * as Yup from 'yup'
 import ToastMessage from '../../components/ToastMessage'
 import ModalApp from '../../components/ModelApp'
 import PhoneInput from 'react-native-phone-number-input'
-import auth from '@react-native-firebase/auth'
+import auth, { firebase } from '@react-native-firebase/auth'
 
 import { regPhone } from '../../data/dataLocal'
 
@@ -55,17 +55,24 @@ const Login_phone = () => {
                 toastRef.current?.show(errors.phone);
             }
             else {
-                console.log(formik.values.phone);
-                console.log('1',phone);
-                try {
-                    const confirmation = await auth().verifyPhoneNumber(phone);
-                    setConfirm(confirmation);
-                    console.log('123',confirmation);
+                // try {
+                    console.log(formik.values.phone);
+                    console.log('1',phone);
+                    // const confirmation = await auth().signInWithPhoneNumber(phone)
+                    firebase.auth().verifyPhoneNumber(phone)
+                    .then(confirmResult =>{
+                        setConfirm(confirmResult);
+                        console.log('123',confirmResult);
+                    })
+                    .catch(error =>{
+                        console.log(error.message);
+                        
+                    })
                     
-                } catch (error) {
-                    console.log(error);
+                // } catch (error) {
+                //     console.log(error);
                     
-                }
+                // }
             }
         });
     }
