@@ -39,7 +39,7 @@ const ToastMessage = forwardRef(({timeout=2000}:any,ref) => {
 const styles = StyleSheet.create({
     toast:{
         position:'absolute',
-        top:10,
+        top:5,
         left:10,
         right:10,
         minHeight:80,

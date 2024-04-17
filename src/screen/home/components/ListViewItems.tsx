@@ -74,7 +74,7 @@ const ListViewItems = () => {
 
 const ItemDrinkHoz = (item: any) => {
     return (
-        <TouchApp disabled={item?.status ? false : true} marH10 marV5 borderR={10} bgW overF='hidden' h={heightScreen * 0.2} row styleBox={{ ...shadowP, opacity: item?.status ? 1 : 0.7 }}
+        <TouchApp disabled={item?.status ? false : true} marH10 marV5 borderR={10} bgW overF='hidden' h={heightScreen * 0.16} row styleBox={{ ...shadowP, opacity: item?.status ? 1 : 0.7 }}
             onPress={() => navigate('Screen_item_detail', { item: item })}
         >
             <ViewApp flex1 >

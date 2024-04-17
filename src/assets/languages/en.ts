@@ -228,6 +228,26 @@ da_bi_huy:   `has been cancelled`,
 xem: 'View',
 dong: 'Close',
 co_yc_dat_hang_moi:   `There is a new order request`,
-  };
+thong_tin_cua_hang:   'Store information',
+dia_chi_shop:`94 Lang Street, Thinh Quang, Dong Da, Hanoi`,
+gio_hoat_dong_shop:`Monday - Sunday: 7:30 - 23:00`,
+dien_thoai:`Phone`,
+gio_mo_cua:`Opening hours`,
+gioi_thieu_shop:   `Located at 94 Lang Street, Thinh Quang, Dong Da, Hanoi, Cong Coffee Nga Tu So is an ideal space for those who love to enjoy quality coffee and relaxing conversations. With an airy and cozy environment, the restaurant becomes an ideal destination for both family and friends.`,
+gioi_thieu_CCP:   `Introducing Cong Coffee`,
+khong_gian_CCP:   `Coffee Community Space`,
+khong_gian_noi_dung:   `The space at Cong Cafe Nga Tu So is designed with its own imprint, creating a cozy and friendly atmosphere.
+
+With the use of many calming colors and delicate decorative lights, the restaurant becomes an ideal place for both family and friends to relax. The restaurant's exceptional space is also notable for its natural wooden tables and chairs, creating a feeling of closeness to nature. The peaceful suburban area, with its green trees and fresh air, is a particularly favorable spot for meetings and conversations. 
+
+On that side, Cong Cafe Nga Tu So's indoor space is also arranged harmoniously, with special care to every detail. 
+
+You not only come here to enjoy delicious coffee but also to experience the unique space and enjoy relaxing moments here.`,  
+
+bi_xoa_do_mat_hang_dang_het:   `Deleted because the item is out of stock`,
+mat_hang:   `Items`,
+thong_ke:   `Statistical`,
+thong_ke_don_hang:   `Order statistics`,
+};
   
   export default en;

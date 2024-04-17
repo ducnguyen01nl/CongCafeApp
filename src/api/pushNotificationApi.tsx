@@ -130,6 +130,10 @@ export const pushNotificationApi = {
     deleteTokenFCM: async() =>{
         const userId: any = await AsyncStorage.getItem('userId')
         const token = await messaging().getToken();
+        console.log('====================================');
+        console.log(userId);
+        console.log(token);
+        console.log('====================================');
         try {
             const querySnapshot = await firestore()
                 .collection('notification')

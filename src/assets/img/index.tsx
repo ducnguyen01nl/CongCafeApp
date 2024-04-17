@@ -12,5 +12,8 @@ export const imgApp = {
     iconTable: require('../img/iconTable.png'),
     iconDelivery: require('../img/iconDelivery.png'),
     boxNothing: require('../img/boxNothing.png'),
-    imgWhite: require('../img/imgWhite.png')
+    imgWhite: require('../img/imgWhite.png'),
+    shop1: require('../img/shop1.jpg'),
+    shop2: require('../img/shop2.jpg'),
+    shop3: require('../img/shop3.jpg'),
 }

@@ -50,8 +50,10 @@ export const useAddressActive = () => {
   return data;
 };
 export const useAddressById = id => {
+  console.log(id);
   const [isLoading, data, onRefresh] = useLocalMater({}, () =>
-    addressApi.getAddressById(id),
+      !id ? null : addressApi.getAddressById(id)
+    
   );
   return [isLoading, data, onRefresh];
 };

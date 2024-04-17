@@ -58,10 +58,14 @@ const Home = (props: Props) => {
 
   const [isLoadingAddress, dataAddress, onRefreshAddress] = useAddressActive2()
   const [isLoadingListAddress, dataListAddress, onRefreshListAddress] = useListAddress()
+  console.log('====================================');
+  console.log(dataListAddress);
+  console.log('====================================');
   useFocusEffect(
     React.useCallback(() => {
       onRefreshAddress()
       onRefresh()
+      onRefreshListAddress()
     }, [])
   )
 
@@ -134,12 +138,12 @@ const Home = (props: Props) => {
               }}>
                 <IconApp color={COLORS.Secondary} size={26} name='search' />
               </TouchApp> */}
-
+{/* 
               <TouchApp square={40} borderR={20} mid
                 onPress={() => navigate('Screen_qr_screen')}
               >
                 <IconApp color={COLORS.Secondary} size={26} name='qrcode' type='AntDesign' />
-              </TouchApp>
+              </TouchApp> */}
 
               <TouchApp square={40} borderR={20} mid>
                 <IconApp color={COLORS.Secondary} size={26} name='bell' type='FontAwesome5' />

@@ -54,6 +54,15 @@ export const covertFirebaseTimeStampToString = (time:Timestamp) => {
   }
 }
 
+export const covertDateToString = (time:Date) => {
+  if(time){
+    const day = time.getDate();
+    const month = time.getMonth() + 1; // Tháng bắt đầu từ 0, nên cần cộng thêm 1
+    const year = time.getFullYear();
+    return  `${day}-${month}-${year}`;
+  }
+}
+
 export const covertStringtoDateTimeStamp = (date: any) => {
   if(date){
     const dateObject = new Date(date);

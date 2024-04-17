@@ -36,12 +36,12 @@ const Screen_item_detail = ({ route }: any) => {
         let isItemExist = false;
         const dataAdd = {
             count:count,
-            idItem:item.id,
+            idItem:item?.id,
         }
         console.log('database',data?.order);
         
         const updateOrder = data?.order?.map((item:any) =>{
-            if(item.idItem === dataAdd.idItem){
+            if(item.idItem === dataAdd?.idItem){
                 isItemExist = true
                 return{
                     ...item,
@@ -65,6 +65,9 @@ const Screen_item_detail = ({ route }: any) => {
     
     return (
         <LayoutApp>
+            {/* {
+                !isLoading &&
+                <> */}
             <ViewApp w100 h={'45%'}>
                 <Image source={{ uri: item.img }} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
                 <TouchApp square={40} borderR100 mid bg={COLORS.trans}
@@ -89,8 +92,8 @@ const Screen_item_detail = ({ route }: any) => {
                         {item?.discount != 0 && <TextApp color={COLORS.red} bold style={{ backgroundColor: COLORS.Secondary, paddingHorizontal: 5, borderRadius: 5 }}>{`-${item?.discount}%`}</TextApp>}
                     </ViewApp>
                     <ViewApp row>
-                        <TextApp size16 colorP bold style={{ textDecorationLine: 'line-through' }}>{formatMoney(item.price)}</TextApp>
-                        <TextApp size16 color={COLORS.red} bold>{formatMoney(moneyDiscount(item.price, item.discount))}</TextApp>
+                        {item?.discount != 0 && <TextApp size16 color={COLORS.red} bold style={{ textDecorationLine: 'line-through' }}>{formatMoney(item.price)}</TextApp>}
+                        <TextApp size16 colorP bold>{formatMoney(moneyDiscount(item.price, item.discount))}</TextApp>
                     </ViewApp>
                 </ViewApp>
                 <ViewApp bg={COLORS.text4} pad5></ViewApp>
@@ -121,6 +124,8 @@ const Screen_item_detail = ({ route }: any) => {
                     onPress={handleAddDrinkToCart}
                 />
             </ViewApp>
+                {/* </>
+            } */}
 
         </LayoutApp>
     )

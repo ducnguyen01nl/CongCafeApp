@@ -23,8 +23,8 @@ export const formatLink = (content: any)  =>{
   const id = content?.id;
   const screen = content?.screen;
   if(screen == 2){
-    console.log(`congcafeapp://` + TYPE_SCREEN[Number(screen)])
-    return `congcafeapp://` + TYPE_SCREEN[Number(screen)]
+    console.log(`congcafeapp://` + TYPE_SCREEN[Number(screen)]  +'/'+id)
+    return `congcafeapp://` + TYPE_SCREEN[Number(screen) +'/'+id]
   }
   console.log(`congcafeapp://` + TYPE_SCREEN[Number(screen)] + '/' + JSON.stringify({id}));
   return `congcafeapp://` + TYPE_SCREEN[Number(screen)] + '/' + JSON.stringify({id})

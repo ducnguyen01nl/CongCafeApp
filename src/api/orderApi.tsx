@@ -24,8 +24,10 @@ export const orderApi = {
                     arrayToken: listTokenAdmin,
                     data: { id: docRef.id, screen: 1 },
                 })
+            return docRef.id
             ToastService.showToast(AppLang('them_yeu_cau_dat_hang_thanh_cong'),0)
             console.log('thêm yêu cầu thành công', docRef.id);
+            
           } catch (error) {
             ToastService.showToast(AppLang('them_yeu_cau_dat_hang_that_bai'))
             console.log(error);

@@ -228,7 +228,26 @@ da_bi_huy:   'đã bị hủy',
 xem:   'Xem',
 dong:   'Đóng',
 co_yc_dat_hang_moi:   'Có yêu cầu đặt hàng mới',
+thong_tin_cua_hang:   'Thông tin cửa hàng',
+dia_chi_shop:`94 Đường Láng, Thịnh Quang, Đống Đa, Hà Nội`,
+gio_hoat_dong_shop:`Thứ 2 - Chủ nhật : 7:30 - 23:00`,
+dien_thoai:`Điện thoại`,
+gio_mo_cua:`Giờ mở cửa`,
+gioi_thieu_shop:   'Nằm tại địa chỉ 94 Đường Láng, Thịnh Quang, Đống Đa, Hà Nội, Cộng Cà Phê Ngã Tư Sở là không gian lý tưởng cho những người yêu thích thưởng thức cà phê chất lượng và trò chuyện thư giãn. Với môi trường thoáng đãng và ấm cúng, quán trở thành điểm đến lý tưởng cho cả gia đình và bạn bè.',
+gioi_thieu_CCP:   'Giới thiệu Cộng Cà Phê',
+khong_gian_CCP:   'Không gian Cộng Cà Phê',
+khong_gian_noi_dung:   `Không gian tại Cộng Cafe Ngã Tư Sở được thiết kế mang đậm dấu ấn riêng, tạo nên không khí ấm cúng và thân thiện. 
 
+Với việc sử dụng nhiều gam màu trấn an và đèn trang trí tinh tế, quán trở thành nơi lý tưởng cho cả gia đình và bạn bè thư giãn. 
+
+Không gian ngoại lệ của quán cũng đáng chú ý với những chiếc bàn và gỗ ghế tự nhiên, tạo cảm giác gần gũi với thiên nhiên. Khu vực ngoại ô yên bình, với cây xanh và không khí trong lành, là điểm đặc biệt thuận lợi cho những buổi gặp gỡ và trò chuyện. Bên bờ đó, không gian trong nhà của Cộng Cafe Ngã Tư Sở cũng được bố trí hài hòa, với sự chăm sóc đặc biệt đến từng chi tiết. 
+
+Quý khách không chỉ đến đây để thưởng thức cà phê ngon mà còn để trải nghiệm không gian độc và tận hưởng những khoảnh khắc thư giãn tại đây.`,
+
+bi_xoa_do_mat_hang_dang_het:   'bị xóa do mặt hàng đang hết',
+mat_hang:   'Mặt hàng',
+thong_ke:   'Thống kê',
+thong_ke_don_hang:   'Thống kê đơn hàng',
   };
   
   export default vi;

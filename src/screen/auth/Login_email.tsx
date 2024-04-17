@@ -53,20 +53,21 @@ const Login_email = () => {
   const handleUpdateTokenFCM = async () => {
     const userId: any = await AsyncStorage.getItem('userId')
     try {
-      // console.log('1111', dataNo);
-      // console.log('2222', token);
-
+      console.log('2222', user);
+      
       const tokenCurrent = dataNo.find((state: any) => state.tokenFCM === token);
       if (tokenCurrent) {
-
-        if (tokenCurrent.userId === userId) {
+        
+        if (tokenCurrent?.userId === userId) {
           return null;
         } else {
           await pushNotificationApi.updateTokenFCM(tokenCurrent.id, {
-            userId: userId
+            userId: userId,
+            role:user.role
           });
         }
       } else {
+        // console.log('1111', dataNo);
         await pushNotificationApi.addTokenFCM(token, user)
       }
 
@@ -106,7 +107,9 @@ const Login_email = () => {
                 birthday: covertFirebaseTimeStampToString(userInfoResponse?.birthday),
                 createAt: covertFirebaseTimeStampToString(userInfoResponse?.createAt),
                 updateAt: covertFirebaseTimeStampToString(userInfoResponse?.updateAt)
+                
               };
+              console.log(covertFirebaseTimeStampToString(userInfoResponse?.updateAt));
               dispatch(setUser(userInfo));
               handleUpdateTokenFCM()
               navigate('BottomTab');

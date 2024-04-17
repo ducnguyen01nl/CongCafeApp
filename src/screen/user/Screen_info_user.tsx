@@ -147,10 +147,10 @@ const Screen_info_user = () => {
 
             />
             {
-              user.role == 2
+              user.role == 1
                 ? <InputCustom
                   isUpdate
-                  label={AppLang(`email`)}
+                  label={AppLang(`email`)} 
                   propsInput={{
                     placeholder: AppLang(`email`),
                     valueInit: user.email,
@@ -174,7 +174,7 @@ const Screen_info_user = () => {
                 />
             }
             {
-              user.role == 2
+              user.role == 1
                 ? <InputCustom
                   label={AppLang(`sdt`)}
                   isUpdate

@@ -18,8 +18,6 @@ import LoadingApp from '../../components/LoadingApp'
 const Screen_lauch = () => {
 
   const [isReady,setIsReady] = useState<boolean>(false)
-
-
   const checkLogin = async () => {
     const userId: any = await AsyncStorage.getItem('userId')
     if (userId) {
@@ -44,10 +42,9 @@ const Screen_lauch = () => {
     checkLogin()
   }, [])
 
-
   useEffect(() => {
     if (isReady) {
-      navigate('BottomTab');
+      navigate('BottomTab')
     }
   }, [isReady]);
 

@@ -84,7 +84,7 @@ const Screen_add_news = ({ route }: any) => {
             title:'Cộng Cà phê xin chào',
             body:data ? AppLang('cong_ca_phe_da_cap_nhat_1_bai_viet') : AppLang('cong_ca_phe_da_them_1_bai_viet_moi'),
             arrayToken:listTokenUser,
-            data:{screen:2},
+            data:{screen:2,id:'NewsAdmin'},
         })        
         setLoading(false)
         // }

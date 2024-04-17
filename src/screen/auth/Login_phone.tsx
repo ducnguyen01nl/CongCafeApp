@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import ViewApp from '../../components/ViewApp'
 import HeaderApp from '../../components/HeaderApp'
 import LayoutApp from '../../components/LayoutApp'
-import { goBack } from '../../root/RootNavigation'
+import { goBack, navigate } from '../../root/RootNavigation'
 import { COLORS } from '../../colors/colors'
 import { imgApp } from '../../assets/img'
 import TextApp from '../../components/TextApp'
@@ -17,23 +17,34 @@ import PhoneInput from 'react-native-phone-number-input'
 import auth, { firebase } from '@react-native-firebase/auth'
 
 import { regPhone } from '../../data/dataLocal'
+import { userApi } from '../../api/userApi'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { covertFirebaseTimeStampToString } from '../../utils/format'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '../../app/redux/slices/userSlice'
+import { useGetListNotification } from '../../service/useLocalMater'
+import { pushNotificationApi } from '../../api/pushNotificationApi'
+import ToastService from '../../service/ToastService'
+import { logEvent } from 'firebase/analytics'
+import LoadingApp from '../../components/LoadingApp'
 
 const Login_phone = () => {
     const toastRef: any = useRef(null)
     const inputPhone: any = useRef()
 
     // verification code (OTP - One-Time-Passcode)
-    const [code, setCode] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState<any>(false);
     const [phone, setPhone] = useState<string>('');
     const [confirm, setConfirm] = useState<any>(null);
-    const [user, setUser] = useState<any>(null);
+    // const [user, setUser] = useState<any>(null);
     const [otp, setOtp] = useState<any>("");
     const refBtnSign: any = useRef();
+    const refModal: any = useRef();
     const recaptchaVerifier = useRef<any>();
     const webViewRef = useRef<any>();
-
-
-
+    const dispatch = useDispatch()
+    const { token } = useSelector((state: any) => state.token)
+    const [isLoadingNo, dataNo, onRefreshNo] = useGetListNotification()
     const recaptchaRef = React.useRef<any>(null)
 
     const formik = useFormik({
@@ -49,61 +60,186 @@ const Login_phone = () => {
         }
     })
 
+    const handleUpdateTokenFCM = async () => {
+        const userId: any = await AsyncStorage.getItem('userId')
+        try {
+            console.log('2222', token);
+
+            const tokenCurrent = dataNo.find((state: any) => state.tokenFCM === token);
+            if (tokenCurrent) {
+
+                if (tokenCurrent.userId === userId) {
+                    return null;
+                } else {
+                    await pushNotificationApi.updateTokenFCM(tokenCurrent.id, {
+                        userId: userId,
+                        role: 1
+                    });
+                }
+            } else {
+                // console.log('1111', dataNo);
+                await pushNotificationApi.addTokenFCM(token, { userId: userId, role: 1 })
+            }
+
+        } catch (error) {
+            console.log(error, 'getToken');
+        }
+    };
+
     const handleLogin = async () => {
-        formik.validateForm().then(async(errors) => {
+        // console.log(phone);
+
+        // await auth().verifyPhoneNumber(phone)
+        // .then(confirmResult =>{
+        //     setConfirm(confirmResult);
+        //     console.log('123',confirmResult);
+        // })
+        // .catch(error =>{
+        //     console.log(error.message);
+
+        // })
+        // auth().verifyPhoneNumber(phone)
+        //     .then(confirmResult => {
+        //         setConfirm(confirmResult.code);
+        //         console.log('123', confirmResult);
+        //     })
+        //     .catch(error => {
+        //         console.log(error.message);
+
+        //     })
+        formik.validateForm().then(async (errors) => {
             if (errors.phone) {
                 toastRef.current?.show(errors.phone);
             }
             else {
-                // try {
-                    console.log(formik.values.phone);
-                    console.log('1',phone);
-                    // const confirmation = await auth().signInWithPhoneNumber(phone)
-                    firebase.auth().verifyPhoneNumber(phone)
-                    .then(confirmResult =>{
+                console.log(formik.values.phone);
+                console.log('1', phone);
+                setIsLoading(true)
+                await auth().verifyPhoneNumber(phone)
+                    .then(confirmResult => {
+                        console.log('=============conffirm=======================');
+                        console.log(confirmResult);
+                        console.log('====================================');
+                        refModal.current.open()
                         setConfirm(confirmResult);
-                        console.log('123',confirmResult);
+                        console.log('123', confirmResult);
                     })
-                    .catch(error =>{
+                    .catch(error => {
                         console.log(error.message);
-                        
+
                     })
-                    
-                // } catch (error) {
-                //     console.log(error);
-                    
-                // }
+                    setIsLoading(false)
             }
         });
     }
 
-    // // Handle login
-    // function onAuthStateChanged(user) {
-    //     if (user) {
-    //         // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
-    //         // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
-    //         // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
-    //         // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
-    //     }
-    // }
+    const confirmCode = async () => {
+        console.log('====================================');
+        console.log(otp);
+        console.log(confirm);
+        console.log('====================================');
+        // try {
+        //     await confirm.confirm(otp);
+        //     console.log('====================================');
+        //     console.log(1);
+        //     console.log('====================================');
+        // } catch (error) {
+        //     console.log('====================================');
+        //     console.log(22);
+        //     console.log('====================================');
+        //     console.log('Invalid code.');
+        // }
 
-    // useEffect(() => {
-    //     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    //     return subscriber; // unsubscribe on unmount
-    // }, []);
+        setIsLoading(true)
+        const credential = firebase.auth.PhoneAuthProvider.credential(confirm.verificationId, otp);
+        await firebase.auth().signInWithCredential(credential)
+            .then(async (userCredential) => {
+                const userInfo = await userApi.getUserInfoByUid(userCredential.user.uid)
+                console.log('success login otp', userCredential);
+                if (userInfo) {
+                    AsyncStorage.setItem('userId', userInfo?.userId);
+                    const user = {
+                        ...userInfo,
+                        birthday: covertFirebaseTimeStampToString(userInfo?.birthday),
+                        createAt: covertFirebaseTimeStampToString(userInfo?.createAt),
+                        updateAt: covertFirebaseTimeStampToString(userInfo?.updateAt)
+                    };
+                    dispatch(setUser(user));
+                }
+                else {
+                    const userDefault = {
+                        uid: userCredential.user.uid,
+                        role: 1,
+                        userName: 'nguoidung',
+                        updateAt: new Date(),
+                        createAt: new Date(),
+                        email: '',
+                        gender: true,
+                        img: 'https://firebasestorage.googleapis.com/v0/b/cong-cafe-app.appspot.com/o/userDefault.png?alt=media&token=4039e0f4-71a2-472c-9679-5d50b0043f9f',
+                        phone: phone,
+                        birthday: new Date()
 
-    // Handle the button press
-    // async function signInWithPhoneNumber(phone) {
-    //     const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-    //     setConfirm(confirmation);
-    // }
+                    }
+                    const dataUser: any = await userApi.addUserInfo(userDefault)
+                    AsyncStorage.setItem('userId', dataUser?.userId); 
+                    const user = {
+                        ...dataUser,
+                        birthday: covertFirebaseTimeStampToString(dataUser?.birthday),
+                        createAt: covertFirebaseTimeStampToString(dataUser?.createAt),
+                        updateAt: covertFirebaseTimeStampToString(dataUser?.updateAt)
+                    };
+                    dispatch(setUser(user))
+                }
+                handleUpdateTokenFCM()
+                refModal.current.close()
+                setIsLoading(false)
+                navigate('BottomTab')
+            })
+            .catch((error: any) => {
+                console.log('error', error);
 
-    async function confirmCode() {
-        try {
-            await confirm.confirm(code);
-        } catch (error) {
-            console.log('Invalid code.');
-        }
+            })
+
+        // if (otp == confirm) {
+        //     const userInfo = await userApi.getUserInfoByPhone(phone)
+        //     if (userInfo) {
+        //         AsyncStorage.setItem('userId', userInfo?.userId);
+        //         const user = {
+        //             ...userInfo,
+        //             birthday: covertFirebaseTimeStampToString(userInfo?.birthday),
+        //             createAt: covertFirebaseTimeStampToString(userInfo?.createAt),
+        //             updateAt: covertFirebaseTimeStampToString(userInfo?.updateAt)
+        //         };
+        //         dispatch(setUser(user));
+        //     }
+        //     else {
+        //         const userDefault = {
+        //             uid: '',
+        //             role: 1,
+        //             userName: 'nguoidung',
+        //             updateAt: new Date(),
+        //             createAt: new Date(),
+        //             email: '',
+        //             gender: true,
+        //             img: 'https://firebasestorage.googleapis.com/v0/b/cong-cafe-app.appspot.com/o/userDefault.png?alt=media&token=4039e0f4-71a2-472c-9679-5d50b0043f9f',
+        //             phone: phone,
+        //             birthday: new Date()
+
+        //         }
+        //         const dataUser: any = await userApi.addUserInfo(userDefault)
+        //         AsyncStorage.setItem('userId', dataUser?.userId);
+        //         console.log('====================================');
+        //         console.log(dataUser);
+        //         console.log('==================================');
+        //         dispatch(setUser(dataUser))
+        //     }
+        //     handleUpdateTokenFCM()
+        //     refModal.current.close()
+        //     navigate('BottomTab')
+        // }
+        // else {
+        //     ToastService.showToast('Mã OTP của bạn không đúng')
+        // }
     }
 
     // if (!confirm) {
@@ -125,6 +261,9 @@ const Login_phone = () => {
                     onPress: () => goBack()
                 }}
             />
+            {
+                isLoading && <LoadingApp />
+            }
             <View style={{ height: 10, backgroundColor: COLORS.text4 }}></View>
             <ViewApp mid>
                 <Image source={imgApp.logoApp} style={styles.logo} resizeMode='contain' />
@@ -142,15 +281,16 @@ const Login_phone = () => {
                 </ViewApp>
             </ViewApp>
             <ToastMessage ref={toastRef} />
-            <ModalApp mid outClose>
+            <ModalApp ref={refModal} mid outClose>
                 <ViewApp backgroundColor={'white'} width={'90%'} padH20 padV={40} borderR={20}>
-                    <TextInputForm placeholder='Nhận mã xác nhận' value={otp} onChangeText={(text: any) => setOtp(text)} />
+                    <TextInputForm placeholder='Nhận mã xác nhận' onChangeText={(text: any) => setOtp(text)} />
                     <ButtonApp title='Xác nhận' bR={20} mV20
-                        onPress={() => { }}
+                        onPress={() => confirmCode()}
                     />
                 </ViewApp>
             </ModalApp>
             <ViewApp id='recaptcha'></ViewApp>
+            
         </LayoutApp>
     )
 

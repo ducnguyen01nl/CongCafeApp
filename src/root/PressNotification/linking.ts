@@ -50,9 +50,7 @@ export const linking = {
                 HandleLink(remoteMessage.data)
             });
         }
-
         notificationListener();
-
         return () => {
             linkingSubscription.remove();
         }

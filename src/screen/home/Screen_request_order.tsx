@@ -22,6 +22,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useSelector } from 'react-redux'
 import { imgApp } from '../../assets/img'
 import { pushNotificationApi } from '../../api/pushNotificationApi'
+import ToastMessage from '../../components/ToastMessage'
+import ToastService from '../../service/ToastService'
 
 const Screen_request_order = ({ route }: any) => {
     const { repurchase } = route?.params
@@ -60,7 +62,11 @@ const Screen_request_order = ({ route }: any) => {
     });
 
     const handleRequestOrder = async () => {
-        const dataRequest = await orderApi.addOrder({
+        console.log('====================================');
+        console.log(Object.keys(addressActive).length > 0);
+        console.log('====================================');
+        if(Object.keys(addressActive).length == 0) return ToastService.showToast(AppLang('ban_chua_co_dia_chi'))
+        const idOrder:any = await orderApi.addOrder({
             idUser: data?.userId,
             idAddress: table ? `${table?.numberTable}-${table?.floor}` : addressActive?.id,
             totalPrice: totalPriceCart,
@@ -71,14 +77,14 @@ const Screen_request_order = ({ route }: any) => {
             message: message ? message : '',
             orderList: repurchase ? repurchase?.orderList : newDataOrder,
         }, listTokenAdmin)
-        console.log('dddđ', dataRequest);
+        console.log('dddđ', idOrder);
 
-        // await pushNotificationApi.pushNotify({
-        //     title: AppLang('cong_ca_phe_thong_bao'),
-        //     body: `${AppLang('co_yc_dat_hang_moi')}`,
-        //     arrayToken: listTokenAdmin,
-        //     data: { id: dataRequest?.id, screen: 1 },
-        // })
+        await pushNotificationApi.pushNotify({
+            title: AppLang('cong_ca_phe_thong_bao'),
+            body: `${AppLang('co_yc_dat_hang_moi')}`,
+            arrayToken: listTokenAdmin,
+            data: { id: idOrder, screen: 1 },
+        })
         navigate('BottomTab')
     }
 

@@ -11,115 +11,116 @@ import { goBack } from "../root/RootNavigation"
 import { utils } from '@react-native-firebase/app';
 
 export const addressApi = {
-    getAddress: async() =>{
-        try {
-            const response = await axios.get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
-            return response.data
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-    },
-    getListAddress: async () => {
-        const userId: any = await AsyncStorage.getItem('userId')
-        try {
-            const addresses: any[] = []
-            await firestore()
-                .collection('address')
-                .where('idUser', '==', userId)
-                .get()
-                .then((querysnapshot: any) => {
-                    querysnapshot.forEach((documentSnapshot: any) => {
-                        addresses.push(documentSnapshot.data())
-                    })
-                })
-            return addresses
-        } catch (error) {
-            console.log(error);
-
-        }
-    },
-    getAddressById: async(idItem:string) =>{
-      try {
-        const documentSnapshot = await firestore()
-            .collection('address')
-            .doc(idItem)
-            .get();
-        if (documentSnapshot.exists) {
-            const item = documentSnapshot.data();
-            return item;
-        } else {
-            return null;
-        }
+  getAddress: async () => {
+    try {
+      const response = await axios.get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
+      return response.data
     } catch (error) {
-        console.log(error);
+      console.error('Error fetching data:', error);
+    }
+  },
+  getListAddress: async () => {
+    const userId: any = await AsyncStorage.getItem('userId')
+    try {
+      const addresses: any[] = []
+      await firestore()
+        .collection('address')
+        .where('idUser', '==', userId)
+        .get()
+        .then((querysnapshot: any) => {
+          querysnapshot.forEach((documentSnapshot: any) => {
+            addresses.push(documentSnapshot.data())
+          })
+        })
+      return addresses
+    } catch (error) {
+      console.log(error);
 
     }
   },
-    getAddressActive: async() =>{
-        const userId: any = await AsyncStorage.getItem('userId')
-        try {
-            const querySnapshot = await firestore()
-                .collection('address')
-                .where('idUser','==',userId)
-                .where('active','==',true)
-                .get()
+  getAddressById: async (idItem: string) => {
 
-            if(querySnapshot.docs.length > 0){
-                const addressActive = querySnapshot.docs[0].data()
-                return addressActive
-            }
-            else{
-                return null
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    },
-    addNewAddress: async(params:any) => {
       try {
-        const docRef = await firestore().collection('address').add(params)
-        const idItem = docRef.id
-        await docRef.update({id: idItem})
-        ToastService.showToast(AppLang('them_dia_chi_thanh_cong'),0)
-        console.log('thêm địa chỉ thành công', docRef.id);
+        const documentSnapshot = await firestore()
+          .collection('address')
+          .doc(idItem)
+          .get();
+        if (documentSnapshot.exists) {
+          const item = documentSnapshot.data();
+          return item;
+        } else {
+          return null;
+        }
       } catch (error) {
-        ToastService.showToast(AppLang('them_dia_chi_that_bai'))
         console.log(error);
-        
-      }
-    },
-    updateAddress: async(id:string,params:any) => {
-      // try {
-        await firestore()
-        .collection('address')
-        .doc(id)  
-        .update(params)
-        .then(() =>{
-          console.log('success');
-          
-        })
-        .catch((error) =>{
-          console.log(error);
-          
-        })
-      // } catch (error) {
-      //   console.log(error);
-        
-      // }
-    },
 
-    deleteAddress: async(id:string) =>{
-      await firestore()
+      }
+  },
+  getAddressActive: async () => {
+    const userId: any = await AsyncStorage.getItem('userId')
+    try {
+      const querySnapshot = await firestore()
         .collection('address')
-        .doc(id)
-        .delete()
-        .then(() =>{
-          ToastService.showToast(AppLang('xoa_thanh_cong'),0)
-        })
-        .catch((error) =>{
-          console.log(error);
-          
-        })
+        .where('idUser', '==', userId)
+        .where('active', '==', true)
+        .get()
+
+      if (querySnapshot.docs.length > 0) {
+        const addressActive = querySnapshot.docs[0].data()
+        return addressActive
+      }
+      else {
+        return null
+      }
+    } catch (error) {
+      console.log(error);
     }
+  },
+  addNewAddress: async (params: any) => {
+    try {
+      const docRef = await firestore().collection('address').add(params)
+      const idItem = docRef.id
+      await docRef.update({ id: idItem })
+      ToastService.showToast(AppLang('them_dia_chi_thanh_cong'), 0)
+      console.log('thêm địa chỉ thành công', docRef.id);
+    } catch (error) {
+      ToastService.showToast(AppLang('them_dia_chi_that_bai'))
+      console.log(error);
+
+    }
+  },
+  updateAddress: async (id: string, params: any) => {
+    // try {
+    await firestore()
+      .collection('address')
+      .doc(id)
+      .update(params)
+      .then(() => {
+        console.log('success');
+
+      })
+      .catch((error) => {
+        console.log(error);
+
+      })
+    // } catch (error) {
+    //   console.log(error);
+
+    // }
+  },
+
+  deleteAddress: async (id: string) => {
+    await firestore()
+      .collection('address')
+      .doc(id)
+      .delete()
+      .then(() => {
+        ToastService.showToast(AppLang('xoa_thanh_cong'), 0)
+      })
+      .catch((error) => {
+        console.log(error);
+
+      })
+  }
 
 }

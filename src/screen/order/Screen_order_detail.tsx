@@ -25,11 +25,14 @@ import { useFocusEffect } from '@react-navigation/native'
 const Screen_order_detail = ({ route }: any) => {
     const { id } = route?.params?.data;
     const [isLoadingItem, dataItem, onRefreshItem] = useGetItemOrder(id)
+    console.log('====================================');
+    console.log(dataItem);
+    console.log('====================================');
     const { user } = useSelector((state: any) => state.user)
     const addressTable = dataItem?.type == 0 ? null : dataItem?.idAddress?.split("-").map(Number)
     const [isLoadingToken, dataToken, onRefreshToken]  = useGetListTokenById(dataItem?.idUser)
 
-    const [isLoading, data, onRefresh] = useAddressById(dataItem?.idAddress)
+    const [isLoading, data, onRefresh] = useAddressById(dataItem?.type == 0 ? dataItem?.idAddress : null)
     useEffect(() => {
         onRefresh()
         onRefreshToken()
@@ -92,8 +95,8 @@ const Screen_order_detail = ({ route }: any) => {
 
     return (
 
-        Object.keys(data).length == 0 ? <LoadingApp noBg />
-            :
+        // isLoading ? <LoadingApp noBg />
+        //     :
             <LayoutApp>
                 <HeaderApp
                     title={AppLang('thong_tin_don_hang')}
@@ -210,9 +213,12 @@ const Screen_order_detail = ({ route }: any) => {
                                 }
                             </ViewApp>
                             <ViewApp flex1 marH5>
-                                <ButtonApp title={AppLang(titleButton(dataItem?.status))}
-                                    onPress={handleConfirm}
-                                />
+                                {
+                                   (dataItem?.status != 3 && dataItem?.status != 4) && <ButtonApp title={AppLang(titleButton(dataItem?.status))}
+                                   onPress={handleConfirm}
+                               />
+                                }
+                                
                             </ViewApp>
                         </ViewApp>
 

@@ -156,20 +156,31 @@ const User = (props: Props) => {
               {
                 user?.role == 1 && <ItemChildren title={AppLang(`danh_sach_dia_chi`)} icon='map-marker' onPress={() => navigate('Screen_address', { select: false })} />
               }
-              <ItemChildren title={AppLang(`doi_mat_khau`)} icon='lock' onPress={() => navigate('Screen_change_password')} />
-            </ItemTitle>
+              {
+                user?.role == 0 && <ItemChildren title={AppLang(`doi_mat_khau`)} icon='lock' onPress={() => navigate('Screen_change_password')} />
+              }
 
+            </ItemTitle>
+            {
+              user.role == 0 &&
+              <ItemTitle title={AppLang(`thong_ke`)}>
+                <ItemChildren title={i18n.t('thong_ke_don_hang')} icon='table' type='FontAwesome' first onPress={() =>{navigate('Screen_statistics')}} />
+
+              </ItemTitle>
+            }
             <ItemTitle title={AppLang(`ung_dung`)}>
               <ItemChildren title={i18n.t('ngon_ngu')} icon='user' first onPress={() => _langue.current.open()} />
               {
                 user?.role == 0 && <ItemChildren title={i18n.t('qr_code')} icon='qrcode' type='AntDesign' onPress={() => { navigate('Screen_qr_code') }} />
               }
-              
+
             </ItemTitle>
 
+
             <ItemTitle title={AppLang(`trung_tam_tro_giup`)}>
-              <ItemChildren title={AppLang(`cau_hoi_thuong_gap`)} icon='comments' first />
-              <ItemChildren title={AppLang(`phan_hoi_ho_tro`)} icon='headset' type='FontAwesome5' />
+              {/* <ItemChildren title={AppLang(`cau_hoi_thuong_gap`)} icon='comments' first />
+              <ItemChildren title={AppLang(`phan_hoi_ho_tro`)} icon='headset' type='FontAwesome5' /> */}
+              <ItemChildren title={AppLang(`thong_tin_cua_hang`)} icon='shop' type='Entypo' onPress={() => navigate('Screen_info_shop')} />
             </ItemTitle>
 
             <ButtonApp title={AppLang(`dang_xuat`)} styleButton={{ borderRadius: 10 }}

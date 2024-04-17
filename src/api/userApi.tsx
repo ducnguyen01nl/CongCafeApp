@@ -21,7 +21,7 @@ export const userApi = {
                 return userData
             }
         } catch (error) {
-            console.log(error);     
+            console.log(error);
         }
         // })
 
@@ -48,19 +48,53 @@ export const userApi = {
 
 
     },
+    getUserInfoByPhone: async (phone: any) => {
+        try {
+            const querySnapshot = await firestore()
+                .collection('user')
+                .where('phone', '==', phone)
+                .get()
+            if (querySnapshot.size > 0) {
+                const doc = querySnapshot.docs[0];
+                const userData = doc.data();
+                return userData
+            } else {
+                console.log('User not found');
+                return null; // or throw an error, depending on your needs
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+    },
+    addUserInfo: async (params: any) => {
+        try {
+            const docRef = await firestore().collection('user').add(params)
+            const id = docRef.id;
+            await docRef.update({ userId: id })
+            const doc = await docRef.get();
+            const userData = doc.data();
+            console.log('thêm thành công', userData);
+            return userData;
+            // ToastService.showToast(AppLang('them_moi_bai_viet_thanh_cong'),0)
+        } catch (error) {
+            console.log(error);
+
+        }
+    },
 
     setUserInfo: async (params: any) => {
         const userId: any = await AsyncStorage.getItem('userId')
         // try {
-            firestore()
-                .collection('user')
-                .doc(userId)
-                .update(params)
-                .then(() => {
-                    ToastService.showToast(AppLang('cap_nhat_thong_tin_thanh_cong'),0)
-                })
-                .catch((error) =>console.log(error))
-                
+        firestore()
+            .collection('user')
+            .doc(userId)
+            .update(params)
+            .then(() => {
+                ToastService.showToast(AppLang('cap_nhat_thong_tin_thanh_cong'), 0)
+            })
+            .catch((error) => console.log(error))
+
         // } catch (error) {
         //     console.log(error);
 
@@ -101,61 +135,60 @@ export const userApi = {
         }
     },
 
-    addDrinksToCart: async(id:any,params:any) => {
+    addDrinksToCart: async (id: any, params: any) => {
         firestore()
-        .collection('cart')
-        .doc(id)
-        .update(params)
-        .then(() =>{
-            ToastService.showToast(AppLang('them_do_uong_thanh_cong'),0)
-        })
-        .catch(() =>{
-            ToastService.showToast(AppLang('them_do_uong_that_bai'),1)
-        })
+            .collection('cart')
+            .doc(id)
+            .update(params)
+            .then(() => {
+                ToastService.showToast(AppLang('them_do_uong_thanh_cong'), 0)
+            })
+            .catch(() => {
+                ToastService.showToast(AppLang('them_do_uong_that_bai'), 1)
+            })
     },
-    addCart: async() =>{
+    addCart: async () => {
         const userId: any = await AsyncStorage.getItem('userId')
         try {
             const docRef = await firestore().collection('cart').add({
-                order:[],
-                userId:userId
+                order: [],
+                userId: userId
             })
             const idItem = docRef.id
-            await docRef.update({id: idItem})
-          } catch (error) {
+            await docRef.update({ id: idItem })
+        } catch (error) {
             console.log(error);
-            
-          }
+
+        }
     },
-    deleteDrinksToCart: async(id:any,params:any) => {
+    deleteDrinksToCart: async (id: any, params: any) => {
         firestore()
-        .collection('cart')
-        .doc(id)
-        .update(params)
-        .then(() =>{
-            console.log('delete success');
-            
-        })
-        .catch((error) =>{
-            console.log(error);
-            
-        })
+            .collection('cart')
+            .doc(id)
+            .update(params)
+            .then(() => {
+                console.log('delete success');
+            })
+            .catch((error) => {
+                console.log(error);
+
+            })
     },
-    updateCart: async (id:any,params:any) => {
+    updateCart: async (id: any, params: any) => {
         // try {
-            firestore()
-                .collection('cart')
-                .doc(id)
-                .update(params)
-                .then(() => {
-                    console.log('update success');
-                })
-                .catch((error) =>console.log(error))
-                
+        firestore()
+            .collection('cart')
+            .doc(id)
+            .update(params)
+            .then(() => {
+                console.log('update success');
+            })
+            .catch((error) => console.log(error))
+
         // } catch (error) {
         //     console.log(error);
 
         // }
     },
-    
+
 }

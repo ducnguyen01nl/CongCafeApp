@@ -27,6 +27,7 @@ import { setTable } from '../../app/redux/slices/tableSlice'
 import { store } from '../../app/redux/store'
 import { setUserRepurchase } from '../../app/redux/slices/userSlice'
 import { orderApi } from '../../api/orderApi'
+import ToastService from '../../service/ToastService'
 
 const Screen_cart = ({ route }: any) => {
     // const { repurchase } = route?.params;
@@ -38,15 +39,14 @@ const Screen_cart = ({ route }: any) => {
     const refModal = useRef<any>()
     const modalDelete = useRef<any>()
     const dispatch = useDispatch()
-    const onPressDelete = async (item: any) => {
+    const onPressDelete = async (item: any, index:number) => {
         const listOrder = data?.order;
         const listNewOrder = listOrder?.filter((prev: any) => prev.idItem !== item.idItem)
-        console.log(listNewOrder);
-
         await userApi.deleteDrinksToCart(data.id, {
             order: listNewOrder
         })
         onRefresh()
+        setItemPrices(itemPrices.splice(index,1))
     }
     const handleDeleteAll = async () => {
         await userApi.deleteDrinksToCart(data.id, {
@@ -120,7 +120,7 @@ const Screen_cart = ({ route }: any) => {
                                     data?.order?.map((item: any, index: number) => (
                                         <ItemOrder key={index} item={item} index={index} 
                                             setItemPrices={setItemPrices} 
-                                            onPressDelete={() => onPressDelete(item)} 
+                                            onPressDelete={ () =>onPressDelete(item,index)} 
                                             handleUpdateCart={(e:any) => handleUpdateCart(e)}/>
                                     ))
 
@@ -202,15 +202,14 @@ const ItemOrder = ({ item, index, setItemPrices, onPressDelete, handleUpdateCart
 
     const [count, setCount] = useState<number>(item?.count)
     const [isLoading, data, onRefresh] = useGetItemDrink(item?.idItem)
-    const handleUpdate = async() =>{
-        
-    }
-
+    // mặt hàng bị hết hàng thì giỏ hàng auto delete item
     useEffect(() => {
-        if (data?.status == false) {
+        if (data && data?.status == false) {
+            console.log(data?.status);
+            ToastService.showToast(`${AppLang('mat_hang')} ${data?.name} ${AppLang('bi_xoa_do_mat_hang_dang_het')}`)
             onPressDelete()
         }
-    }, [data])
+    }, [isLoading])
 
     useEffect(() => {
         //cập nhật count item
@@ -231,6 +230,11 @@ const ItemOrder = ({ item, index, setItemPrices, onPressDelete, handleUpdateCart
         }
     }, [count, data]);
 
+    const handleDeleteItem = () =>{
+        // setCount(0)
+        onPressDelete()
+    }
+
 
     return (
 
@@ -242,10 +246,7 @@ const ItemOrder = ({ item, index, setItemPrices, onPressDelete, handleUpdateCart
                 <ViewApp row centerH>
                     <TextApp size18 colorP bold>{data?.name}</TextApp>
                     <TouchApp
-                        onPress={() => {
-                            setCount(0)
-                            onPressDelete()
-                        }}
+                        onPress={() => handleDeleteItem()}
                     >
                         <IconApp color={COLORS.primary} name='delete' type='MaterialIcons' />
                     </TouchApp>
