@@ -103,6 +103,10 @@ const ItemOrder = ({ item, onPress, onPressButton }: any) => {
     >
       {/* <ViewApp pad5 bg={COLORS.Secondary} /> */}
       <ViewApp flex1 pad10>
+        <ViewApp row centerH padV10>
+          <TextApp style={{ flex: 1 }} color1>{`${AppLang('ma_don')}: ${item?.id}`}</TextApp>
+          <TextApp color1>{formatDateTimestampAll(item?.createAt)}</TextApp>
+        </ViewApp>
         {user?.role == 1 && item?.orderList.map((item: any, index: number) => (
           <ViewApp key={index} row centerH marB10>
             <ViewApp row alignCenter flex1>
@@ -115,10 +119,6 @@ const ItemOrder = ({ item, onPress, onPressButton }: any) => {
           </ViewApp>
         ))
         }
-        <ViewApp row centerH padV10>
-          <TextApp style={{ flex: 1 }} color1>{`${AppLang('ma_don')}: ${item?.id}`}</TextApp>
-          <TextApp color1>{formatDateTimestampAll(item?.createAt)}</TextApp>
-        </ViewApp>
 
         <ViewApp row centerH padV10 borderTW={1} borderBW={1}>
           <TextApp color1>{`${totalCount} ${AppLang('san_pham')}`}</TextApp>

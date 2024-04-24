@@ -87,6 +87,41 @@ export const DATA_FILTER_TYPE_2 = [
     {name:AppLang('tin_tuc'), value:3},
 ]
 
+export const DATA_FILTER_STATISTICS = [
+    {name:AppLang('theo_nam'), value:0},
+    {name:AppLang('theo_thang'), value:1},
+    {name:AppLang('theo_ngay'), value:2},
+]
+export const DATA_MONTH = [
+    {name:AppLang('tat_ca_thang'), value:0},
+    {name:AppLang('thang_1'), value:1},
+    {name:AppLang('thang_2'), value:2},
+    {name:AppLang('thang_3'), value:3},
+    {name:AppLang('thang_4'), value:4},
+    {name:AppLang('thang_5'), value:5},
+    {name:AppLang('thang_6'), value:6},
+    {name:AppLang('thang_7'), value:7},
+    {name:AppLang('thang_8'), value:8},
+    {name:AppLang('thang_9'), value:9},
+    {name:AppLang('thang_10'), value:10},
+    {name:AppLang('thang_11'), value:11},
+    {name:AppLang('thang_12'), value:12},
+]
+export const DATA_MONTH_2 = [
+    {name:AppLang('thang_1'), value:1},
+    {name:AppLang('thang_2'), value:2},
+    {name:AppLang('thang_3'), value:3},
+    {name:AppLang('thang_4'), value:4},
+    {name:AppLang('thang_5'), value:5},
+    {name:AppLang('thang_6'), value:6},
+    {name:AppLang('thang_7'), value:7},
+    {name:AppLang('thang_8'), value:8},
+    {name:AppLang('thang_9'), value:9},
+    {name:AppLang('thang_10'), value:10},
+    {name:AppLang('thang_11'), value:11},
+    {name:AppLang('thang_12'), value:12},
+]
+
 export const LINK_TO = (id:number) =>{
     switch(id){
         case 0:

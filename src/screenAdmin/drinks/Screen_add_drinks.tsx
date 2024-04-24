@@ -118,6 +118,7 @@ const Screen_add_drinks = ({route}:any) => {
                             placeholder: AppLang(`ten_mat_hang`),
                             valueInit:dataItem?.name,
                             placeholderTextColor: COLORS.text2,
+                            color: COLORS.text1
                         }}
                         ref={ref => (_input.current['name'] = ref)}
                     />
@@ -129,7 +130,8 @@ const Screen_add_drinks = ({route}:any) => {
                             placeholder: AppLang(`giam_gia`),
                             placeholderTextColor: COLORS.text2,
                             keyboardType: 'number-pad',
-                            valueInit:dataItem?.discount && String(dataItem?.discount)
+                            valueInit:dataItem?.discount && String(dataItem?.discount),
+                            color: COLORS.text1
                         }}
                         ref={ref => (_input.current['discount'] = ref)}
                     />
@@ -141,7 +143,8 @@ const Screen_add_drinks = ({route}:any) => {
                             placeholder: AppLang(`don_gia`),
                             placeholderTextColor: COLORS.text2,
                             keyboardType: 'number-pad',
-                            valueInit:dataItem?.price && String(dataItem?.price)
+                            valueInit:dataItem?.price && String(dataItem?.price),
+                            color: COLORS.text1
                         }}
                         ref={ref => (_input.current['price'] = ref)}
                     />
@@ -161,7 +164,8 @@ const Screen_add_drinks = ({route}:any) => {
                         propsInput={{
                             placeholder: AppLang(`mo_ta`),
                             placeholderTextColor: COLORS.text2,
-                            valueInit:dataItem?.des &&  String(dataItem?.des)
+                            valueInit:dataItem?.des &&  String(dataItem?.des),
+                            color: COLORS.text1
                         }}
                         multiline
                         styleInput={{ height: 100, paddingRight: 10 }}

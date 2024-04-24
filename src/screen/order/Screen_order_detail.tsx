@@ -55,6 +55,9 @@ const Screen_order_detail = ({ route }: any) => {
     }
 
     const handlePushNotification = async (body: string) => {
+        console.log('=============44444444444444=======================');
+        console.log(dataToken);
+        console.log('====================================');
         await pushNotificationApi.pushNotify({
             title: AppLang('cong_ca_phe_thong_bao'),
             body: `${AppLang('don_hang_ma')} ${dataItem?.id} ${body}`,

@@ -151,7 +151,7 @@ const Screen_add_address = ({ route }: any) => {
       />
       <ScrollView>
         <ViewApp bg={COLORS.text4} pad10>
-          <TextApp>{AppLang('lien_he')}</TextApp>
+          <TextApp colorP>{AppLang('lien_he')}</TextApp>
         </ViewApp>
         <ViewApp marV10>
           <InputCustom
@@ -187,7 +187,7 @@ const Screen_add_address = ({ route }: any) => {
           />
         </ViewApp>
         <ViewApp bg={COLORS.text4} pad10>
-          <TextApp>{AppLang('dia_chi')}</TextApp>
+          <TextApp colorP>{AppLang('dia_chi')}</TextApp>
         </ViewApp>
         <ViewApp padT10 padH5>
           <InputSelect
@@ -236,7 +236,7 @@ const Screen_add_address = ({ route }: any) => {
             <TouchApp disabled={dataItem?.active} borderW={1} borderC='red' bgR={active} w={'70%'} mid borderR={5}
               onPress={() => setActive(!active)}
             >
-              <TextApp pV10 bold color={active ? 'white' : 'red'}>{active ? AppLang('dang_mac_dinh') : AppLang('dat_lam_mac_dinh')}</TextApp>
+              <TextApp pV10 bold color={active ? 'black' : 'red'}>{active ? AppLang('dang_mac_dinh') : AppLang('dat_lam_mac_dinh')}</TextApp>
             </TouchApp>
 
           </ViewApp>

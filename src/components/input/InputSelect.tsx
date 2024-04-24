@@ -29,6 +29,7 @@ interface Props extends TextInputMaskProps {
     background?: any,
     option?: { title: string }
     multiSelect?: boolean
+    disabled?: boolean
     onSelectItem?:(item:any) => void
 }
 const TEXT_COLOR = '#1E2E3D'
@@ -83,6 +84,8 @@ const InputSelect = React.forwardRef<any, Props>(({ label, valueInit, placeholde
                         alignItems: 'center',
                     }, styleBlockContain]}
                 {...propsInput}
+                disabled={props.disabled}
+            
             >
                 <ViewApp width={'95%'}>
                     <TextApp style={styleText} >{multiSelect ? nameToStringInputSelect(value, placeholder) : value ? value?.name : placeholder}</TextApp>

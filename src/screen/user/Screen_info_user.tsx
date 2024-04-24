@@ -126,7 +126,8 @@ const Screen_info_user = () => {
                 placeholder: AppLang(`ho_va_ten`),
                 valueInit: user.userName,
                 placeholderTextColor: COLORS.text2,
-              }}
+                color: COLORS.text2
+              }} 
               ref={ref => (_input.current['full_name'] = ref)}
             />
             <InputDate
@@ -155,6 +156,7 @@ const Screen_info_user = () => {
                     placeholder: AppLang(`email`),
                     valueInit: user.email,
                     placeholderTextColor: COLORS.text2,
+                    color: COLORS.text2
                   }}
                   ref={ref => (_input.current['email'] = ref)}
                 />
@@ -197,6 +199,7 @@ const Screen_info_user = () => {
                     keyboardType: 'number-pad',
                     valueInit: user.phone,
                     placeholderTextColor: COLORS.text2,
+                    color: COLORS.text2
                   }}
                   ref={ref => (_input.current['phone'] = ref)}
                 />

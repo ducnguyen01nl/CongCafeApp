@@ -123,6 +123,7 @@ const NewsAdmin = () => {
             isUpdate
             propsInput={{
               placeholder: AppLang('tim_kiem_theo_tieu_de'),
+              color: COLORS.text1
             }}
             styleInput={{
               width: '100%',

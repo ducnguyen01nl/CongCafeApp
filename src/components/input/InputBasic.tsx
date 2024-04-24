@@ -69,7 +69,7 @@ const InputCore = React.forwardRef<Handle, Props>((props, ref) => {
         value={value}
         onChangeText={setValue}
         placeholder={props.placeholder}
-        style={[{ height: props.multiline ? textareaHeight : 50, width: props.look ? '90%' : '100%', marginHorizontal:10 },
+        style={[{ height: props.multiline ? textareaHeight : 50, width: props.look ? '90%' : '100%', marginHorizontal:10,},
           , props?.styleInput]}
         // textAlignVertical='top'
         secureTextEntry={look}

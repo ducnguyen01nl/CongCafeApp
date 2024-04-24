@@ -70,8 +70,8 @@ const Screen_address = ({ route }: any) => {
           <>
             <ViewApp>
               <ViewApp backgroundColor={COLORS.text4} pad10 row centerH>
-                <TextApp>{AppLang('dia_diem_cua_toi')}</TextApp>
-                <TextApp>{`${data.length}/${MAX_ADDRESS}`}</TextApp>
+                <TextApp colorP>{AppLang('dia_diem_cua_toi')}</TextApp>
+                <TextApp colorP>{`${data.length}/${MAX_ADDRESS}`}</TextApp>
               </ViewApp>
             </ViewApp>
 
@@ -118,7 +118,7 @@ const Screen_address = ({ route }: any) => {
 const ItemAddress = ({ item, select, onRefresh, onPressDelete, onSelectItem }: any) => {
 
   return (
-    <TouchApp disabled={select ? false : true} key={item.id} w100 minHeight={50} row centerH pad10 borderBW={1}
+    <TouchApp disabled={select ? false : true} styleBox={{opacity:1}} key={item.id} w100 minHeight={50} row centerH pad10 borderBW={1}
       onPress={onSelectItem}
     >
       <ViewApp row alignI='center' flex1 marR10>

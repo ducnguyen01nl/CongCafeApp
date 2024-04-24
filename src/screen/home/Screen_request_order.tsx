@@ -152,8 +152,9 @@ const Screen_request_order = ({ route }: any) => {
                                 <TextInput
                                     placeholder={AppLang('luu_y_cho_cua_hang')}
                                     placeholderTextColor={COLORS.text2}
-                                    style={{ textAlign: "right", flex: 1 }}
+                                    style={{ textAlign: "right", flex: 1, color:COLORS.text1 }}
                                     onChangeText={text => setMessage(text)}
+                                    
                                 />
                             </ViewApp>
                             <ViewApp bg={COLORS.text4} pad5 />

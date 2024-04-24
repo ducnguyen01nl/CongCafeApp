@@ -96,6 +96,10 @@ export const formatMoney = (number:number) => {
   return `${Number(number).toLocaleString('en-US')} đ`
 }
 
+export const formatMoney2 = (number:number) => {
+  return Number(number.toFixed(2))
+}
+
 export const moneyDiscount = (money:any,discoust:any) =>{
   
   const percent = 100 - Number(discoust);

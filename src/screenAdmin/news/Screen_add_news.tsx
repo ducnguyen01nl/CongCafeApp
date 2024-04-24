@@ -169,10 +169,11 @@ const Screen_add_news = ({ route }: any) => {
                             placeholder: AppLang(`tieu_de`),
                             valueInit: data?.title,
                             placeholderTextColor: COLORS.text2,
+                            color: COLORS.text1
                         }}
-                        style={{
-                            color:COLORS.text1,
-                        }}
+                        // style={{
+                        //     color:COLORS.text1,
+                        // }}
                         ref={ref => (_input.current['title'] = ref)}
                     />
 
@@ -183,11 +184,12 @@ const Screen_add_news = ({ route }: any) => {
                         propsInput={{
                             placeholder: AppLang(`noi_dung`),
                             placeholderTextColor: COLORS.text2,
-                            valueInit: data?.content && String(data?.content)
+                            valueInit: data?.content && String(data?.content),
+                            color: COLORS.text1
                         }}
-                        style={{
-                            color:COLORS.text1,
-                        }}
+                        // style={{
+                        //     color:COLORS.text1,
+                        // }}
                         multiline
                         styleInput={{ height: 200, paddingRight: 10 }}
                         ref={ref => (_input.current['content'] = ref)}

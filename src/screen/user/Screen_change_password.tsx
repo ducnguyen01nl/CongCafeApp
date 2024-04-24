@@ -68,6 +68,7 @@ const Screen_change_password = () => {
                 propsInput={{
                     placeholder:AppLang('mat_khau_cu'),
                     placeholderTextColor: COLORS.text2,
+                    color: COLORS.text1
 
                 }}
                 ref={ref => refInput.current['oldPassword'] = ref}
@@ -79,6 +80,7 @@ const Screen_change_password = () => {
                 propsInput={{
                     placeholder:AppLang('mat_khau_moi'),
                     placeholderTextColor: COLORS.text2,
+                    color: COLORS.text1
 
                 }}
                 ref={ref => refInput.current['newPassword'] = ref}
@@ -90,6 +92,7 @@ const Screen_change_password = () => {
                 propsInput={{
                     placeholder:AppLang('xac_nhan_mat_khau_moi'),
                     placeholderTextColor: COLORS.text2,
+                    color: COLORS.text1
 
                 }}
                 ref={ref => refInput.current['newPasswordConfirm'] = ref}

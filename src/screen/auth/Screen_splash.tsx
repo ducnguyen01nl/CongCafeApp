@@ -14,6 +14,7 @@ import { store } from '../../app/redux/store'
 import { setUser } from '../../app/redux/slices/userSlice'
 import { useDispatch } from 'react-redux'
 import LoadingApp from '../../components/LoadingApp'
+import { useFocusEffect } from '@react-navigation/native'
 
 const Screen_lauch = () => {
 

@@ -60,7 +60,7 @@ const handleUpdateTokenFCM = async () => {
                 });
             }
         } else {
-            await pushNotificationApi.addTokenFCM(token)
+            await pushNotificationApi.addTokenFCM(token,user)
         }
 
     } catch (error) {
@@ -91,7 +91,7 @@ const handleUpdateTokenFCM = async () => {
                             <TouchApp square={40} borderR={20} mid
                                 onPress={handlePushNotification}
                             >
-                                <IconApp color={COLORS.primary} size={26} name='bell' type='FontAwesome5' />
+                                {/* <IconApp color={COLORS.primary} size={26} name='bell' type='FontAwesome5' /> */}
                             </TouchApp>
                         </ViewApp>
                     </ViewApp>

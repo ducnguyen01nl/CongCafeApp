@@ -58,7 +58,7 @@ const User = (props: Props) => {
     i18n.locale = language
     forceUpdate()
     _langue.current.close()
-    navigate('Screen_splash')
+    // navigate('Screen_splash')
     // setTimeout(() =>{
     //   // CodePush.restartApp()
     //   RNRestart.Restart()
@@ -164,14 +164,14 @@ const User = (props: Props) => {
             {
               user.role == 0 &&
               <ItemTitle title={AppLang(`thong_ke`)}>
-                <ItemChildren title={i18n.t('thong_ke_don_hang')} icon='table' type='FontAwesome' first onPress={() =>{navigate('Screen_statistics')}} />
+                <ItemChildren title={AppLang('thong_ke_don_hang')} icon='table' type='FontAwesome' first onPress={() =>{navigate('Screen_statistics')}} />
 
               </ItemTitle>
             }
             <ItemTitle title={AppLang(`ung_dung`)}>
-              <ItemChildren title={i18n.t('ngon_ngu')} icon='user' first onPress={() => _langue.current.open()} />
+              <ItemChildren title={AppLang('ngon_ngu')} icon='user' first onPress={() => _langue.current.open()} />
               {
-                user?.role == 0 && <ItemChildren title={i18n.t('qr_code')} icon='qrcode' type='AntDesign' onPress={() => { navigate('Screen_qr_code') }} />
+                user?.role == 0 && <ItemChildren title={AppLang('qr_code')} icon='qrcode' type='AntDesign' onPress={() => { navigate('Screen_qr_code') }} />
               }
 
             </ItemTitle>
@@ -234,13 +234,13 @@ const BoxChangeLang = ({ onChange }: any) => {
       <ViewApp>
         <ScrollView>
           <ViewApp mid h={30} marV={25}>
-            <TextApp size22 bold>{i18n.t('thay_doi_ngon_ngu')}</TextApp>
+            <TextApp color1 size22 bold>{AppLang('thay_doi_ngon_ngu')}</TextApp>
           </ViewApp>
           <TouchApp onPress={() => onChange('vi')} mid padV20 borderBW={1}>
-            <TextApp size18>{i18n.t('tieng_viet')}</TextApp>
+            <TextApp color1 size18>{AppLang('tieng_viet')}</TextApp>
           </TouchApp>
           <TouchApp onPress={() => onChange('en')} mid padV20 borderBW={1}>
-            <TextApp size18>{i18n.t('tieng_anh')}</TextApp>
+            <TextApp color1 size18>{AppLang('tieng_anh')}</TextApp>
           </TouchApp>
         </ScrollView>
       </ViewApp>

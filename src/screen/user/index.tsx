@@ -8,6 +8,7 @@ import Screen_show_qr_code from "./Screen_show_qr_code"
 import Screen_change_password from "./Screen_change_password"
 import Screen_info_shop from "./Screen_info_shop"
 import Screen_statistics from "./Screen_statistics"
+import Screen_list_order_statistics from "./Screen_list_order_statistics"
 export default {
     Screen_info_user,
     Screen_address,
@@ -18,6 +19,8 @@ export default {
     Screen_show_qr_code,
     Screen_change_password,
     Screen_info_shop,
-    Screen_statistics
+    Screen_statistics,
+    Screen_list_order_statistics,
+
 
 }

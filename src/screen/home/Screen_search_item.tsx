@@ -88,6 +88,8 @@ const Screen_search_item = () => {
                     <TextInput placeholder={AppLang('tim_kiem_theo_ten_gia')}
                         value={search}
                         onChangeText={(text: any) => setSearch(text)}
+                        style={{color:COLORS.text1,}}
+                        placeholderTextColor={COLORS.text1}
                     />
                 </ViewApp>
                 <TouchApp

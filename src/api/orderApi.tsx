@@ -12,98 +12,110 @@ import { utils } from '@react-native-firebase/app';
 import { pushNotificationApi } from "./pushNotificationApi";
 
 export const orderApi = {
-    addOrder: async(params:any, listTokenAdmin:any) =>{
+    addOrder: async (params: any, listTokenAdmin: any) => {
         try {
             const docRef = await firestore().collection('order').add(params)
             const idItem = docRef.id
-            await docRef.update({id: idItem})
+            await docRef.update({ id: idItem })
             //thong bao cho admin
             await pushNotificationApi.pushNotify({
-                    title: AppLang('cong_ca_phe_thong_bao'),
-                    body: `${AppLang('co_yc_dat_hang_moi')}`,
-                    arrayToken: listTokenAdmin,
-                    data: { id: docRef.id, screen: 1 },
-                })
+                title: AppLang('cong_ca_phe_thong_bao'),
+                body: `${AppLang('co_yc_dat_hang_moi')}`,
+                arrayToken: listTokenAdmin,
+                data: { id: docRef.id, screen: 1 },
+            })
             return docRef.id
-            ToastService.showToast(AppLang('them_yeu_cau_dat_hang_thanh_cong'),0)
+            ToastService.showToast(AppLang('them_yeu_cau_dat_hang_thanh_cong'), 0)
             console.log('thêm yêu cầu thành công', docRef.id);
-            
-          } catch (error) {
+
+        } catch (error) {
             ToastService.showToast(AppLang('them_yeu_cau_dat_hang_that_bai'))
             console.log(error);
-            
-          }
+
+        }
     },
-    getListOrderByStatus: async(status:number) =>{
+    getListOrderByStatus: async (status: number) => {
         const userId: any = await AsyncStorage.getItem('userId')
-      try {
-        const listOrder: any[] = []
+        try {
+            const listOrder: any[] = []
+            await firestore()
+                .collection('order')
+                .where('idUser', '==', userId)
+                .where('status', '==', status)
+                .get()
+                .then((querysnapshot: any) => {
+                    querysnapshot.forEach((documentSnapshot: any) => {
+                        listOrder.push(documentSnapshot.data())
+                    })
+                })
+            return listOrder
+        } catch (error) {
+            console.log(error);
+
+        }
+    },
+    getListOrderAll: async () => {
+        const userId: any = await AsyncStorage.getItem('userId')
+        try {
+            const listOrder: any[] = []
+            await firestore()
+                .collection('order')
+                .where('idUser', '==', userId)
+                .get()
+                .then((querysnapshot: any) => {
+                    querysnapshot.forEach((documentSnapshot: any) => {
+                        listOrder.push(documentSnapshot.data())
+                    })
+                })
+            return listOrder
+        } catch (error) {
+            console.log(error);
+
+        }
+    },
+    getListOrderAllAppByStatus: async (status: number) => {
+        try {
+            const listOrder: any[] = []
+            if (status == -1) {
+                await firestore()
+                    .collection('order')
+                    .get()
+                    .then((querysnapshot: any) => {
+                        querysnapshot.forEach((documentSnapshot: any) => {
+                            listOrder.push(documentSnapshot.data())
+                        })
+                    })
+            }
+            else {
+                await firestore()
+                    .collection('order')
+                    .where('status', '==', status)
+                    .get()
+                    .then((querysnapshot: any) => {
+                        querysnapshot.forEach((documentSnapshot: any) => {
+                            listOrder.push(documentSnapshot.data())
+                        })
+                    })
+            }
+            return listOrder
+        } catch (error) {
+            console.log(error);
+
+        }
+    },
+    updateOrder: async (id: string, params: any) => {
         await firestore()
             .collection('order')
-            .where('idUser','==',userId)
-            .where('status','==',status)
-            .get()
-            .then((querysnapshot: any) => {
-                querysnapshot.forEach((documentSnapshot: any) => {
-                    listOrder.push(documentSnapshot.data())
-                })
-            })
-        return listOrder
-    } catch (error) {
-        console.log(error);
+            .doc(id)
+            .update(params)
+            .then(() => {
+                console.log('success');
 
-    }
-    },
-    getListOrderAll: async() =>{
-        const userId: any = await AsyncStorage.getItem('userId')
-        try {
-          const listOrder: any[] = []
-          await firestore()
-              .collection('order')
-              .where('idUser','==',userId)
-              .get()
-              .then((querysnapshot: any) => {
-                  querysnapshot.forEach((documentSnapshot: any) => {
-                      listOrder.push(documentSnapshot.data())
-                  })
-              })
-          return listOrder
-      } catch (error) {
-          console.log(error);
-  
-      }
-      },
-      getListOrderAllAppByStatus: async(status:number) =>{
-        try {
-          const listOrder: any[] = []
-          await firestore()
-              .collection('order')
-              .where('status','==',status)
-              .get()
-              .then((querysnapshot: any) => {
-                  querysnapshot.forEach((documentSnapshot: any) => {
-                      listOrder.push(documentSnapshot.data())
-                  })
-              })
-          return listOrder
-      } catch (error) {
-          console.log(error);
-  
-      }
-      },
-    updateOrder: async(id:string,params:any) =>{
-        await firestore()
-        .collection('order')
-        .doc(id)  
-        .update(params)
-        .then(() =>{
-          console.log('success');
-          
-        })
-        .catch((error) =>{
-          console.log(error);
-          
-        })
+            })
+            .catch((error) => {
+                console.log(error);
+
+            })
     },
     getItemOrder: async (idItem: string) => {
         try {

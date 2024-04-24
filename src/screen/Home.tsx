@@ -145,9 +145,9 @@ const Home = (props: Props) => {
                 <IconApp color={COLORS.Secondary} size={26} name='qrcode' type='AntDesign' />
               </TouchApp> */}
 
-              <TouchApp square={40} borderR={20} mid>
+              {/* <TouchApp square={40} borderR={20} mid>
                 <IconApp color={COLORS.Secondary} size={26} name='bell' type='FontAwesome5' />
-              </TouchApp>
+              </TouchApp> */}
             </ViewApp>
           </ViewApp>
 
