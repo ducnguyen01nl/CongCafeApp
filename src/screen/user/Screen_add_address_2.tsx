@@ -18,10 +18,9 @@ import { validatePhone } from '../../utils/validate'
 import ToastService from '../../service/ToastService'
 import TouchApp from '../../components/TouchApp'
 
-const Screen_add_address = ({ route }: any) => {
+const Screen_add_address_2 = ({ route }: any) => {
 
   const { dataItem } = route?.params
-  
   const [active, setActive] = useState<boolean>(dataItem?.active)
   const parts = dataItem?.address.split(',').map((part: any) => part.trim())
   const consciousPart = parts?.pop();
@@ -32,13 +31,10 @@ const Screen_add_address = ({ route }: any) => {
 
   useEffect(() => {
     if(dataItem){
-      // _input.current['conscious'].setValue({ name: consciousPart })
+      _input.current['conscious'].setValue({ name: consciousPart })
       _input.current['district'].setValue({ name: districtPart })
       _input.current['wards'].setValue({ name: wardsPart })
     }
-    // else{
-    //   _input.current['conscious']. setValue({name:'Thành Phố Hà Nội', value:"01"})
-    // }
   }, [])
 
   // const [data,setData] = useState<any>()
@@ -46,55 +42,41 @@ const Screen_add_address = ({ route }: any) => {
   const [consciousActive, setConsciousActive] = useState<any>()
   const [districtActive, setDistrictActive] = useState<any>()
   const [isLoading, data, onRefresh] = useAddressVN()
-  console.log(data[0]);
-  
   const [isLoadingList, dataList, onRefreshList] = useListAddress()
 
   //get tinh tp
   const conscious = () => {
-    // const cons: any[] = [];
-    // if (Array.isArray(data)) {
-    //   data.map((data: any) => {
-    //     cons.push({ name: data.Name, value: data.Id })
-    //   })
-
-    // }
-
-    return data[0].Districts
-  }
-
-  //get quận huyện
-  const district = () => {
-    const dist: any[] = [];
-    if (Array.isArray(conscious())) {
-      conscious().map((data: any) => {
-        dist.push({ name: data.Name, value: data.Id })
+    const cons: any[] = [];
+    if (Array.isArray(data)) {
+      data.map((data: any) => {
+        cons.push({ name: data.Name, value: data.Id })
       })
 
     }
-    return dist
+    return cons
   }
 
   //get quan huyen
-  // const district = useCallback(() => {
-  //   const dis: any[] = []
-  //   if (Array.isArray(data)) {
-  //     const listDisOrigin = data.find((prev: any) => prev.Id == consciousActive?.value)?.Districts
-  //     if (Array.isArray(listDisOrigin)) {
-  //       listDisOrigin.map((data: any) => {
-  //         dis.push({ name: data.Name, value: data.Id })
-  //       })
-  //     }
-  //     return dis
-  //   }
-  //   return []
-  // }, [consciousActive])
+  const district = useCallback(() => {
+    const dis: any[] = []
+    if (Array.isArray(data)) {
+      const listDisOrigin = data.find((prev: any) => prev.Id == consciousActive?.value)?.Districts
+      if (Array.isArray(listDisOrigin)) {
+        listDisOrigin.map((data: any) => {
+          dis.push({ name: data.Name, value: data.Id })
+        })
+      }
+      return dis
+    }
+    return []
+  }, [consciousActive])
 
   //get xa phuong
   const wards = useCallback(() => {
     const wards: any[] = []
     if (Array.isArray(district())) {
-      const listWardsOrigin = conscious()?.find((prev: any) => prev.Id == districtActive?.value)?.Wards
+      const listDisOrigin = data.find((prev: any) => prev.Id == consciousActive?.value)?.Districts
+      const listWardsOrigin = listDisOrigin?.find((prev: any) => prev.Id == districtActive?.value)?.Wards
       if (Array.isArray(listWardsOrigin)) {
         listWardsOrigin.map((data: any) => {
           wards.push({ name: data.Name, value: data.Id })
@@ -110,15 +92,11 @@ const Screen_add_address = ({ route }: any) => {
     const userId: any = await AsyncStorage.getItem('userId')
     const nameAddress = _input.current['name'].getValue();
     const phoneAddress = _input.current['phone'].getValue();
-    const conscious = _input.current['conscious'].getValue();
+    const conscious = _input.current['conscious'].getValue()?.name;
     const district = _input.current['district'].getValue()?.name;
     const wards = _input.current['wards'].getValue()?.name;
     const house = _input.current['house'].getValue();
     const newAddress = `${house}, ${wards}, ${district}, ${conscious}`
-    console.log('====================================');
-    console.log(conscious);
-    console.log(district);
-    console.log('====================================');
 
     if (!nameAddress) return ToastService.showToast(AppLang('vui_long_nhap_ho_ten'))
     if (!phoneAddress) return ToastService.showToast(AppLang('vui_long_nhap_sdt'))
@@ -212,26 +190,13 @@ const Screen_add_address = ({ route }: any) => {
           <TextApp colorP>{AppLang('dia_chi')}</TextApp>
         </ViewApp>
         <ViewApp padT10 padH5>
-          {/* <InputSelect
-            // disabled
+          <InputSelect
             placeholder={AppLang('tinh_TP')}
             data={conscious()}
-            // icon={{ name: 'caret-down' }}
-            // onSelectItem={(e) => setConsciousActive(e)}
-            /> */}
-          <InputCustom
-                  isUpdate
-                  propsInput={{
-                    // placeholder: AppLang(`email`),
-                    editable: false,
-                    valueInit: 'Thành Phố Hà Nội',
-                    placeholderTextColor: "#A4A4A4",
-                    color: COLORS.text2
-
-                  }}
-                  background={"#ddd"}
-                  ref={ref => _input.current['conscious'] = ref}
-                />
+            icon={{ name: 'caret-down' }}
+            ref={ref => _input.current['conscious'] = ref}
+            onSelectItem={(e) => setConsciousActive(e)}
+          />
         </ViewApp>
         <ViewApp padH5>
           <InputSelect
@@ -282,4 +247,4 @@ const Screen_add_address = ({ route }: any) => {
   )
 }
 
-export default Screen_add_address
+export default Screen_add_address_2

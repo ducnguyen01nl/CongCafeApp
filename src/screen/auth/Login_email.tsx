@@ -28,12 +28,13 @@ import moment from 'moment'
 import { useGetListNotification } from '../../service/useLocalMater'
 import { pushNotificationApi } from '../../api/pushNotificationApi'
 import messaging from '@react-native-firebase/messaging'
+import TouchApp from '../../components/TouchApp'
 const Login_email = () => {
   const toastRef: any = useRef(null)
   const formik = useFormik({
     initialValues: {
       email: 'ducnguyen01nl@gmail.com',
-      password: '12345678',
+      password: 'Nguyen01nl',
     },
     validationSchema: Yup.object({
       email: Yup.string().trim().lowercase().email(AppLang(`phai_la_email`)).required(AppLang(`email_khong_duoc_trong`)),
@@ -41,11 +42,9 @@ const Login_email = () => {
     }),
     onSubmit: (values) => {
       console.log('value', values);
-
     }
   })
   const { user, userLoading } = useSelector((state: any) => state.user);
-  
   const { token } = useSelector((state: any) => state.token)
   const [isLoadingNo, dataNo, onRefreshNo] = useGetListNotification()
   const dispatch = useDispatch();
@@ -165,7 +164,9 @@ const Login_email = () => {
             value={formik.values.password}
             onBlur={formik.handleBlur('password')}
           />
-
+          <TouchApp onPress={() => navigate('Screen_change_password',{type:0})} alignI='flex-end'>
+            <TextApp style={{textDecorationLine:'underline'}} color={COLORS.blue}>{AppLang('quen_mk')}</TextApp>
+          </TouchApp>
           <ButtonApp bR={20} title={AppLang(`dang_nhap`)}
             onPress={handleLogin}
           />

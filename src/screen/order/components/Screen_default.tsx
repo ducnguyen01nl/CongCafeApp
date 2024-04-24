@@ -10,7 +10,7 @@ import TextApp from '../../../components/TextApp'
 import { AppLang } from '../../../assets/languages'
 import { imgApp } from '../../../assets/img'
 import IconApp from '../../../components/IconApp'
-import { formatMoney } from '../../../utils/format'
+import { coverDateTimeStamp, formatMoney } from '../../../utils/format'
 import ButtonApp from '../../../components/ButtonApp'
 import ModalApp from '../../../components/ModelApp'
 import { orderApi } from '../../../api/orderApi'
@@ -24,6 +24,7 @@ import App from '../../../../App'
 const Screen_default = ({ isLoading, data, onRefresh }: any) => {
   const refModal = useRef<any>()
   const [itemActive, setItemActive] = useState<any>()
+  const dataSortTime = data.sort((a:any,b:any) => b.createAt - a.createAt)
 
 
   const focus = useIsFocused()
@@ -58,7 +59,7 @@ const Screen_default = ({ isLoading, data, onRefresh }: any) => {
         data.length > 0
           ?
           <FlatList
-            data={data}
+            data={dataSortTime}
             renderItem={({ item, index }) => (
               <ItemOrder item={item} key={index} onPress={() => { }}
                 onPressButton={() => {

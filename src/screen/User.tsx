@@ -157,7 +157,7 @@ const User = (props: Props) => {
                 user?.role == 1 && <ItemChildren title={AppLang(`danh_sach_dia_chi`)} icon='map-marker' onPress={() => navigate('Screen_address', { select: false })} />
               }
               {
-                user?.role == 0 && <ItemChildren title={AppLang(`doi_mat_khau`)} icon='lock' onPress={() => navigate('Screen_change_password')} />
+                user?.role == 0 && <ItemChildren title={AppLang(`doi_mat_khau`)} icon='lock' onPress={() => navigate('Screen_change_password',{type:1})} />
               }
 
             </ItemTitle>

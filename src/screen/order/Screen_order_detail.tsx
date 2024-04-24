@@ -200,7 +200,7 @@ const Screen_order_detail = ({ route }: any) => {
                             </ViewApp>
                             <ViewApp flex1 marH5>
                                 {
-                                    dataItem?.status == 0 && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
+                                    dataItem?.status == 0&& <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
                                 }
                                 {
                                     (dataItem?.status == 3 || dataItem?.status == 4) && <ButtonApp title={AppLang('mua_lai')} onPress={() => navigate('Screen_request_order', { repurchase: dataItem })} />
@@ -211,7 +211,7 @@ const Screen_order_detail = ({ route }: any) => {
                         <ViewApp row borderTW={1} padH10>
                             <ViewApp flex1 marH5>
                                 {
-                                    dataItem?.status == 0 && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
+                                    (dataItem?.status == 0 || dataItem?.status == 2) && <ButtonApp title={AppLang('huy')} onPress={() => refModal.current.open()} />
 
                                 }
                             </ViewApp>

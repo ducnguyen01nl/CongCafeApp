@@ -1,4 +1,4 @@
-import { View, Text, Button } from 'react-native'
+import { View, Text, Button, Alert } from 'react-native'
 import React, { useRef } from 'react'
 import LayoutApp from '../../components/LayoutApp'
 import HeaderApp from '../../components/HeaderApp'
@@ -9,24 +9,57 @@ import InputCustom from '../../components/input/InputCustom'
 import { COLORS } from '../../colors/colors'
 import ButtonApp from '../../components/ButtonApp'
 import ToastService from '../../service/ToastService'
-import auth from '@react-native-firebase/auth'
+import auth, { firebase } from '@react-native-firebase/auth'
 import { updatePassword } from 'firebase/auth'
+import TextApp from '../../components/TextApp'
 // import { getAuth, updatePassword } from "firebase/auth";
 
-const Screen_change_password = () => {
+const Screen_change_password = ({ route }: any) => {
+    const { type } = route?.params
     const refInput = useRef<any>({})
 
-    const user:any = auth().currentUser;  
+    const user: any = auth().currentUser;
+    console.log(user.providerData);
 
-    const handleConfirm = async() =>{
-        const oldPassword = refInput.current['oldPassword'].getValue()
-        const newPassword = refInput.current['newPassword'].getValue()
-        const newPasswordConfirm = refInput.current['newPasswordConfirm'].getValue()
+    const sendEmail = () => {
+        firebase.auth().sendPasswordResetEmail(user.email)
+            .then(() => {
+                Alert.alert(type == 0 ? AppLang('quen_mk') : AppLang('doi_mk'), AppLang('hay_check_email'),
+                    [
+                        {
+                            text: AppLang('dong'),
+                            onPress: () => { },
+                        }
+                    ])
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
 
-        if(!oldPassword) return ToastService.showToast(AppLang('ban_chua_nhap_mat_khau_cu'))
-        if(!newPassword) return ToastService.showToast(AppLang('ban_chua_nhap_mat_khau_moi'))
-        if(!newPasswordConfirm) return ToastService.showToast(AppLang('ban_chua_nhap_xac_nhan_mat_khau_cu'))
-        if(newPassword !== newPasswordConfirm) return ToastService.showToast(AppLang('xac_nhan_mat_khau_khong_khop'))
+    const handleConfirm = async () => {
+        const email = refInput.current['email'].getValue()
+        // const password = refInput.current['password'].getValue()
+
+        // if (type == 0) {
+        if (!email) return ToastService.showToast(AppLang('email_khong_duoc_trong'))
+        if (email != user.email) return ToastService.showToast(AppLang('email_khong_khop'))
+        sendEmail()
+        // }
+        // else {
+        //     await auth().signInWithEmailAndPassword(email, password)
+        //         .then(() => {
+
+        //         })
+        //         .catch((error) => {
+        //             if (error.code === 'auth/invalid-credential') {
+        //                 console.log('Tài khoản mật khẩu không đúng');
+        //                 return ToastService.showToast(AppLang(`tai_khoan_mk_sai`))
+        //             }
+        //         })
+
+        // }
+        // if(pa)
 
         // await auth().sendPasswordResetEmail('ducnguyen01nl@gmail.com')
         // .then(() =>{
@@ -35,74 +68,69 @@ const Screen_change_password = () => {
         // .catch((error) =>{
         //     console.log(error);
         // })
-        console.log(user);
-        console.log(newPassword);
-        if(user){
-            await updatePassword(user,newPassword).then(() =>{
-                console.log('====================================');
-                console.log('success');
-                console.log('====================================');
-            })
-            .catch((error) =>{
-                console.log(error);
-                
-            })
-        }
+        // if(user){
+        //     await updatePassword(user,newPassword).then(() =>{
+        //         console.log('====================================');
+        //         console.log('success');
+        //         console.log('====================================');
+        //     })
+        //     .catch((error) =>{
+        //         console.log(error);
+
+        //     })
+        // }
+
 
     }
 
-  return (
-    <LayoutApp>
-        <HeaderApp 
-            title={AppLang('doi_mat_khau')}
-            left={{
-                show:true,
-                onPress: () => goBack()
-            }}
-        />
-        <ViewApp flex1 mar10>
-            <InputCustom 
-                required
-                isUpdate
-                label={AppLang('mat_khau_cu')}
-                propsInput={{
-                    placeholder:AppLang('mat_khau_cu'),
-                    placeholderTextColor: COLORS.text2,
-                    color: COLORS.text1
-
+    return (
+        <LayoutApp>
+            <HeaderApp
+                title={AppLang('doi_mat_khau')}
+                left={{
+                    show: true,
+                    onPress: () => goBack()
                 }}
-                ref={ref => refInput.current['oldPassword'] = ref}
             />
-            <InputCustom 
-                required
-                isUpdate
-                label={AppLang('mat_khau_moi')}
-                propsInput={{
-                    placeholder:AppLang('mat_khau_moi'),
-                    placeholderTextColor: COLORS.text2,
-                    color: COLORS.text1
+            <ViewApp flex1 mar10 marT={100}>
 
-                }}
-                ref={ref => refInput.current['newPassword'] = ref}
-            />
-            <InputCustom 
-                required
-                isUpdate
-                label={AppLang('xac_nhan_mat_khau_moi')}
-                propsInput={{
-                    placeholder:AppLang('xac_nhan_mat_khau_moi'),
-                    placeholderTextColor: COLORS.text2,
-                    color: COLORS.text1
+                <ViewApp mid padV10>
+                    <TextApp colorP size18>{AppLang('nhap_dia_chi_email_tai_khoan_cua_ban')}</TextApp>
+                </ViewApp>
+                <InputCustom
+                    required
+                    isUpdate
+                    label={AppLang('dia_chi_email')}
+                    propsInput={{
+                        placeholder: AppLang('dia_chi_email'),
+                        placeholderTextColor: COLORS.text2,
+                        color: COLORS.text1
 
-                }}
-                ref={ref => refInput.current['newPasswordConfirm'] = ref}
-            />
-            <ButtonApp title={AppLang('ma_xac_thuc')} 
-                onPress={handleConfirm}
-            />
-        </ViewApp>
-    </LayoutApp>
-  )
+                    }}
+                    ref={ref => refInput.current['email'] = ref}
+                />
+                {/* {
+                    type == 1 &&
+                    <InputCustom
+                        required
+                        isUpdate
+                        label={AppLang('mat_khau_cu')}
+                        propsInput={{
+                            placeholder: AppLang('mat_khau_cu'),
+                            placeholderTextColor: COLORS.text2,
+                            color: COLORS.text1
+
+                        }}
+                        ref={ref => refInput.current['oldPassword'] = ref}
+                    />
+                } */}
+
+                <ButtonApp title={AppLang('xac_thuc')}
+                    onPress={handleConfirm}
+                />
+            </ViewApp>
+        </LayoutApp>
+    )
 }
 
 export default Screen_change_password
