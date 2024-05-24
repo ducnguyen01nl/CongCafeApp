@@ -69,6 +69,9 @@ const Screen_info_user = () => {
         gender: gender.value,
         email: email,
         phone: phone,
+        role: user?.role,
+        uid: user?.uid,
+        userId: user?.userId,
         updateAt: moment(new Date()).format('DD-MM-YYYY'),
       }));
       await userApi.setUserInfo({
@@ -247,7 +250,7 @@ const Screen_info_user = () => {
         </>
         <ModalApp ref={refModal} mid>
           <ViewApp w={'90%'} mid pad20 backgroundColor={'white'} borderR={10} animated>
-            <TextApp size18 bold>{AppLang('ban_co_chac_muon_thay_doi_tt')}</TextApp>
+            <TextApp color1 size18 bold>{AppLang('ban_co_chac_muon_thay_doi_tt')}</TextApp>
             <ViewApp row w={'90%'} justifyContent='flex-end' marT={20}>
               <ButtonApp
                 title={AppLang('huy')}

@@ -282,6 +282,7 @@ email_khong_khop:   'Email không khớp',
 hay_check_email:   'Chúng tôi đã gửi 1 thư đến email của bạn, hãy kiểm tra email của bạn',
 doi_mk:   'Đổi mật khẩu',
 quen_mk:  `Quên mật khẩu`,
+do_ban_khong_nhan_hang:   'do bạn không nhận hàng',
   };
   
   export default vi;

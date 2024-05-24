@@ -60,7 +60,7 @@ const Screen_add_address = ({ route }: any) => {
 
     // }
 
-    return data[0].Districts
+    return data[0]?.Districts
   }
 
   //get quận huyện

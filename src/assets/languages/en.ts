@@ -282,6 +282,7 @@ email_khong_khop:   `Emails do not match`,
 hay_check_email:   `We have sent a message to your email, please check your email`,
 doi_mk:   `Change Password`,
 quen_mk:  `Forgot password`,
+do_ban_khong_nhan_hang:   `because you did not receive the goods`,
 };
   
   export default en;
