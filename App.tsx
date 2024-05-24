@@ -34,6 +34,7 @@ import RootScreen from './src/root/RootScreen';
 import ToastMessage from './src/components/ToastMessage';
 import { getTokenOAuth, notificationListener, requestUserPermission, useToken } from './src/utils/notification';
 import { linking } from './src/root/PressNotification/linking';
+import CodePush from 'react-native-code-push'
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -80,4 +81,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default CodePush(App);

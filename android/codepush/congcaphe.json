@@ -1,0 +1,4 @@
+{
+    "android-pro": "appcenter codepush release-react -a ducnguyen01nl/CoffeeApp -d Production -t '>=1.0.0'",
+    "android-staging": "appcenter codepush release-react -a ducnguyen01nl/CoffeeApp -d Staging -t '>=1.0.0'"
+}
